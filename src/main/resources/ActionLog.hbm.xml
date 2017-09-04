@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.ActionLog" table="T_ACTION_LOG" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="userId" column="USER_ID" type="string"/>
+		<property name="ipAddr" column="IP_ADDRESS" type="string"/>
+		<property name="actionType" column="ACTION_TYPE" type="string"/>
+		<property name="fieldName" column="FIELD_NAME" type="string"/>
+		<property name="fromValue" column="FROM_VALUE" type="string"/>
+		<property name="toValue" column="TO_VALUE" type="string"/>
+		<property name="source" column="SOURCE" type="string"/>
+		<property name="createTime" column="CREATE_TIME" type="timestamp"/>
+	</class>
+</hibernate-mapping>   

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.DocumentNum" table="T_DOC_NUM" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="orgOid" column="ORG_OID" type="long"/>
+		<property name="typeCode" column="TYPE_CODE" type="string"/>
+		<property name="docNum" column="DOC_NUM" type="integer"/>
+		
+	</class>
+</hibernate-mapping>   

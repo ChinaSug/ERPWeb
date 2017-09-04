@@ -1,0 +1,331 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>库存查询</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../ERPWeb/assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+		<link href="../ERPWeb/assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+		<link href="../ERPWeb/assets/css/page-min.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="container" style="min-width: 1000px;">
+			<div class="row" style="margin-bottom: 10px;">
+				<form class="form-horizontal span8" style="width: auto;">
+					<div class="control-group space-row">
+						<span class="space-span">
+							<label>库存类型：</label>
+							<span style="display: inline-block;">
+								<select id="searchType" name="s_itemType">
+									<option value="1">物料</option>
+									<option value="2">产品</option>
+								</select>
+							</span>
+						</span>
+					</div>
+				</form>
+				<form id="searchForm" name="searchForm" style="margin-left: 0px; width: 600px;" class="form-horizontal span24" action="/ERPWeb/mgHandler.html?op_action=STOCK_SEARCH">
+					<div class="control-group space-row">
+						<span class="space-span">
+							<label>仓库名称：</label>
+							<span style="display: inline-block;">
+								<input name="warehouseName" id="sea_wah" type="text"  class="input-normal control-text">
+								<input name="warehouse_oid" type="hidden" />
+							</span>
+						</span>
+						<span class="space-span">
+							<label>物品名称：</label>
+							<span style="display: inline-block;">
+								<input type="text" class="text" id="search_name" name="search_name">
+							</span>
+						</span>
+						<span>
+							<button type="button" id="btnSearch" class="button button-primary">查询</button>
+						</span>
+					</div>
+				</form>
+				<form id="searchProdForm2" style="margin-left: 0px;  width: 600px; display: none;" class="form-horizontal span24">
+					<div class="control-group space-row">
+						<span class="space-span">
+							<label>仓库名称：</label>
+							<span style="display: inline-block;">
+								<input name="warehouseName" id="sea_wah2" type="text"  class="input-normal control-text">
+								<input name="warehouse_oid" type="hidden" />
+							</span>
+						</span>
+						<span class="space-span">
+							<label>产品名称：</label>
+							<span style="display: inline-block;">
+								<input type="text" class="text" name="search_prodName">
+							</span>
+						</span>
+						<span>
+							<button type="button" id="btnSearch2" class="button button-primary">查询</button>
+						</span>
+					</div>
+				</form>
+			</div>
+			<div class="search-grid-container">
+				<div id="grid"></div>
+				<div id="prodGrid"></div>
+			</div>
+			
+			
+		</div>
+		<script type="text/javascript" src="../ERPWeb/assets/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/config-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/abs-select.js"></script>
+		<script type="text/javascript">
+			BUI.use('common/page');
+				$(function(){
+
+				//仓库名称
+				var wah = new SelectGrid({
+					render: 'sea_wah',
+					url: '/ERPWeb/mgHandler.html?op_action=WHS_OPT',
+					itemKey: 'warehouseName',
+					itemTitle: [{
+						title: '仓库名称',
+						dataIndex: 'warehouseName'
+					}],
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'warehouseName'
+					}, {
+						itemName: 'value',
+						fieldName: 'warehouse_oid'
+					}],
+					setField: true,
+					selectWidth: '150px',
+				});
+				
+				var wah2 = new SelectGrid({
+					render: 'sea_wah2',
+					url: '/ERPWeb/mgHandler.html?op_action=WHS_OPT',
+					itemKey: 'warehouseName',
+					itemTitle: [{
+						title: '仓库名称',
+						dataIndex: 'warehouseName'
+					}],
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'warehouseName'
+					}, {
+						itemName: 'value',
+						fieldName: 'warehouse_oid'
+					}],
+					setField: true,
+					selectWidth: '150px',
+				});
+			});
+
+		</script>
+		<script type="text/javascript">
+			BUI.use(['bui/grid', 'bui/data', 'common/search'], function(Grid, Data, Search) {
+				var enumObj = {
+						"1": "有效",
+						"0": "失效"
+					},
+					editing = new BUI.Grid.Plugins.DialogEditing({
+						contentId: 'content', //设置隐藏的Dialog内容
+					}),
+					columns = [{
+							title: '物品OID',
+							dataIndex: 'itemOid',
+							visible: false
+						},
+						{
+							title: '物品编号',
+							dataIndex: 'itemCode',
+							width: 150
+						},
+						{
+							title: '物品名称',
+							dataIndex: 'itemName',
+							width: 150,
+							
+						},
+						{
+							title: '物品类型',
+							dataIndex: 'typeName',
+							width: 80
+						},
+						{
+							title: '型号',
+							dataIndex: 'model',
+							width: 80,
+							
+						},
+						{
+							title: '颜色',
+							dataIndex: 'color',
+							width: 80
+						},
+						{
+							title: '规格', 
+							dataIndex: 'spec',
+							width: 80
+						},
+						{
+							title: '单位',
+							dataIndex: 'unit',
+							width: 70
+						},
+						{
+							title: '供应商名称',
+							dataIndex: 'supplierName',
+							width: 150
+						},
+						{
+							title: '仓库名称',
+							dataIndex: 'warehouseName',
+							width: 70
+						},
+						{
+							title: '安全库存量',
+							dataIndex: 'safeAmt',
+							width: 100,
+							
+						},
+						{
+							title: '当前库存量',
+							dataIndex: 'stockAmt',
+							width: 100
+						},
+					],
+					store = Search.createStore('/ERPWeb/mgHandler.html?op_action=STOCK_SEARCH', {
+						proxy: {
+							save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
+								addUrl: '',
+								updateUrl: '',
+								removeUrl: ''
+							},
+							pageStart: 1,
+							method: 'POST'
+						},
+						pageSize: 10,
+						autoSync: true //保存数据后，自动更新
+					}),
+					gridCfg = Search.createGridCfg(columns, {
+						plugins: [editing, BUI.Grid.Plugins.AutoFit] // 插件形式引入多选表格
+					});
+
+				var search = new Search({
+						store: store,
+						gridCfg: gridCfg,
+					}),
+					grid = search.get('grid');
+				
+
+				// 产品表格
+				var prodCol = [{
+					title: 'BOM编号',
+					dataIndex: 'bomNum',
+					width: 180
+				}, {
+					title: '产品编号',
+					dataIndex: 'prodId',
+					width: 180
+				}, {
+					title: '产品名称',
+					dataIndex: 'prodName',
+					width: 150
+				}, {
+					title: '仓库名称',
+					dataIndex: 'warehouseName',
+					width: 150
+				}, {
+					title: '安全库存量',
+					dataIndex: 'safeAmt',
+					width: 120
+				}, {
+					title: '当前库存量',
+					dataIndex: 'stockAmt',
+					width: 120
+				}];
+				var prodStore, prodGridCfg, prodSearch;
+				var prodStore = Search.createStore('/ERPWeb/mgHandler.html?op_action=STOCK_PROD_SEARCH', {
+						proxy: {
+							pageStart: 1,
+							method: 'POST'
+						},
+						pageSize: 10,
+						autoSync: true //保存数据后，自动更新
+					}),
+					prodGridCfg = Search.createGridCfg(prodCol, {
+						plugins: [BUI.Grid.Plugins.AutoFit] // 插件形式引入多选表格
+					});
+
+				var prodSearch = new Search({
+						gridId: "prodGrid",
+						store: prodStore,
+						gridCfg: prodGridCfg,
+						btnId: "btnSearch2",
+						formId: "searchProdForm2",
+						autoSearch: false,
+					});
+					prodGrid = prodSearch.get('grid');
+					
+				$("#btnSearch, #btnSearch2").click(function() {
+					showGrid();
+				});
+				$("#searchType").change(function() {
+					var st = $("#searchType").val();
+					
+					if (1 == st) {
+						$("#searchForm").show();
+						$("#searchProdForm2").hide();
+					} else if (2 == st) {
+						$("#searchForm").hide();
+						$("#searchProdForm2").show();
+					}
+					$("#btnSearch, #btnSearch2").click();
+				});
+				
+				showGrid();
+				function showGrid() {
+					var st = $("#searchType").val();
+					
+					if (1 == st) {
+						$("#prodGrid").hide();
+						$("#grid").show();
+					} else if (2 == st) {
+						$("#prodGrid").show();
+						$("#grid").hide();
+					}
+				}
+				
+				grid.on("aftershow", function() {
+					showUnusualData(1);
+				});
+				prodGrid.on("aftershow", function() {
+					showUnusualData(2);
+				});
+				// 标出当前库存量少于安全库存量10%的
+				function showUnusualData(val) {
+					var $trs;
+					if (val == 1) {
+						$trs = $("#grid .bui-grid .bui-grid-table").find("tr");
+					} else {
+						$trs = $("#prodGrid .bui-grid .bui-grid-table").find("tr");
+					}
+					
+					$.each($trs, function(i, n) {
+						var safeAmt = $(n).find("td[data-column-field=safeAmt]").text();
+						var stockAmt = $(n).find("td[data-column-field=stockAmt]").text();
+						
+						if (safeAmt != "" && stockAmt != "") {
+							if (+safeAmt > +stockAmt) {
+								$(n).find("td[data-column-field=stockAmt]").css({
+									backgroundColor: "#ff9c9c",
+									fontWeight: "bold"
+								});
+							}
+						}
+					});
+				}
+				
+			});
+		</script>
+		<body>
+</html>

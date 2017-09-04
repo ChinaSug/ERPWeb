@@ -1,0 +1,468 @@
+﻿<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<title>物品管理</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../ERPWeb/assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+		<link href="../ERPWeb/assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+		<link href="../ERPWeb/assets/css/page-min.css" rel="stylesheet" type="text/css" />
+
+		<style>
+			#myform .controls {
+				width: 160px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<div class="container">
+			<div class="row">
+				<form id="searchForm" name="searchForm" class="form-horizontal span24" action="/ERPWeb/mgHandler.html?op_action=ITEM_LIST">
+					<div class="controls space-row" style="width: 700px;">
+						<span class="space-span">
+							<label>类型</label>
+							<input name="typeName" id="sea_type" type="text" class="input-normal control-text">
+							<input name="search_typeOid" type="hidden" />
+						</span>
+						<span class="space-span">
+							<input type="text" placeholder="请输入编号,名称,型号,规格" class="text" id="search_name" name="search_name" style="width: 150px;">
+						</span>
+						<span class="space-span">
+							<button type="button" id="btnSearch" class="button button-primary">查询</button>
+						</span>
+					</div>
+				</form>
+			</div>
+			<div class="search-grid-container">
+				<div id="grid"></div>
+			</div>
+		</div>
+
+		<div id="content" class="hide">
+			<form id="myform" name="myform" class="form-horizontal" action="/ERPWeb/mgHandler.html?op_action=ITEM_SAVE">
+				<input type="hidden" name="oid" id="oid">
+				<input type="hidden" name="oldCode" id="oldCode">
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>物品编号：</label>
+						<div class="controls">
+							<input name="code" id="code" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>物品名称：</label>
+						<div class="controls">
+							<input name="name" id="name" type="text" data-rules="{required:true,maxlength:100}" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>供应商名称：</label>
+						<div class="controls">
+							<input name="supplierName" id="sup_name" type="text" data-rules="{required:true}" class="input-normal control-text">
+							<input name="supplierOid" type="hidden" />
+						</div>
+					</div>
+
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>物品类型：</label>
+						<div class="controls" id="itemTypeList">
+							<input name="typeName" id="typ_name" type="text" data-rules="{required:true}" class="input-normal control-text">
+							<input name="typeOid" type="hidden" />
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>型号：</label>
+						<div class="controls">
+							<input name="model" id="model" type="text" data-rules="{required:true,maxlength:100}" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>规格：</label>
+						<div class="controls">
+							<input name="spec" id="spec" type="text" data-rules="{required:true,maxlength:30}" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>单价：</label>
+						<div class="controls">
+							<input name="unitPrice" id="unitPrice" type="text" data-rules="{required:true}" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>材料单价：</label>
+						<div class="controls">
+							<input name="matPrice" id="matPrice" type="text" data-rules="{required:true}" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>饼料单价：</label>
+						<div class="controls">
+							<input name="piePrice" id="piePrice" type="text" data-rules="{required:true}" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>报废单价：</label>
+						<div class="controls">
+							<input name="damPrice" id="damPrice" type="text" data-rules="{required:true}" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>单位：</label>
+						<div class="controls">
+							<input name="unit" id="unit" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text">
+						</div>
+					</div>
+
+					<div class="control-group span8">
+						<label class="control-label">颜色：</label>
+						<div class="controls">
+							<input name="color" id="color" type="text" data-rules="{maxlength:50}" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+
+					<div class="control-group span8">
+						<label class="control-label">状态：</label>
+						<div class="controls">
+							<select name="status" id="status" class="input-normal" style="width: 150px;">
+								<option value="1">有效</option>
+								<option value="0">失效</option>
+							</select>
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">安全库存量：</label>
+						<div class="controls">
+							<input name="safeAmt" id="safeAmt" type="text" class="input-normal control-text" data-rules="{number:true}">
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript" src="../ERPWeb/assets/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/config-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/abs-select.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/check-data.js"></script>
+		<script type="text/javascript">
+			BUI.use('common/page');
+		</script>
+
+		<script type="text/javascript">
+			BUI.use('common/search', function(Search) {
+				var status = {
+						"1": "有效",
+						"0": "失效"
+					},
+					editing = new BUI.Grid.Plugins.DialogEditing({
+						contentId: 'content', //设置隐藏的Dialogn内容
+						autoSave: true, //设置隐藏数据或者修改数据时，自动保存
+						form: 'myform',
+						triggerCls: 'btn-edit',
+						editor: {
+							title: "物品信息"
+						}
+					}),
+					columns = [{
+							title: '物品编号',
+							dataIndex: 'code',
+							width: 150
+						},
+						{
+							title: '物品名称',
+							dataIndex: 'name',
+							width: 150
+						},
+						{
+							title: '类型名称',
+							dataIndex: 'typeName',
+							width: 80
+						},
+						{
+							title: '供应商名称',
+							dataIndex: 'supplierName',
+							width: 150
+						},
+						{
+							title: '型号',
+							dataIndex: 'model',
+							width: 80
+						},
+						{
+							title: '规格',
+							dataIndex: 'spec',
+							width: 80
+						},
+						{
+							title: '单位',
+							dataIndex: 'unit',
+							width: 70
+						},
+						{
+							title: '颜色',
+							dataIndex: 'color',
+							width: 80
+						},
+						{
+							title: '安全库存量',
+							dataIndex: 'safeAmt',
+							width: 100
+						},
+						{
+							title: '状态',
+							dataIndex: 'status',
+							width: 60,
+							renderer: BUI.Grid.Format.enumRenderer(status)
+						},
+						{
+							title: '操作',
+							renderer: function(value, obj) {
+								return '<span class="grid-command btn-edit"  title="编辑信息">编辑</span>';
+							}
+						}
+					],
+					store = Search.createStore('/ERPWeb/mgHandler.html?op_action=ITEM_LIST', {
+						proxy: {
+							save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
+								addUrl: '/ERPWeb/mgHandler.html?op_action=ITEM_SAVE',
+								updateUrl: '/ERPWeb/mgHandler.html?op_action=ITEM_SAVE',
+								removeUrl: '/ERPWeb/mgHandler.html?op_action=ITEM_DEL'
+							},
+							pageStart: 1,
+							method: 'POST'
+						},
+						pageSize: 10,
+						autoSync: true
+
+					}),
+					gridCfg = Search.createGridCfg(columns, {
+						tbar: {
+							items: [{
+									text: '<i class = "icon-plus"></i>添加',
+									btnCls: 'button button-small',
+									handler: addFunction
+								},
+								{
+									text: '<i class = "icon-trash"></i>删除',
+									btnCls: 'button button-small',
+									handler: delFunction
+								}
+							]
+						},
+						listeners: {
+							cellclick: function(ev) {
+								editor = editing.get('editor');
+								var traggerCls = editing.get('triggerCls');
+								if('btn-edit' == traggerCls && editor) {
+
+									var clValue = ev.record.typeName; //物品类型 
+									hideSelect = $("#itemTypeList .bui-select-input");
+									if(clValue != hideSelect.val()) {
+										hideSelect.val(clValue);
+									}
+
+									var clSupperName = ev.record.supplierName; //供应商类型
+									hideSelect2 = $("#supplierList .bui-select-input");
+									if(clSupperName != hideSelect2.val()) {
+										hideSelect2.val(clSupperName);
+									}
+
+								}
+							}
+						},
+						plugins: [editing, BUI.Grid.Plugins.CheckSelection, BUI.Grid.Plugins.AutoFit] // 插入形式引用多样式表格
+					});
+
+				editing.on('editorshow', function(ev) {
+					var editor = editing.get('editor');
+					var _eVal = editor.get('editValue');
+
+					$("#oldCode").val(_eVal.code);
+				})
+
+				//实例化
+				var search = new Search({
+						store: store,
+						gridCfg: gridCfg
+					}),
+					grid = search.get('grid'),
+					form = editing.get('form').render(),
+					name = "code",
+					classN = "ItemInfo",
+					nameField = form.getField(name),
+					editor = editing.get('editor').render();
+
+				nameField.set('remote', {
+					url: "/ERPWeb/mgHandler.html?op_action=IS_EXIST",
+					dataType: 'json', //默认为字符串
+					callback: function(data) {
+						if(data != null) {
+							if(data.success) {
+								return '';
+							} else {
+								return data.errors[name];
+							}
+						}
+					}
+				});
+				nameField.on('remotestart', function(ev) {
+					var data = ev.data;
+					var oidField = form.getField("oid");
+					nameField = form.getField(name);
+
+					data.oid = oidField.get("value");
+					data.class = classN;
+					data.field = name;
+					data.value = nameField.get('value');
+				});
+
+				setEditorAndClearCache(editing, nameField);
+
+				function addFunction() {
+					var newData = {
+						isNew: true
+					}; //标志是新增加的记录
+					//清空所有的虚假选项（例：库存名称等）
+					if($("#typeOid").val() == "") {
+						$(".bui-select-input").attr("value", "");
+					}
+					editing.add(newData, 'name');
+				}
+
+				function delFunction() {
+					var selections = grid.getSelection();
+					if(selections == '') {
+						BUI.Message.Alert("请先选择记录");
+					} else {
+						delIems(selections);
+					}
+				}
+
+				function delIems(items) {
+					var ids = [];
+					var numbers = [];
+					BUI.each(items, function(item) {
+						//alert("item.disabled = " +item.disabled);
+
+						if(!item.disabled) {
+							ids.push(item.oid);
+						} else {
+							numbers.push(item.name);
+						}
+					});
+					if(ids.length) {
+						var showMsg = "确认要删除选中记录么?";
+						if(numbers.length) {
+							showMsg = "下列记录不能删除，排除后继续执行么？</br>" + numbers.join(",");
+						}
+						BUI.Message.Confirm(showMsg, function() {
+							store.save('remove', {
+								ids: ids.join(",")
+							});
+						}, 'question');
+					} else {
+						if(numbers.length) {
+							BUI.Message.Alert("所选择记录不能删除</br>" + numbers.join(","), "warning");
+						}
+					}
+				}
+
+				//供应商
+				var sup = new SelectGrid({
+					render: 'sup_name',
+					url: '/ERPWeb/mgHandler.html?op_action=SUPPLIER_OPT',
+					itemKey: 'supplierName',
+					itemTitle: [{
+						title: '供应商名称',
+						dataIndex: 'supplierName'
+					}],
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'supplierName'
+					}, {
+						itemName: 'value',
+						fieldName: 'supplierOid'
+					}],
+					setField: true,
+					selectWidth: '150px',
+					mustSelect: true,
+				});
+
+				//物品类型
+				var typ = new SelectGrid({
+					render: 'typ_name',
+					url: '/ERPWeb/mgHandler.html?op_action=ITEM_TYPE_OPT',
+					itemKey: 'typeName',
+					itemTitle: [{
+						title: '物品类型',
+						dataIndex: 'typeName'
+					}],
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'typeName'
+					}, {
+						itemName: 'value',
+						fieldName: 'typeOid'
+					}],
+					setField: true,
+					selectWidth: '150px',
+					mustSelect: true,
+				});
+
+				//搜索物品类型
+				var seaType = new SelectGrid({
+					render: 'sea_type',
+					url: '/ERPWeb/mgHandler.html?op_action=ITEM_TYPE_OPT',
+					itemKey: 'typeName',
+					itemTitle: [{
+						title: '物品名称',
+						dataIndex: 'typeName'
+					}],
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'typeName'
+					}, {
+						itemName: 'value',
+						fieldName: 'search_typeOid'
+					}],
+					setField: true,
+					selectWidth: '150px',
+				});
+
+				//监听事件，删除一条记录
+				grid.on('cellclick', function(ev) {
+					var sender = $(ev.domTarget); //点击的Dom 
+					if(sender.hasClass('btn-del')) {
+						var record = ev.record;
+						delIems([record]);
+					}
+					if(sender.hasClass('btn-edit')) {
+						var record = ev.record;
+						alert("record = " + record);
+					}
+				});
+
+			});
+		</script>
+
+		<body>
+
+</html>

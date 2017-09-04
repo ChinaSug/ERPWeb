@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.CheckPointMain" table="T_ST_CHECK_MAIN" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="checkNum" column="CHECK_NUM" type="string"/>
+		<property name="peroidType" column="PEROID_TYPE" type="string"/>
+		<property name="peroidYear" column="PEROID_YEAR" type="string"/>
+		<property name="peroidTime" column="PEROID_TIME" type="string"/>
+		<property name="checkPerson" column="CHECK_PERSON" type="string"/>
+		<property name="warehouseOid" column="WAREHOUSE_OID" type="long"/>
+		<property name="remark" column="REMARK" type="string"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+		
+	</class>
+</hibernate-mapping>   

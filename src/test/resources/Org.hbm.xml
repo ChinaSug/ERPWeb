@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.Organization" table="T_ORG" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="orgName" column="ORG_NAME" type="string"/>
+		<property name="orgCode" column="ORG_CODE" type="string"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="needConfirm" column="NEED_CONFIRM" type="boolean"/>
+		<property name="assetsExpireAdvanceDateAmt" column="ASSETS_EXPIRE_AD_AMT" type="integer"/>
+		<property name="returnExpireAdvanceDateAmt" column="RETURN_EXPIRE_AD_AMT" type="integer"/>
+		<property name="maxAppointDay" column="MAX_APPOINT_DAY" type="integer"/>
+		<property name="isWorkingDay" column="IS_WORKING_DATE" type="boolean"/>
+		<property name="isInternal" column="IS_INTERNAL" type="boolean"/>
+		<property name="expireDate" column="EXPIRE_DATE" type="date"/>
+		<property name="logoUrl" column="LOGO_URL" type="string"/>
+		<property name="descr" column="DESCR" type="string"/>
+		<property name="activityAmt" column="ACT_AMT" type="integer"/>
+		<property name="hotNoticeAmt" column="HOT_NTC_AMT" type="integer"/>
+		<property name="hotActivityAmt" column="HOT_ACT_AMT" type="integer"/>
+		<property name="hotEnrollAmt" column="HOT_ENL_AMT" type="integer"/>
+		<property name="rotateImgUrl1" column="RT_IMG_1" type="string"/>
+		<property name="rotateImgUrl2" column="RT_IMG_2" type="string"/>
+		<property name="rotateImgUrl3" column="RT_IMG_3" type="string"/>
+		<property name="rotateImgUrl4" column="RT_IMG_4" type="string"/>
+		<property name="rotateImgUrl5" column="RT_IMG_5" type="string"/>
+		<property name="imgUrl1" column="IMG1_URL" type="string"/>
+		<property name="imgUrl2" column="IMG2_URL" type="string"/>
+		<property name="imgUrl3" column="IMG3_URL" type="string"/>
+		<property name="imgUrl4" column="IMG4_URL" type="string"/>
+		<property name="imgUrl5" column="IMG5_URL" type="string"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+		
+	</class>
+</hibernate-mapping>   

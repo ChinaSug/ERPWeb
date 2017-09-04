@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.abs.ps.domain.HouseInfo" table="T_HOUSE_INFO" catalog="rentdb">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="estateCode" column="ESTATE_CODE" type="string"/>
+		<property name="estateName" column="ESTATE_NAME" type="string"/>
+		<property name="orgOid" column="ORG_OID" type="long"/>
+		<property name="scopeOid" column="SCOPE_OID" type="long"/>
+        <property name="landCode" column="LAND_CODE" type="string"/>
+        <property name="houseCode" column="HOUSE_CODE" type="string"/>
+		<property name="status" column="status" type="string"/>
+		<property name="count" column="COUNT" type="integer"/>
+		<property name="area" column="AREA" type="double"/>
+		<property name="price" column="PRICE" type="double"/>
+		<property name="address" column="ADDRESS" type="string"/>
+		<property name="buildDate" column="BUILD_DATE" type="date"/>
+		<property name="purpose" column="PURPOSE" type="long"/>
+		<property name="assetFrom" column="ASSET_FROM" type="long"/>
+		<property name="ownership" column="OWNERSHIP" type="long"/>
+		<property name="remark" column="REMARK" type="string"/>
+		<property name="img1Url" column="IMG1_URL" type="string"/>
+		<property name="img2Url" column="IMG2_URL" type="string"/>
+		<property name="img3Url" column="IMG3_URL" type="string"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+    </class>
+</hibernate-mapping>

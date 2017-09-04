@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.ScheduleMain" table="T_SCHD_MAIN" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="customerOid" column="CUSTOMER_OID" type="long"/>
+		<property name="prodId" column="PROD_ID" type="string"/>
+		<property name="scheduleDate" column="SCHD_DATE" type="date"/>
+		<property name="respPerson" column="RESP_PERSON" type="string"/>
+		<property name="name" column="SCHD_NAME" type="string"/>
+		<property name="prodAmt" column="PROD_AMT" type="string"/>
+		<property name="itemOid" column="ITEM_OID" type="long"/>
+		<property name="prodNum" column="PROD_NUM" type="string"/>
+		<property name="unitConsume" column="UNIT_CONSUME" type="string"/>
+		<property name="productAmt" column="PRODUCT_AMT" type="string"/>
+		<property name="projectId" column="PROJECT_ID" type="string"/>
+		<property name="projectDate" column="PROJECT_DATE" type="date"/>
+		<property name="prodPicUrl" column="PROD_PIC_URL" type="string"/>
+		<property name="fetchStandardNum" column="FETCH_STD_NUM" type="string"/>
+		<property name="fetchActualNum" column="FETCH_ACT_NUM" type="string"/>
+		<property name="shotStandardWgt" column="SHOT_STD_WGT" type="string"/>
+		<property name="shotActualWgt" column="SHOT_ACT_WGT" type="string"/>
+		<property name="prodStandardWgt" column="PROD_STD_WGT" type="string"/>
+		<property name="prodActualWgt" column="PROD_ACT_WGT" type="string"/>
+		<property name="pwStandardWgt" column="PW_STD_WGT" type="string"/>
+		<property name="pwActualWgt" column="PW_ACT_WGT" type="string"/>
+		<property name="mouldTgCompleteDate" column="MOULD_TG_COMPLETE_DATE" type="date"/>
+		<property name="mouldActCompleteDate" column="MOULD_ACT_COMPLETE_DATE" type="date"/>
+		<property name="tryAmt" column="TRY_AMT" type="string"/>
+		<property name="actAmt" column="ACT_AMT" type="string"/>
+		<property name="prodQc" column="PROD_QC" type="string"/>
+		<property name="prodStandardJob" column="PROD_JOB_STD" type="string"/>
+		<property name="prodFqc" column="PROD_FQC" type="string"/>
+		<property name="prodPkg" column="PROD_PKG" type="string"/>
+		<property name="prodShape" column="PROD_SHAPE" type="string"/>
+		<property name="prodReport" column="PROD_REPORT" type="string"/>
+		<property name="prodSignDate" column="PROD_SIGN_DATE" type="date"/>
+		<property name="prodVerify" column="PROD_VERIFY" type="string"/>
+		<property name="prodGo" column="PROD_GO" type="string"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+		
+	</class>
+</hibernate-mapping>   

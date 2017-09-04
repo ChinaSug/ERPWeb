@@ -1,0 +1,147 @@
+
+.container {
+  margin-left: 0px;
+  margin-top: 0px;
+  width: auto;
+  padding: 20px 20px 0px 20px;
+}
+
+.detail-page,.form-page,.search-page{
+	padding:0;
+}
+
+.doc-content {
+	min-width: 1200px;
+}
+
+/**内容超出 出现滚动条 **/
+.bui-stdmod-body{
+  overflow-x : hidden;
+  overflow-y : auto;
+}
+   
+.form-info-ul{
+    padding: 7px 12px;
+	background-color: rgb(238, 238, 238);
+	margin-bottom: 18px;
+	border: 1px solid rgb(221, 221, 221);
+	border-radius: 3px;
+}
+
+/** 表格中文字不超出边框   **/
+.table-fix{
+	table-layout:fixed;
+}
+
+.table-fix td{
+	word-wrap:break-word;
+}
+
+/** loading使用时的遮蔽层   **/
+.over {
+	display: none;
+	position: fixed;
+	top: 22px;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #f5f5f5;
+	opacity:0.5;
+	z-index: 1000;
+}
+   
+/** loading图片显示  **/
+.layout {
+	display: none;
+	position: fixed;
+	top: 40%;
+	left: 40%;
+	width: 20%;
+	height: 20%;
+	z-index: 1001;
+	text-align:center;
+}
+
+.div-row .control-group{
+	padding-left: 30px;
+}
+
+.div-row .control-text{
+	width: 240px;
+}
+
+.div-row .controls input[type=text] {
+	width: 300px;
+}
+
+.controls-textare {
+	height: auto !important;
+	margin-bottom: 18px;
+}
+
+.controls-textare .valid-text {
+	position: absolute;
+}
+
+.select-time {
+	background: url(../img/calendar-200-300.gif) no-repeat right -130px #fff;
+}
+
+.img-file {
+	display: none;
+}
+
+.input-imgButton {
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
+
+.div-img-forward {
+	float: right;
+	display: none;
+}
+
+.div-img-forward input {
+	width: 400px;
+}
+
+.img-controls {
+	height: auto !important;
+}
+
+.displayDiv {
+	margin-top: 2px;
+	width: 240px;
+}
+
+.div-content {
+	padding-left:30px;
+	width:1200px;
+}
+
+.search-bar {
+	overflow: auto;
+}
+
+.search-bar input {
+	padding: 4px 4px 4px 4px;
+	border-radius: 3px;
+}
+
+.search-bar li {
+	float: left;
+	margin-left: 20px;
+}
+
+.search-bar select {
+	padding: 4px 4px 4px 4px;
+	border-radius: 3px;
+	height: 27px;
+}
+
+.search-bar input:focus,select:focus {
+	border-color: #067dde;
+	outline: 0;
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.MenuItem" table="T_MENU_ITEM" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="menuCode" column="MENU_CODE" type="string"/>
+		<property name="menuName" column="MENU_NAME" type="string"/>
+		<property name="className" column="CLASS_NAME" type="string"/>
+		<property name="isAdmin" column="IS_ADMIN" type="boolean"/>
+		<property name="url" column="URL" type="string"/>
+		<property name="mainMenuOid" column="MAIN_MENU_OID" type="long"/>
+		<property name="isShow" column="IS_SHOW" type="boolean"/>
+		<property name="isSingle" column="IS_SINGLE" type="boolean"/>
+		<property name="seq" column="SEQ" type="integer"/>
+	</class>
+</hibernate-mapping>   

@@ -1,0 +1,604 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<title>工程管理编辑</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/css/page-min.css" rel="stylesheet" type="text/css" />
+		<style>
+			#pro_sch_table tr td {
+				text-align: center;
+			}
+			
+			#btu_div {
+				overflow: auto;
+				width: 800px;
+				text-align: center;
+				margin-bottom: 100px;
+			}
+			
+			#btu_div ul {
+				display: inline-block;
+				text-align: center;
+			}
+			
+			#btu_div ul li {
+				float: left;
+				padding: 0 100px 0 100px;
+			}
+			s{
+				color: red;
+			}
+			
+			.margin-right-5 {
+				margin-left: 5px;
+			}
+			
+			#pro_sch_form .border-left-width {
+				border-left-width: 1px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="loading-bar" style="">
+			<div class="over"></div>
+			<div class="layout">
+				<img src="../assets/img/load-16-16.gif" />
+			</div>
+		</div>
+
+		<div id="pro_father_div" class="container">
+			<div id="pro_child_div" style="width: 800px;">
+				<form name="pro_sch_form" id="pro_sch_form" method="post" action="/ERPWeb/mgHandler.html?op_action=SCHED_SAVE">
+					<input name="oid" class="hide" />
+					<table class="bui-grid-table table table-bordered table-striped" id="pro_sch_table" style="height: 30px;border: 1px solid #DDDDDD;">
+						<tr>
+							<td><s>*</s>客户</td>
+							<td colspan="2">
+								<input name="customerName" id="cus_name" type="text" data-rules="{required:true}" class="input-normal control-text" style="width: 220px;">
+								<input name="customerOid" type="hidden" />
+							</td>
+							<td><s>*</s>立上日期</td>
+							<td colspan="2"><input name="scheduleDate" id="scheduleDate" type="text" data-rules="{required:true}" class="input-normal calendar control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td><s>*</s>担 当</td>
+							<td colspan="2"><input name="respPerson" id="respPerson" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td><s>*</s>部 番</td>
+							<td colspan="2"><input name="prodId" id="prodId" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td><s>*</s>名 称</td>
+							<td colspan="2"><input name="name" id="name" type="text" data-rules="{required:true,maxlength:30}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td><s>*</s>生 产 数</td>
+							<td colspan="2"><input name="prodAmt" id="prodAmt" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr> 
+							<td><s>*</s>材 料</td>
+							<td colspan="2">
+								<input name="itemName" id="ite_name" type="text" data-rules="{required:true}" class="input-normal control-text" style="width: 220px;">
+								<input name="itemOid" type="hidden" />
+							</td>
+							<td>单 耗</td>
+							<td colspan="2"><input name="unitConsume" id="unitConsume" type="text" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td>产品编号</td>
+							<td colspan="2"><input name="prodNum" id="prodNum" type="text" data-rules="{maxlength:30}" class="input-normal control-text" style="width: 89%;" /></td>
+							<td>量 产</td>
+							<td colspan="2"><input name="productAmt" id="productAmt" type="text" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td rowspan="2" style="line-height: 60px;">工程图面版本</td>
+							<td colspan="2">图 番<input name="projectId" id="projectId" type="text" class="input-normal control-text margin-right-5" style="width: 73%;" /></td>
+							<td rowspan="2" style="line-height: 60px;">产品图面</td>
+							<td rowspan="2" colspan="2">
+						</tr>
+						<tr>
+							<td colspan="2" class="border-left-width">配布日期：<input name="projectDate" id="projectDate" type="text" class="input-normal calendar control-text" style="width: 57%;" /></td>
+						</tr>
+						<tr>
+							<td rowspan="2" style="line-height: 60px;">取数</td>
+							<td colspan="2">标 准<input name="fetchStandardNum" id="fetchStandardNum" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+							<td rowspan="2" style="line-height: 60px;">S T</td>
+							<td colspan="2">标 准<input name="shotStandardWgt" id="shotStandardWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" class="border-left-width">实 际<input name="fetchActualNum" id="fetchActualNum" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+							<td colspan="2">实 际<input name="shotActualWgt" id="shotActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+						</tr>
+						<tr>
+							<td rowspan="2" style="line-height: 60px;">部品单重</td>
+							<td colspan="2">标 准<input name="prodStandardWgt" id="prodStandardWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+							<td rowspan="2" style="line-height: 60px;">流道重量</td>
+							<td colspan="2">标 准<input name="pwStandardWgt" id="pwStandardWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" class="border-left-width">实 际<input name="prodActualWgt" id="prodActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+							<td colspan="2">实 际<input name="pwActualWgt" id="pwActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+						</tr>
+						<tr>
+							<td colspan="6">模具加工日程</td>
+						</tr>
+						<tr>
+							<td>预计模具<br/>加工完成日期</td>
+							<td colspan="2"><input name="mouldTgCompleteDate" id="mouldTgCompleteDate" type="text" class="input-normal calendar control-text" style="width: 90%;" /></td>
+							<td>实际模具<br/>加工完成日期</td>
+							<td colspan="2"><input name="mouldActCompleteDate" id="mouldActCompleteDate" type="text" class="input-normal calendar control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td>试做目标 回数</td>
+							<td colspan="2"><input name="tryAmt" id="tryAmt" type="text" data-rules="{maxlength:10}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td>实际试做 回数</td>
+							<td colspan="2"><input name="actAmt" id="actAmt" type="text" data-rules="{maxlength:10}" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td colspan="6">项目资料完成状况</td>
+						</tr>
+						<tr>
+							<td>QC工程图</td>
+							<td colspan="2"><input name="prodQc" id="prodQc" type="text" class="input-normal control-text" style="width: 90%;" /></td>
+							<td>作业标准</td>
+							<td colspan="2"><input name="prodStandardJob" id="prodStandardJob" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td>检查标准 FQC\IPQC\OQC</td>
+							<td colspan="2"><input name="prodFqc" id="prodFqc" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td>包装仕样书</td>
+							<td colspan="2"><input name="prodPkg" id="prodPkg" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td>成型条件表</td>
+							<td colspan="2"><input name="prodShape" id="prodShape" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td>材料报告 MSDS/SGS/UL</td>
+							<td colspan="2"><input name="prodReport" id="prodReport" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td>客户样品 签订日期</td>
+							<td colspan="2"><input name="prodSignDate" id="prodSignDate" type="text" class="input-normal  calendar control-text" style="width: 90%;" /></td>
+							<td>模具验收</td>
+							<td colspan="2"><input name="prodVerify" id="prodVerify" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+						</tr>
+						<tr>
+							<td>量产GO发行</td>
+							<td colspan="2"><input name="prodGo" id="prodGo" type="text" data-rules="{maxlength:30}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td></td>
+							<td colspan="2"></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+
+			<div class="search-grid-container" style="width: 800px;">
+				<div id="grid" style="margin-bottom: 30px;"></div>
+			</div>
+			<div id="btu_div">
+				<ul>
+					<li><button class="button button-primary"  id="sub_btn">提交</button></li>
+					<li><button class="button"  id="can_btn">取消</button></li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="content" class="hide">
+			<form id="myform" name="myform" class="form-horizontal" action="/ERPWeb/mgHandler.html?op_action=SUPPLIER_SAVE">
+				<input name="oid" type="hidden" />
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>编号：</label>
+						<div class="controls">
+							<input name="tryNum" id="tryNum" type="text" data-rules="{required:true}" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>预定试做日期：</label>
+						<div class="controls">
+							<input name="tryDate" id="tryDate" type="text" data-rules="{required:true}" style="width: 140px;" class="input-normal calendar control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>实际试做日期：</label>
+						<div class="controls">
+							<input name="actualDate" id="actualDate" type="text" data-rules="{required:true}" style="width: 140px;" class="input-normal calendar control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">判定结果：</label>
+						<div class="controls">
+							<input name="result" id="result" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row"> 
+					<div class="control-group span8">
+						<label class="control-label">试做指示单回收：</label>
+						<div class="controls">
+							<input name="tryCallback" id="tryCallback" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<script type="text/javascript" src="../assets/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="../assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../assets/js/config-min.js"></script>
+		<script type="text/javascript" src="../assets/js/abs-select.js" ></script>
+		<script type="text/javascript" src="../assets/js/check-data.js" ></script>
+		<script type="text/javascript">
+			//提交表单
+			BUI.use('bui/form', function(Form) {
+				var buiForm = new Form.HForm({
+					srcNode: '#pro_sch_form',
+					submitType: 'ajax',
+					callback: function(data) {
+						if(data != null && data.hasError == "") {
+							window.location.href = "/ERPWeb/mgHandler.html?op_action=PROJ_MANA_PAGE";
+						}
+					}
+				}).render();
+				
+				var classN = "ScheduleMain",
+					fieldName1 = "prodId",
+					fieldName2 = "name";
+					
+				setFieldRemote(buiForm, fieldName1, classN);
+				setFieldRemote(buiForm, fieldName2, classN);
+				
+				$("#sub_btn").click(function() {
+					if (checkBeforeSubmit($("#pro_sch_form"))) {
+						$('#pro_sch_form').submit();
+					}
+				});
+				
+			});
+
+			//日期
+			BUI.use('bui/calendar', function(Calendar) {
+				var datepicker = new Calendar.DatePicker({
+					trigger: '.calendar',
+					autoRender: true
+				});
+			});
+
+			$(function() {
+				var addOid = 0; //是否从点击编辑跳转
+
+				$('#can_btn').click(function() {
+					window.history.back();
+				});
+
+				//客户
+					var cus = new SelectGrid({
+						render: 'cus_name',
+						url: '/ERPWeb/mgHandler.html?op_action=CUSTOMER_OPT',
+						itemKey: 'customerName',
+						itemTitle: [{ 
+							title: '客户',
+							dataIndex: 'customerName'
+						}], 
+						fieldReplace: [{
+							itemName: 'text',
+							fieldName: 'customerName'
+						}, {
+							itemName: 'value',
+							fieldName: 'customerOid'
+						}], 
+						setField: true,
+						selectWidth: '230px',
+						mustSelect: true,
+					});
+					
+					
+					//材料 
+					var ite = new SelectGrid({
+						render: 'ite_name',
+						url: '/ERPWeb/mgHandler.html?op_action=ITEM_OPT&type_oid=24',
+						itemKey: 'itemName',
+						itemTitle: [{
+							title: '材料',
+							dataIndex: 'itemName'
+						}], 
+						fieldReplace: [{
+							itemName: 'text',
+							fieldName: 'itemName'
+						}, {
+							itemName: 'value',
+							fieldName: 'itemOid'
+						}], 
+						setField: true,
+						selectWidth: '230px',
+						mustSelect: true,
+					});
+
+				//判断是否是点击编辑跳转页面
+				var thisUrl = document.URL;
+				var getValue = thisUrl.split("?")[1];
+				if(getValue != undefined) {
+					addOid = getValue.split('=')[1];
+					if(addOid == "N") {
+						var d = new Date();
+						var month = d.getMonth()+1;
+						month = month < 10 ? "0" + month : month;
+						$('#scheduleDate').val(d.getFullYear()+"-"+month+"-"+d.getDate());
+						return false;
+					} else {
+						//一进入就开始显示加载图标
+						$('.over').css({'display':'block',"background-color":"#202020"});
+						$('.layout').css("display","block");
+						$.ajax({
+							type: "post",
+							url: "/ERPWeb/mgHandler.html?op_action=GET_SCHED&sched_oid=" + addOid,
+							async: true,
+							success: function(data) {
+								if (data) {
+									var result = jQuery.parseJSON(data);
+									var jsonObj = $.parseJSON(data);
+									BUI.FormHelper.setFields($("#pro_sch_form")[0], jsonObj);
+								}
+								
+								//完成渲染以后加载图标隐藏
+								$('.over').css("display","none");
+								$('.layout').css("display","none");
+							}
+						});
+					} 
+				}
+
+				BUI.use('common/search', function(Search) {
+					var enumObj = {
+							"1": "有效",
+							"0": "失效"
+						},
+						editing = new BUI.Grid.Plugins.DialogEditing({
+							contentId: 'content', //设置隐藏的Dialog内容
+							autoSave: true, //添加数据或者修改数据时，自动保存
+							form: 'myform',
+							triggerCls: 'btn-edit',
+							editor: {
+								title: ''
+							}
+						}),
+						columns = [{
+								title: '类型OID',
+								dataIndex: 'oid',
+								visible: false
+							},
+							{
+								title: '编号',
+								dataIndex: 'tryNum',
+								width: 180
+							},
+							{
+								title: '预定试做日期',
+								dataIndex: 'tryDate',
+								width: 100
+							},
+							{
+								title: '实际试做日期',
+								dataIndex: 'actualDate',
+								width: 100
+							},
+							{
+								title: '判定结果',
+								dataIndex: 'result',
+								width: 120
+							},
+							{
+								title: '试做指示单回收',
+								dataIndex: 'tryCallback',
+								width: 120
+							},
+							{
+								title: '操作',
+								renderer: function(value, obj) {
+									return '<span class="grid-command btn-edit" title="编辑信息">编辑</span>';
+								}
+							}
+						],
+						store = Search.createStore("/ERPWeb/mgHandler.html?op_action=SCHED_SUB_LIST&sched_oid=" + addOid, {
+							proxy: {
+								save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
+									addUrl: '/ERPWeb/mgHandler.html?op_action=SCHED_SUB_SAVE&sched_oid=' + addOid,
+									updateUrl: '/ERPWeb/mgHandler.html?op_action=SCHED_SUB_SAVE',
+									removeUrl: '/ERPWeb/mgHandler.html?op_action=SCHED_SUB_DEL'
+								},
+								pageStart: 1,
+								method: 'POST'
+							},
+							pageSize: 10,
+							autoSync: true //保存数据后，自动更新
+						}),
+						gridCfg = Search.createGridCfg(columns, {
+							tbar: {
+								items: [{
+										text: '<i class="icon-plus"></i>添加',
+										btnCls: 'button button-small',
+										handler: addFunction
+									},
+									{
+										text: '<i class="icon-trash"></i>删除',
+										btnCls: 'button button-small',
+										handler: delFunction
+									}
+								]
+							},
+							listeners: {
+								cellclick: function(ev) {
+									editor = editing.get('editor');
+									var triggerCls = editing.get('triggerCls');
+									if("btn-edit" == triggerCls && editor) {
+
+									}
+								}
+							},
+							plugins: [editing, BUI.Grid.Plugins.CheckSelection, BUI.Grid.Plugins.AutoFit] // 插件形式引入多选表格
+						});
+
+					if(addOid == "N") {
+						return false;
+					} else {
+						var search = new Search({
+								store: store,
+								gridCfg: gridCfg
+							}),
+							grid = search.get('grid'),
+							bForm = editing.get('form').render(),
+							classN1 = "ScheduleDetail",
+							fName = "tryNum";
+							
+						setFieldRemote(bForm, fName, classN1);
+						
+						var editor = editing.get('editor');
+						editor.set('success', function() {
+							var _form = editing.get('form').render();
+							if (_form.isValid()) {
+								editor.accept();
+							}
+						});
+						
+
+						store.__proto__.onSave = function(type, saveData, data) {
+							var _self = this,
+								hasErrorField = _self.get('hasErrorProperty');
+
+							if(data != null) {
+								if(data[hasErrorField] || data.exception) { //如果失败
+									_self.onException(data);
+									return;
+								}
+							}
+
+							_self._clearDirty(type, saveData);
+
+							_self.fire('saved', { type: type, saveData: saveData, data: data });
+							if(_self.get('autoSync')) {
+								_self.load();
+							}
+						}
+						store.__proto__.processLoad = function(data, params) {
+							var _self = this,
+								hasErrorField = _self.get('hasErrorProperty');
+
+							_self.fire('beforeprocessload', { data: data });
+
+							_self.fire('beforeProcessLoad', data);
+
+							if(data != null) {
+								if(data[hasErrorField] || data.exception) {
+									_self.onException(data);
+									return false;
+								}
+							}
+
+							return true;
+						}
+						store.__proto__.afterProcessLoad = function(data, params) {
+							var _self = this,
+								root = _self.get('root'),
+								start = params.start,
+								limit = params.limit,
+								totalProperty = _self.get('totalProperty');
+
+							if(data != null) {
+								if(BUI.isArray(data)) {
+									_self._setResult(data);
+								} else {
+									_self._setResult(data[root], data[totalProperty]);
+								}
+							}
+
+							_self.set('start', start);
+
+							if(limit) {
+								_self.set('pageIndex', start / limit);
+							}
+
+							if(!_self.get('remoteSort')) {
+								_self._sortData();
+							}
+
+							_self.fire('load', { params: params });
+						}
+
+					}
+
+					function addFunction() {
+						var newData = {
+							isNew: true
+						}; //标志是新增加的记录
+
+						//清空所有的虚假选项（例：库存名称等）
+						if($("#stockTypeOid").val() == "") {
+							$(".bui-select-input").attr("value", "");
+						}
+						editing.add(newData, 'name'); //添加记录后，直接编辑 
+
+					}
+
+					//删除操作
+					function delFunction() {
+						var selections = grid.getSelection();
+						if(selections == '') {
+							BUI.Message.Alert("请先选择记录");
+						} else {
+							delItems(selections);
+						}
+					}
+
+					function delItems(items) {
+						var ids = [];
+						var numbers = [];
+						BUI.each(items, function(item) {
+							if(!item.disabled) {
+								ids.push(item.oid);
+							} else {
+								numbers.push(item.stockNum);
+							}
+
+						});
+
+						if(ids.length) {
+							var showMsg = "确认要删除选中的记录么？";
+							if(numbers.length) {
+								showMsg = "下列记录不能删除，排除后继续执行么？</br>" + numbers.join(",");
+							}
+							BUI.Message.Confirm(showMsg, function() {
+								store.save('remove', {
+									ids: ids.join(",")
+								});
+							}, 'question');
+						} else {
+							if(numbers.length) {
+								BUI.Message.Alert("所选择记录不能删除</br>" + numbers.join(","), "warning");
+							}
+						}
+					}
+					
+					//监听事件，删除一条记录
+					grid.on('cellclick', function(ev) {
+						var sender = $(ev.domTarget); //点击的Dom
+						if(sender.hasClass('btn-del')) {
+							var record = ev.record;
+							delItems([record]);
+						}
+						if(sender.hasClass('btn-edit')) {
+							var record = ev.record;
+							alert("record = " + record);
+						}
+
+					});
+				});
+
+			});
+		</script>
+
+	</body>
+
+</html>

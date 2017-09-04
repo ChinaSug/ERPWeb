@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.ScheduleDetail" table="T_SCHD_DETAIL" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="scheduleOid" column="SCHD_OID" type="long"/>
+		<property name="tryNum" column="TRY_NUM" type="string"/>
+		<property name="tryDate" column="TRY_DATE" type="date"/>
+		<property name="actualDate" column="ACT_DATE" type="date"/>
+		<property name="result" column="RESULT" type="string"/>
+		<property name="tryCallback" column="TRY_CALLBACK" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		
+		
+	</class>
+</hibernate-mapping>   

@@ -1,0 +1,782 @@
+﻿<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<title>BOM管理</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/css/page-min.css" rel="stylesheet" type="text/css" />
+		<style>
+			s{
+				color: red;
+			}
+			#pro_sch_table tr td{
+				text-align: center;
+			}
+			#pro_father_div .btn-div { 
+				overflow: auto;
+				width: 100%px;
+				text-align: center;
+				margin-bottom: 100px;
+			}
+			.div-btn-ul {
+				display: inline-block;
+				text-align: center;
+			}
+			.div-btn-ul li {
+				float: left;
+				padding: 0 100px 0 100px;
+			}
+			.bui-dialog-editor {
+				overflow:auto;
+			}
+			#pro_sch_table .select-width {
+				width: 150px;
+			}
+			#pro_sch_table .word2-input-width {
+				width: 120px;
+				margin-left: 5px;
+			}
+			
+			#pro_sch_table .word4-input-width {
+				width: 96px;
+				margin-left: 5px;
+			}
+			
+			#pro_sch_table td {
+				vertical-align: middle;
+			}
+			
+			#pro_sch_form input[type=text] {
+				width: 90%;
+			}
+			
+			.triangle_border_nw {
+				width: 0;
+				height: 0;
+				border-width: 0 0 8px 8px;
+				border-style: solid;
+				border-color: transparent transparent transparent #3997db;
+				position: absolute;
+				margin-left: -9px;
+				margin-top: -9px;
+			}
+			
+			#myform .hidePrice {
+				border: none;
+			}
+			
+			#pro_sch_form .input-readonly {
+				border: none;
+    			background-color: transparent;
+			}
+			
+			table .valid-text {
+				position: absolute;
+			}
+			
+			#pro_sch_table img {
+				position: absolute;
+				margin-top: 3px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+ 
+		<div id="pro_father_div" class="container" style="width: 1200px;margin-left: auto;margin-right: auto;">
+			<div id="pro_child_div" style="width:100%;">
+				<form name="pro_sch_form" id="pro_sch_form" method="post" action="/ERPWeb/mgHandler.html?op_action=BOMINFO_SAVE" >
+					<input name="oid" id="oid" class="hide"/>
+					<table class="bui-grid-table table table-bordered table-striped" id="pro_sch_table" style="height: 30px;border: 1px solid #DDDDDD;">
+						<tr>
+							<td><s>*</s>BOM编号</td>
+							<td colspan="2"><input type="text" id="bomNum" name="bomNum" data-rules="{required:true,maxlength:20}" /></td>
+							<td>状态</td>
+							<td colspan="2">
+								<input type="text" id="status_name" value="待审" readonly="readonly" class="input-readonly"/>
+							</td>
+						</tr>
+						<tr>
+							<td>承认</td>
+							<td colspan="2"><input name="confirmPerson" id="confirmPerson" type="text" data-rules="{maxlength:20}" class="input-normal control-text" /></td>
+							<td>担当</td>
+							<td colspan="2"><input name="respPerson" id="respPerson" type="text" data-rules="{maxlength:20}" class="input-normal control-text" /></td>
+						</tr>
+						<tr>
+							<td><s>*</s>客户</td>
+							<td colspan="2">
+								<input type="text" id="showCusName" style="display: none;" class="input-normal control-text"/>
+								<input name="customerName" id="cus_name" type="text" data-rules="{required:true}" class="input-normal control-text">
+								<input name="customerOid" type="hidden" />
+							</td>
+							<td></td>
+							<td colspan="2">
+								<input name="lastModifyBy" id="lastModifyBy" type="hidden" class="input-normal control-text" style="width: 150px;" />
+							</td>
+						</tr>
+						<tr style="display:none">
+							<td>修改日期</td>
+							<td colspan="2">
+								<input type="hidden" class="calendar input-normal control-text " id="lastModifyDate" name="lastModifyDate"  style="width: 150px;">
+							</td>
+							<td>创建日期</td>
+							<td colspan="2">
+								<input type="hidden" class="input-normal control-text calendar" id="createDate"name="createDate" style="width: 150px;">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div class="search-grid-container" style="width: 100%;">
+				<div id="grid" style="margin-bottom: 30px;"></div>
+			</div>
+			<div id="verify_div" class="btn-div" style="display:none;">
+				<ul class="div-btn-ul">
+					<li><button class="button button-success" onclick="verifyFunc(1)">通过</button></li>
+					<li><button class="button button-danger" onclick="verifyFunc(0)">不通过</button></li>
+					<li><button class="button" onclick="window.history.back();">返回</button></li>
+				</ul>
+			</div>
+			<div id="back_div" class="btn-div" style="display:none;">
+				<ul class="div-btn-ul">
+					<li><button class="button" onclick="window.history.back();">返回</button></li>
+				</ul>
+			</div>
+			<div id="btu_div" class="btn-div">
+				<ul class="div-btn-ul">
+					<li><button class="button button-primary"  id="sub_btn">提交</button></li>
+					<li><button class="button"  id="can_btn">取消</button></li>
+				</ul>
+			</div>
+		</div>
+		<div id="content" class="hide" style="margin-top:0px;">
+			<form id="myform" name="myform" class="form-horizontal" method="post" action="/ERPWeb/mgHandler.html?op_action=BOMDETAIL_SAVE">
+				<input name="oid" id="oid" type="hidden" />
+				<table id="pro_sch_table" style="border: 1px solid #DDDDDD;" class=" table table-bordered table-striped">
+						<tr>
+							<td rowspan="1" style="width:80px;"><s>*</s>产品编号</td>
+							<td colspan="2" style="width: 170px;">
+								<input data-rules="{required:true,maxlength:30}" name="prodId" id="prodId" type="text"  class="input-normal control-text" style="width: 150px;" />
+							</td>
+							<td rowspan="2" style="width:80px;">流道重量</td>
+							<td colspan="2" style="">标准<input name="pwStandardWgt" id="pwStandardWgt" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+						</tr>
+						<tr>
+							<td rowspan="1"><s>*</s>模具编号</td>
+							<td colspan="2" >
+								<input name="mouldName" id="mou_name" type="text" data-rules="{required:true}" class="input-normal control-text select-width">
+								<input name="mouldOid" type="hidden" />
+							</td>
+							<td colspan="2">实际<input name="pwActualWgt" id="pwActualWgt" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+						</tr>
+						<tr>
+							<td rowspan="1"><s>*</s>名称</td>
+							<td colspan="2"><input name="name" id="name" type="text" data-rules="{required:true,maxlength:50}" class="input-normal control-text"style="width: 150px;" /></td>
+							<td rowspan="2" style="">单重</td>
+							<td colspan="2">标准<input name="shotStandardWgt" id="shotStandardWgt" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+						</tr>
+						<tr>
+							<td rowspan="1" ><s>*</s>材料型号</td>
+							<td colspan="2">
+								<input name="itemCode" id="ite_code" type="text" data-rules="{required:true}" class="input-normal control-text select-width">
+								<input name="itemOid" type="hidden" />
+							</td>
+							
+							<td colspan="2">实际<input name="shotActualWgt" id="shotActualWgt" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+						</tr>
+						<tr>
+							<td rowspan="1" >材料颜色</td>
+							<td colspan="2" ><input name="itemColor" type="test" class="input-normal control-text" readonly="readonly" style="width:150px;border:0;background-color:white;" /></td>
+							<td rowspan="2" style="">适用机台</td>
+							<td colspan="2">标准<input name="stardardMachine" id="stardardMachine" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+						</tr>
+						<tr>
+							
+							<td>生产能力/日</td>
+							<td colspan="2">
+								<div id="dPcTip" class="triangle_border_nw"></div>
+								<input title="生产能力/日=3600*23/周期*穴数" name="dailyPc" id="dailyPc" type="text" data-rules="{maxlength:20}" class="input-normal control-text" style="width: 150px;" />
+							</td>
+							<td colspan="2">实际<input name="actualMachine" id="actualMachine" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+						</tr>
+						<tr>
+							<td rowspan="2">穴数</td>
+							<td colspan="2">标准<input name="fetchStandardNum" id="fetchStandardNum" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+							<td rowspan="2" style="">周期</td>
+							<td colspan="2">标准<input name="shapeStdPd" id="shapeStdPd" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">实际<input name="fetchActualNum" id="fetchActualNum" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+							<td colspan="2">实际<input name="shapeActPd" id="shapeActPd" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width" /></td>
+						</tr>
+						<tr>
+							<td>工程图面版本</td>
+							<td colspan="2">图番<input name="projectId" id="projectId" type="text" data-rules="{maxlength:20}" class="input-normal control-text word2-input-width"  /></td>
+							<td rowspan="2">产品图面</td>
+							<td rowspan="2" colspan="2">
+								<!-- <input name="prodPicUrl" id="prodPicUrl" type="text" data-rules="{maxlength:100}" class="input-normal control-text" style="width:150px;" /> -->
+							</td>
+						</tr>
+						<tr>
+							<td>安全库存量</td>
+							<td>
+								<input name="safeAmt" id="safeAmt" type="text" data-rules="{number:true}" class="input-normal control-text"style="width: 150px;" />
+							</td>
+						</tr>
+						<tr>
+							<td>物料类型</td>
+							<td colspan="2">
+								<select name="materialType" style="width: 160px;">
+									<option value="">=请选择=</option>
+									<option value="1">五金</option>
+									<option value="2">油墨</option>
+								</select>
+							</td>
+							<td>物料名称</td>
+							<td colspan="2" id="mat-0"></td>
+							<td colspan="2" id="mat-1" style="display:none;">
+								五金
+								<input name="alloyName" id="alloyName" type="text" class="input-normal control-text" style="width: 120px;">
+								<input name="alloyOid" type="hidden" />
+							</td>
+							<td colspan="2" id="mat-2" style="display:none;">
+								油墨
+								<input name="pinkName" id="pinkName" type="text" class="input-normal control-text" style="width: 120px;">
+								<input name="pinkOid" type="hidden" />
+							</td>
+						</tr>
+						<tr>
+							<td>单价</td>
+							<td colspan="2">
+								<input name="unitPrice" type="text" data-rules="{number:true}" class="input-normal control-text select-width admin-show">
+								<input class="hidePrice  input-normal control-text" type="text" placeholder="****" readonly="readonly" style='display:none;' />
+							</td>
+							<td>材料单价</td>
+							<td colspan="2">
+								<input name="materialUpc" type="text" data-rules="{number:true}" class="input-normal control-text select-width admin-show">
+								<input class="hidePrice  input-normal control-text" type="text" placeholder="****" readonly="readonly" style='display:none;' />
+							</td>
+						</tr>
+						<tr>
+							<td>饼料单价</td>
+							<td colspan="2">
+								<input name="pieUpc" type="text" data-rules="{number:true}" class="input-normal control-text select-width admin-show">
+								<input class="hidePrice  input-normal control-text" type="text" placeholder="****" readonly="readonly" style='display:none;' />
+							</td>
+							<td>报废单价</td>
+							<td colspan="2">
+								<input name="damageUpc" type="text" data-rules="{number:true}" class="input-normal control-text select-width admin-show">
+								<input class="hidePrice  input-normal control-text" type="text" placeholder="****" readonly="readonly" style='display:none;' />
+							</td>
+						</tr>
+						<tr>
+							<td rowspan="3" style="">包装</td>
+							<td colspan="5">
+								<span style="float: left;margin-left: 15px;">
+									纸箱规格<input name="pkgBoxMd" id="pkgBoxMd" type="text" data-rules="{maxlength:20}" class="input-normal control-text" style="width:110px;margin-left:5px;"/>
+								</span>
+								<span style="float: right;margin-right: 20px;">
+									吸塑盒规格<input name="pkgSuckMd" id="pkgSuckMd" type="text" data-rules="{maxlength:20}" class="input-normal control-text" style="width:110px;margin-left:5px;" />
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="5">
+								<span style="float: left;margin-left: 15px;">
+									胶袋规格<input name="pkgBagMd" id="pkgBagMd" type="text" data-rules="{maxlength:20}" class="input-normal control-text" style="width:110px;margin-left:5px;" />
+								</span>
+								<span style="float: right;margin-right: 20px;">
+									保护膜<input name="pkgFilm" id="pkgFilm" type="text" data-rules="{maxlength:20}" class="input-normal control-text" style="width: 110px;margin-left: 5px;" />
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="5">
+								说明<input name="pkgRemark" id="pkgRemark" type="text" data-rules="{maxlength:200}" class="input-normal control-text" style="width:380px;margin-left: 5px;">
+							</td>
+						</tr>
+						<tr>
+							<td>备注</td>
+							<td colspan="5">
+								<textarea name="remark" data-rules="{maxlength:500}" style="width: 430px; height: 60px;max-width: 430px; max-height: 60px;"></textarea>
+							</td>					
+						</tr>
+				</table>
+			</form>
+		</div> 
+		
+		<script type="text/javascript" src="../assets/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="../assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../assets/js/config-min.js"></script>
+		<script type="text/javascript" src="../assets/js/abs-select.js" ></script>
+		<script type="text/javascript" src="../assets/js/check-data.js?v=2017811092507" ></script>
+		<script type="text/javascript" src="../assets/js/common.js" ></script>
+		<script type="text/javascript">
+			var enumObj = {
+				"0": "已审",
+				"1": "待审",
+				"2": "未通过审核",
+				"3": "重审"
+			};
+			var $verifyDiv = $("#verify_div");
+			var $btuDiv = $("#btu_div");
+			
+			var addOid;//是否从点击编辑跳转
+			var det_oid;//字表oid
+ 			//日期
+			BUI.use('bui/calendar', function(Calendar) { 
+				var datepicker = new Calendar.DatePicker({
+					trigger: '.calendar', 
+					autoRender: true 
+				});
+			});
+			
+			//客户
+			var cus = new SelectGrid({ 
+				render: 'cus_name',
+				url: '/ERPWeb/mgHandler.html?op_action=CUSTOMER_OPT',
+				itemKey: 'customerName',
+				itemTitle: [{
+					title: '客户名',
+					dataIndex: 'customerName'
+				}], 
+				fieldReplace: [{
+					itemName: 'text',
+					fieldName: 'customerName'
+				}, {
+					itemName: 'value',
+					fieldName: 'customerOid'
+				}], 
+				setField: true,
+				mustSelect: true,
+			});
+
+			$(function() {
+				
+				$('#can_btn').click(function(){
+					  window.history.back();    
+				});
+				
+				//判断是否是点击编辑跳转页面
+				var thisUrl = document.URL;
+				var urlParam = convertParamToObj(document.URL);
+				if(urlParam != undefined){
+					addOid = urlParam["bomOid"];
+					if(addOid == "N"){
+						$verifyDiv.hide();
+						$(".search-grid-container").hide();
+						return false; 
+					}else{
+						$.ajax({
+							type:"post",
+							url:"/ERPWeb/mgHandler.html?op_action=GET_BOM&bomOid="+addOid,
+							async:true,
+							success:function(data){ 
+								if (data) {
+									var result = jQuery.parseJSON(data);
+									var bom = result["BomMain"];
+									if (bom != null) {
+										$("#status_name").val(enumObj[bom.status]);
+										if ((bom.status == 1 || bom.status == 3) && result["IsAdmin"]) {
+											$("#showCusName").show();
+											$("#showCusName").val(bom.customerName);
+											$("#cus_name").hide();
+											$("#cus_name_caret").hide();
+											$("#pro_sch_form input[type=text]").addClass("input-readonly");
+											$("#pro_sch_form input[type=text]").attr("readonly", "readonly");
+											
+											$verifyDiv.show();
+											$btuDiv.hide();
+										} else if (bom.status == 0 && !result["IsAdmin"]) {
+											$("#showCusName").show();
+											$("#showCusName").val(bom.customerName);
+											$("#cus_name").hide();
+											$("#cus_name_caret").hide();
+											$("#pro_sch_form input[type=text]").addClass("input-readonly");
+											$("#pro_sch_form input[type=text]").attr("readonly", "readonly");
+											
+											$("#back_div").show();
+											$btuDiv.hide();
+										} else if (bom.status == 2) {
+											$("#sub_btn").append("重审");
+										}
+									}
+									if (!result["IsAdmin"]) {
+										$(".admin-show").hide();
+										$(".hidePrice").show();
+									}
+									BUI.FormHelper.setFields($("#pro_sch_form")[0], bom);
+								}
+							}
+						});
+					}
+				} 
+				
+
+			
+			BUI.use('common/search', function(Search) {
+				var editing = new BUI.Grid.Plugins.DialogEditing({
+						contentId: 'content', //设置隐藏的Dialog内容
+						autoSave: true, //添加数据或者修改数据时，自动保存
+						form: 'myform',
+						triggerCls: 'btn-edit',
+						editor: {
+							title: '',
+						}
+					}),
+					columns = [{ 
+							title: '类型OID',
+							dataIndex: 'oid',
+							visible: false
+						},
+						{
+							title: '产品编号',
+							dataIndex: 'prodId',
+							width: '20%'
+							
+						},
+						{
+							title: '模具',
+							dataIndex: 'mouldName',
+							width: '20%'
+						}, 
+						{
+							title: '名称',
+							dataIndex: 'name',
+							width: '20%'
+						},
+						{
+							title: '材料型号',
+							dataIndex: 'itemCode',
+							width: '15%'
+						},
+						{ 
+							title: '材料颜色',
+							dataIndex: 'itemColor',
+							width: '10%'
+						},
+						/* {
+							title: '产品图面',
+							dataIndex: 'prodPicUrl',
+							width: 120
+						}, */
+						{
+							title: '操作',
+							renderer: function(value, obj) {
+								return '<span class="grid-command btn-edit" title="编辑信息">编辑</span>';
+							},
+							width: '5%'
+						}
+					],
+					store = Search.createStore("/ERPWeb/mgHandler.html?op_action=BOMDETAIL_LIST&bomOid="+addOid, {
+						proxy: {
+							save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
+								addUrl: "/ERPWeb/mgHandler.html?op_action=BOMDETAIL_SAVE&bomOid="+addOid,
+								updateUrl: "/ERPWeb/mgHandler.html?op_action=BOMDETAIL_SAVE&bomOid="+addOid,
+								removeUrl: "/ERPWeb/mgHandler.html?op_action=BOMDETAIL_DEL"
+							},
+							pageStart: 1,
+							method: 'POST' 
+						}, 
+						pageSize: 10,
+						autoSync: true //保存数据后，自动更新
+					}),
+					gridCfg = Search.createGridCfg(columns, {
+						tbar: {
+							items: [{
+									text: '<i class="icon-plus"></i>添加',
+									btnCls: 'button button-small',
+									handler: addFunction
+									
+								},
+								{
+									text: '<i class="icon-trash"></i>删除',
+									btnCls: 'button button-small',
+									handler: delFunction
+								}
+							]
+						},
+						listeners: {
+							cellclick: function(ev) {
+							}
+						},
+						plugins: [editing, BUI.Grid.Plugins.CheckSelection, BUI.Grid.Plugins.AutoFit] // 插件形式引入多选表格
+					});
+
+				
+					if(addOid == "N"){
+						return false; 
+					}else{
+						var search = new Search({
+							store: store,
+							gridCfg: gridCfg
+						}),
+						grid = search.get('grid'),
+						bForm = editing.get('form').render(),
+						classN1 = "BomDetail",
+						fName = "prodId";
+						
+						setEditorAndClearCache(editing);
+						setFieldRemote(bForm, fName, classN1);
+						
+						var editor = editing.get('editor');
+						editor.set('success', function() {
+							var _form = editing.get('form').render();
+							if (_form.isValid() && checkBeforeSubmit($("#" + _form.get("id")))) {
+								editor.accept();
+							}
+						});
+					}
+					
+
+				function addFunction() {
+					var newData = {
+						isNew: true
+					}; //标志是新增加的记录
+					
+					//清空所有的虚假选项（例：库存名称等）
+					if($("#stockTypeOid").val() == ""){
+						$(".bui-select-input").attr("value","");
+					}
+					editing.add(newData, 'name'); //添加记录后，直接编辑 
+				}
+
+				//删除操作
+				function delFunction() {
+					var selections = grid.getSelection();
+					if(selections == '') {
+						BUI.Message.Alert("请先选择记录");
+					} else {
+						delItems(selections);
+					}
+				}
+
+				function delItems(items) {
+					var ids = [];
+					var numbers = [];
+					BUI.each(items, function(item) {
+						if(!item.disabled) {
+							ids.push(item.oid);
+						} else {
+							numbers.push(item.stockNum);
+						}
+
+					});
+
+					if(ids.length) {
+						var showMsg = "确认要删除选中的记录么？";
+						if(numbers.length) {
+							showMsg = "下列记录不能删除，排除后继续执行么？</br>" + numbers.join(",");
+						}
+						BUI.Message.Confirm(showMsg, function() {
+							store.save('remove', {
+								ids: ids.join(",")
+							});
+						}, 'question');
+					} else {
+						if(numbers.length) {
+							BUI.Message.Alert("所选择记录不能删除</br>" + numbers.join(","), "warning");
+						}
+					}
+				}
+				
+				editing.on('editorshow', function(ev) {
+					var editor = editing.get('editor');
+					editor.set('y', 20);
+					showMaterialName();
+				});
+
+				//模具编号 
+				var mou = new SelectGrid({
+					render: 'mou_name',
+					url: '/ERPWeb/mgHandler.html?op_action=MOULD_OPT',
+					itemKey: 'mouldName',
+					itemTitle: [{
+						title: '模具',
+						dataIndex: 'mouldName'
+					}], 
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'mouldName'
+					}, {
+						itemName: 'value',
+						fieldName: 'mouldOid'
+					}],
+					setField: true,
+					selectWidth: '160px',
+					mustSelect: true,
+				});
+				
+				//五金 
+				var aoy = new SelectGrid({ 
+					render: 'alloyName',
+					url: '/ERPWeb/mgHandler.html?op_action=ITEM_OPT&type_oid=22',
+					itemKey: 'alloyName',
+					itemTitle: [{
+						title: '物料名称',
+						dataIndex: 'alloyName'
+					}], 
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'alloyName'
+					}, {
+						itemName: 'value',
+						fieldName: 'alloyOid'
+					}, {
+						itemName: 'itemCode',
+						fieldName: '__itemCode'
+					}], 
+					setField: true,
+					selectWidth: '130px',
+					mustSelect: true,
+				});
+				
+				//油墨 
+				var pnk = new SelectGrid({ 
+						render: 'pinkName',
+						url: '/ERPWeb/mgHandler.html?op_action=ITEM_OPT&type_oid=23',
+						itemKey: 'pinkName',
+						itemTitle: [{
+							title: '物料名称',
+							dataIndex: 'pinkName'
+						}], 
+						fieldReplace: [{
+							itemName: 'text',
+							fieldName: 'pinkName'
+						}, {
+							itemName: 'value',
+							fieldName: 'pinkOid'
+						}, {
+							itemName: 'itemCode',
+							fieldName: '__itemCode'
+						}], 
+						setField: true,
+						selectWidth: '130px',
+						mustSelect: true,
+				});
+				
+				// 材料
+				var itemSG = new SelectGrid({ 
+					render: 'ite_code',
+					url: '/ERPWeb/mgHandler.html?op_action=GET_MATERIAL&type_oid=24',
+					itemKey: 'itemCode',
+					itemTitle: [{
+						title: '材料型号',
+						dataIndex: 'itemCode'
+					}, {
+						title: '材料名称',
+						dataIndex: 'itemName'
+					}], 
+					setField: true,
+					selectWidth: '160px',
+					mustSelect: true,
+				});
+				
+				//监听事件，删除一条记录
+				grid.on('cellclick', function(ev) {
+					var sender = $(ev.domTarget); //点击的Dom
+					if(sender.hasClass('btn-del')) {
+						var record = ev.record;
+						delItems([record]);
+					}
+					if(sender.hasClass('btn-edit')) {
+						var record = ev.record;
+						alert("record = " + record);
+					}
+
+				});
+			});
+			$(".bui-grid-bbar").find("div").css("width","900px")
+			});
+			
+			//提交表单
+			BUI.use('bui/form', function(Form) {
+				var buiForm = new Form.HForm({
+					srcNode: '#pro_sch_form',
+					submitType: 'ajax',
+					callback: function(data) {
+						if(data.hasError == ""){   
+							window.location.href="/ERPWeb/mgHandler.html?op_action=BOMINFO_PAGE";
+						} 
+					}
+				}).render(),
+				classN = "BomMain",
+				fieldName = "bomNum";
+				
+				setFieldRemote(buiForm, fieldName, classN);
+				
+				$("#sub_btn").click(function() {
+					if (checkBeforeSubmit($("#pro_sch_form"))) {
+						$("#pro_sch_form").submit();
+					}
+				});
+				
+			}); 
+			
+			$("select[name=materialType]").change(function() {
+				showMaterialName();
+			});
+			
+			function showMaterialName() {
+				var _val = $("select[name=materialType]").val();
+				$("#mat-0").hide();
+				$("#mat-1").hide();
+				$("#mat-2").hide();
+				if (_val == "") {
+					$("#mat-0").show();
+				} else if (_val == "1") {
+					$("#mat-1").show();
+					$("#mat-2").find("input").val("");
+				} else if (_val == "2") {
+					$("#mat-2").show();
+					$("#mat-1").find("input").val("");
+				}
+			}
+			
+			BUI.use('bui/tooltip',function (Tooltip) {
+     			
+				var dPcTip = new Tooltip.Tip({
+					trigger : '#dPcTip',
+					alignType : 'bottom',
+					offset : 10,
+					title : '生产能力/日=3600*23/周期*穴数/1000',
+					elCls : 'tips tips-info tips-small',
+					zIndex: 2000,
+					titleTpl : '<span class="x-icon x-icon-small x-icon-info"><i class="icon icon-white icon-book"></i></span>\
+					<div class="tips-content">{title}</div>'
+    			});
+     			dPcTip.render();
+			});
+			
+			// 生产能力/日 = 3600 * 23 / 周期 * 穴数 / 1000
+			$("#fetchActualNum, #shapeActPd").on('change keyup', function() {
+				var fetchActualNum = $("#fetchActualNum").val();
+				var shapeActPd = $("#shapeActPd").val();
+				
+				var dpc = 3600 * 23 / shapeActPd * fetchActualNum / 1000;
+				dpc = $.isNumeric(dpc) ? dpc : 0; 
+				$("#dailyPc").val(Math.ceil(dpc));
+				
+			})
+			
+			function verifyFunc(val) {
+				$.ajax({
+					type: "post",
+					url: "/ERPWeb/mgHandler.html?op_action=BOM_VERIFY&bomOid="+addOid + "&verify=" + val,
+					success: function(data) { 
+						if (data != null) {
+							location.href = "/ERPWeb/mgHandler.html?op_action=BOMINFO_PAGE";
+						}
+					}
+				});
+			}
+			
+		</script>
+
+	</body>
+
+</html>

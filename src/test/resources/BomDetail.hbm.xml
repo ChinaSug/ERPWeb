@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.BomDetail" table="T_BOM_DETAIL" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="bomOid" column="BOM_OID" type="long"/>
+		<property name="prodId" column="PROD_ID" type="string"/>
+		<property name="mouldOid" column="MOULD_OID" type="long"/>
+		<property name="name" column="NAME" type="string"/>
+		<property name="prodPicUrl" column="PROD_PIC_URL" type="string"/>
+		<property name="itemOid" column="ITEM_OID" type="long"/>
+		<property name="pinkOid" column="PINK_OID" type="long"/>
+		<property name="alloyOid" column="ALLOY_OID" type="long"/>
+		<property name="projectId" column="PROJECT_ID" type="string"/>
+		<property name="fetchStandardNum" column="FETCH_STD_NUM" type="string"/>
+		<property name="fetchActualNum" column="FETCH_ACT_NUM" type="string"/>
+		<property name="rawItemStdPrice" column="RAW_ITEM_STD_PRICE" type="string"/>
+		<property name="rawItemActPrice" column="RAW_ITEM_ACT_PRICE" type="string"/>
+		<property name="shapeStdPd" column="SHAPE_STD_PD" type="string"/>
+		<property name="shapeActPd" column="SHAPE_ACT_PD" type="string"/>
+		<property name="prodStandardWgt" column="PROD_STD_WGT" type="string"/>
+		<property name="prodActualWgt" column="PROD_ACT_WGT" type="string"/>
+		<property name="pwStandardWgt" column="PW_STD_WGT" type="string"/>
+		<property name="pwActualWgt" column="PW_ACT_WGT" type="string"/>
+		<property name="shotStandardWgt" column="SHOT_STD_WGT" type="string"/>
+		<property name="shotActualWgt" column="SHOT_ACT_WGT" type="string"/>
+		<property name="stardardMachine" column="STD_MACHINE" type="string"/>
+		<property name="actualMachine" column="ACT_MACHINE" type="string"/>
+		<property name="dailyPc" column="DAILY_PC" type="string"/>
+		<property name="unitPrice" column="UNIT_PRICE" type="double"/>
+		<property name="avgProdAmt" column="AVG_MON_PROD_AMT" type="string"/>
+		<property name="reqAmt" column="YEARLY_REQ_AMT" type="string"/>
+		<property name="pkgBoxMd" column="PKG_BOX_MD" type="string"/>
+		<property name="pkgSuckMd" column="PKG_SUCK_MD" type="string"/>
+		<property name="pkgBagMd" column="PKG_BAG_MD" type="string"/>
+		<property name="pkgFilm" column="PKG_FILM" type="string"/>
+		<property name="pkgRemark" column="PKG_REMARK" type="string"/>
+		<property name="remark" column="REMARK" type="string"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		
+		<property name="materialUpc" column="MATERIAL_UPC" type="double"/>
+		<property name="pieUpc" column="PIE_UPC" type="double"/>
+		<property name="damageUpc" column="DAMAGE_UPC" type="double"/>
+		<property name="materialType" column="MATERIAL_TYPE" type="long"/>
+		<property name="safeAmt" column="SAFE_AMT" type="double"/>
+	</class>
+</hibernate-mapping>   

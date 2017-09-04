@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>周计划表</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/page-min.css" rel="stylesheet" type="text/css" />
+		
+		<style>
+			body {
+				font: 12px/1.5 "Hiragino Sans GB","Microsoft Yahei UI","Microsoft Yahei","微软雅黑",'Segoe UI',Tahoma,"宋体b8b\4f53",SimSun,sans-serif;
+			}
+			
+			.table-ent-stat th {
+				border: 1px solid #333;
+				padding: 5px 10px;
+				text-align: center;
+				color: #fff;
+				background-color: rgb(81, 130, 187);
+				border-bottom-width: 0;
+			}
+			
+			.table-ent-stat td {
+				height: 20px;
+				border: 1px solid #333;
+				padding: 5px 10px;
+				text-align: center;
+			}
+			
+			.table-foot {
+				background-color: #DEDEDE;
+			}
+			
+			.x-monthpicker-footer {
+				display: none;
+			}
+		
+			.form-horizontal .valid-text {
+				display: inherit;
+			}
+			
+			.float-left {
+				float: left;
+			}
+			
+			.label-space {
+				margin-left: 20px;
+			}
+			
+			.m-calendar {
+				background: url("assets/img/calendar-200-300.gif") no-repeat right -130px #fff;
+			}
+			
+			.ds-div {
+			    overflow: hidden;
+			    position: relative;
+			    width: 1200px;
+			    border: 2px solid #AEAEAE;
+			    border-radius: 15px;
+			    margin: auto;
+			    margin-bottom: 30px;
+			    padding-bottom: 30px;
+			}
+			
+			.ds-title {
+				font-size: 25px;
+				font-weight: bold;
+				text-align: center;
+				margin-bottom: 15px;
+				margin-top: 15px;
+			}
+			
+			.select-width {
+				width: 80px;
+				margin-top: -2px;
+			}
+			
+			.invisible-div {
+				position: absolute;
+				top: -999px;
+				left: -999px;
+			}
+			
+			.wp-table {
+			    border: 1px solid #807878;
+			    border-left: 0;
+			    border-collapse: separate;
+			    -webkit-border-radius: 3px;
+			    -moz-border-radius: 3px;
+			    border-radius: 3px;
+			    text-align: center;
+    			vertical-align: middle;
+			    width: 100%;
+			}
+			
+			.wp-table thead:first-child tr:first-child th {
+				border-top: 0;
+			}
+			
+			.wp-table tr {
+			    display: table-row;
+			    vertical-align: inherit;
+			    border-color: inherit;
+			}
+			
+			.wp-table th {
+			    padding-top: 0;
+			    padding-bottom: 0;
+			    height: 38px;
+			    line-height: 38px;
+			    border-top: 1px solid #807878;
+			    border-left: 1px solid #807878;
+			}
+			
+			.wp-table td {
+			    line-height: 18px;
+			    text-align: center;
+			    border-top: 1px solid #807878;
+		        border-left: 1px solid #807878;
+			}
+			
+			.wp-title {
+				font-size: 15px;
+			}
+			
+			.wp-table .redWord {
+				color: red;
+			}
+			
+		</style>
+		
+	</head>
+	<body>
+		<div class="container" style="margin-bottom: 50px;height: 100px;">
+			<div style="margin-left: 30px;">
+				<h2>周计划表</h2>
+				<div class="row" style="margin-top: 10px;margin-left: 30px;">
+					<form id="searchForm" class="span24" action="/ERPWeb/mgHandler.html?op_action=WEEK_PLAN">
+						<div class="row">
+							<div class="control-group span8" style="width: 100%;margin-top: 5px;">
+								<div class="controls" style="width: 100%;">
+									<div class="float-left label-space">
+										<label class="float-left">年份：</label>
+										<div class="float-left">
+											<input type="text" name="year" data-rules="{required:true,number:true}" style="width: 70px;margin-top: -2px;"/>
+										</div>
+									</div>
+									<div class="float-left label-space">
+										<label class="float-left">月份：</label>
+										<div class="float-left">
+											<select class="select-width" name="month" data-rules="{required:true}">
+												<option value="">=请选择=</option>
+												<option value="1">一月</option>
+												<option value="2">二月</option>
+												<option value="3">三月</option>
+												<option value="4">四月</option>
+												<option value="5">五月</option>
+												<option value="6">六月</option>
+												<option value="7">七月</option>
+												<option value="8">八月</option>
+												<option value="9">九月</option>
+												<option value="10">十月</option>
+												<option value="11">十一月</option>
+												<option value="12">十二月</option>
+											</select>
+										</div>
+									</div>
+									<div class="float-left label-space">
+										<label class="float-left">周数：</label>
+										<div class="float-left">
+											<select class="select-width" name="week" data-rules="{required:true}">
+												<option value="">=请选择=</option>
+												<option value="1">第1周</option>
+												<option value="2">第2周</option>
+												<option value="3">第3周</option>
+												<option value="4">第4周</option>
+												<option value="5">第5周</option>
+											</select>
+										</div>
+									</div>
+									<button type="submit" id="btnSearch" style="margin-top: -3px;" class="button button-primary label-space">查询</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<hr />
+			
+			<div id="pd_table_div" class="hide">
+				<a href="" id="exportExcel" style="float:right;padding: 5px;margin-bottom: 10px;" class="button button-info">
+					<i class="icon-white icon-share"></i>
+					导出Excel
+				</a>
+				<table class="wp-table" id="wpTable">
+					<thead></thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			
+		</div>
+		
+		<script type="text/javascript" src="assets/js/jquery-1.8.1.min.js" ></script>
+		<script type="text/javascript" src="assets/js/bui-min.js" ></script>
+		<script type="text/javascript" src="assets/js/jquery.table2excel.js"></script>
+		<script type="text/javascript" src="assets/js/common.js" ></script>
+		<script>
+			var now = new Date();
+			var curYear = now.getFullYear();
+			var curMonth = now.getMonth() + 1;
+			var curDay = now.getDate();
+			var weekOp = ['第1周', '第2周', '第3周', '第4周', '第5周'];
+			
+			$("input[name=year]").val(curYear);
+			$("select[name=month]").val(curMonth);
+			setWeekOption();
+			$("select[name=week]").val(Math.ceil(curDay / 7));
+			
+			$("input[name=year], select[name=month]").on('click change', function() {
+				setWeekOption();
+			});
+			
+			$("#btnSearch").click(function() {
+				var year = $("input[name=year]").val();
+				var month = $("select[name=month]").val();
+				var week = $("select[name=week]").val();
+				
+				var href = "/ERPWeb/mgHandler.html?op_action=WEEK_PLAN";
+				href += "&year=" + year + "&month=" + month + "&week=" + week;
+				$("#exportExcel").attr("href", href);
+			});
+			
+			BUI.use('bui/form', function(Form) {
+				var form = new Form.HForm({
+					srcNode: '#searchForm',
+					submitType: 'ajax',
+					callback: generateWeekPlanTable,
+				});
+				form.render();
+			});
+			
+			// 获取周计划日期对象
+			function getWeekPlanDate() {
+				var year = $("input[name=year]").val();
+				var month = $("select[name=month]").val();
+				var week = $("select[name=week]").val();
+				var date = new Date(year, month, 0);
+				var startDate = (week - 1) * 7 + 1;
+				var endDate = week * 7 > date.getDate() ? date.getDate() : week * 7; 
+				
+				return new Object({
+					year: year,
+					month: month,
+					week: week,
+					startDate: startDate,
+					endDate: endDate,
+				});
+			}
+			
+			// 生成周计划表格
+			function generateWeekPlanTable(pdJsonObj) {
+				var wpTime = getWeekPlanDate();
+				var year = wpTime.year;
+				var month = wpTime.month;
+				var week = wpTime.week;
+				var startDate = wpTime.startDate;
+				var endDate = wpTime.endDate; 
+				var barRow = 6; // 固定标题栏数 （机台，部番...等） 
+				var dateRow = (endDate-startDate+1)*2 + 1; // 生产日期栏数（9\1，达成率...+合计等）
+				var excessRow = 3; // 额外列 （计划时间，实际时间）
+				
+				var thead = "<tr><th class='wp-title' colspan='" + (barRow+dateRow+excessRow) + "'>" + month + "月份第" + week + "周计划 计划产量(K)＝23*3600/周期*穴数/1000</th></tr>";
+				thead += "<tr><td colspan='2'>开机台数：</td>" + fillSpaceTag(4+dateRow+excessRow, "td") + "</tr>";
+				thead += "<tr><td colspan='2'>人数：</td>" + fillSpaceTag(4+dateRow+excessRow, "td") + "</tr>";
+				thead += "<tr><th>机台</th> <th>部番</th> <th>周期</th> <th>穴数</th> <th>生产数</th> <th>产量/日期</th>";
+				for (var i = startDate; i <= endDate; i++) {
+					thead += "<th>" + month + "/" + i + "</th>";
+					thead += "<th>达成率</th>";
+				}
+				thead += "<th>合计</th><th>计划时间</th><th>实际时间</th><th>损耗时间</th>";
+				thead += "</tr>";
+				
+				month = month < 10 ? "0" + month : month;
+				endDate = endDate < 10 ? "0" + endDate : endDate;
+				var sameMac = false; // 判断是否已经设置了机台tag
+				var tbody = "";
+				for(var machine in pdJsonObj) {
+					var macObj = pdJsonObj[machine];
+					for (var prodId in macObj) {
+						var pd = macObj[prodId];
+						
+						tbody += "<tr>";
+						if (!sameMac) { // 用于设置机台显示占的行数，只在第一个设置显示
+							tbody += "<td rowspan='" + (4*Object.getOwnPropertyNames(macObj).length) + "'>" + machine + "</td>";
+						}
+						sameMac = true;
+						tbody += "<td rowspan='4'>" + prodId + "</td>";
+						tbody += "<td rowspan='4'>" + pd.period + "</td>";
+						tbody += "<td rowspan='4'>" + pd.hole + "</td>";
+						tbody += "<td rowspan='4'>" + pd.prodAmt + "</td>";
+						tbody += "<td>计划生产量</td>";
+						tbody += getPdTableAmtTag(pd, "planAmt");
+						tbody += "</tr>";
+						
+						tbody += "<tr>";
+						tbody += "<td>实际生产量</td>";
+						tbody += getPdTableAmtTag(pd, "actAmt");
+						tbody += "</tr>";
+						
+						tbody += "<tr>";
+						tbody += "<td>加工良品数</td>";
+						tbody += getPdTableAmtTag(pd, "goodAmt");
+						tbody += "</tr>";
+						
+						tbody += "<tr>";
+						tbody += "<td>不良数</td>";
+						tbody += getPdTableAmtTag(pd, "badAmt");
+						tbody += "</tr>";
+					}
+					
+					tbody += "<tr><td></td><td colspan='4'></td><td>需加工人数</td>" + fillSpaceTag(dateRow + excessRow, "td") + "</tr>";
+					sameMac = false;
+				};
+				
+				$("#wpTable thead").html(thead);
+				$("#wpTable tbody").html(tbody);
+				
+				var tFoot = getPdTableFoot(pdJsonObj);
+				$("#wpTable tbody").append(tFoot);
+				$("#pd_table_div").show();
+			}
+			
+			// 填充空标签
+			function fillSpaceTag(num, tag) {
+				var thText = "";
+				if (num > 0) {
+					for (var i = 0; i < num; i++) {
+						thText += "<" + tag + "></" + tag + ">";
+					}
+				}
+				return thText;
+			}
+			
+			// 返回产量日期对象的标签
+			function getPdTableAmtTag(pdObj, amtName) {
+				var wpTime = getWeekPlanDate();
+				var year = wpTime.year;
+				var month = wpTime.month;
+				var week = wpTime.week;
+				var startDate = wpTime.startDate;
+				var endDate = wpTime.endDate; 
+				month = month < 10 ? "0" + month : month;
+				var planAmtTotal = 0, actAmtTotal = 0; // 计划生产总量，实际生产总量
+				var pdTime = pdObj.PROD_TIME;
+				var total = ""; // 合计
+				var _tbody = "";
+				var hole = parseFloat(pdObj.hole);
+				var period = parseFloat(pdObj.period);
+				
+				for (var i = startDate; i <= endDate; i++) {
+					var _d = i < 10 ? "0" + i : i;
+					var pdT = pdTime[year + "-" + month + "-" + _d];
+					var amt = pdT != null ? pdT[amtName] : ""; 
+					
+					_tbody += "<td>" + amt + "</th>";
+					var rate = "";
+					if ("planAmt" == amtName) { // 为计划生产量时将计算达成率
+						if (pdT != null && amt != "") {
+							var actAmt = pdT["actAmt"] != "" ? pdT["actAmt"] : 0;
+							rate = keep2Decimal(actAmt / amt * 100);
+							actAmtTotal = (+actAmtTotal) + (+pdT["actAmt"]);
+						}
+						planAmtTotal = (+planAmtTotal) + (+amt);
+						_tbody += "<td rowspan='2'>" + rate + "</td>";
+					} else if ("goodAmt" == amtName) { // 为加工良品数时将计算达成率
+						if (pdT != null && amt != "") {
+							var badAmt = pdT["badAmt"] != "" ? pdT["badAmt"] : 0;
+							rate = keep2Decimal(badAmt / amt * 100);
+						}
+						_tbody += "<td rowspan='2'>" + rate + "</td>";
+					}
+					total = (+total) + (+amt);
+				}
+				_tbody += "<td>" + total + "</td>";
+				
+				// 设置计划时间，实际时间，损耗时间值
+				if ("planAmt" == amtName) {
+					var planTime = planAmtTotal / hole * period / 3.6; // 计划时间 = 计划生成总量 / 穴数 * 周期 / 3.6
+					var actTime = actAmtTotal / hole * period / 3.6; // 实际时间 = 实际生成总量  / 穴数 * 周期 / 3.6
+					_tbody += "<td>" + keep2Decimal(planTime) + "</td>";
+					_tbody += "<td>" + keep2Decimal(actTime) + "</td>";
+					var gap = keep2Decimal(planTime-actTime);
+					_tbody += "<td " + (gap < 0 ? "class='redWord'" : "") + ">" + keep2Decimal(planTime-actTime) + "</td>";
+				} else {
+					_tbody += fillSpaceTag(3, "td");
+				}
+				
+				return _tbody;
+			}
+			
+			// 底部显示总数表格
+			function getPdTableFoot(pdJsonObj) {
+				var wpTime = getWeekPlanDate();
+				var year = wpTime.year;
+				var month = wpTime.month;
+				var week = wpTime.week;
+				var startDate = wpTime.startDate;
+				var endDate = wpTime.endDate; 
+				var dateRow = (endDate-startDate+1)*2 + 1; // 生产日期栏数（9\1，达成率...+合计等）
+				
+				var _tbody = "<tr>" + fillSpaceTag(5, "td");
+				_tbody += "<td>合计</td>" + fillSpaceTag(dateRow-1, "td");
+				_tbody += "<td>" + amountTableCol("wpTable", -3) + "</td>";
+				_tbody += "<td>" + amountTableCol("wpTable", -2) + "</td>";
+				_tbody += "<td></td><td></td>";
+				_tbody += "</tr>";
+				
+				// 获取该周日期对象数组
+				var timeObj = new Object();
+				month = month < 10 ? "0" + month : month;
+				for (var i = startDate; i <= endDate; i++) {
+					var _d = i < 10 ? "0" + i : i;
+					var _t = year + "-" + month + "-" + _d;
+					timeObj[_t] = {
+						planAmtT: 0, // 该天所有机台计划生产总量
+						actAmtT: 0, // 该天所有机台实际生产总量
+					};
+				}
+				// 获取所有生产日期数据数组
+				var planAmtT = 0, actAmtT = 0;
+				var pdTArr = new Array();
+				for(var machine in pdJsonObj) {
+					var macObj = pdJsonObj[machine];
+					for (var prodId in macObj) {
+						pdTArr.push(macObj[prodId].PROD_TIME);
+					}
+				}
+				// 合并对应日期计划生产量和实际生产量得出总量
+				for (var i = 0, len = pdTArr.length; i < len; i++) {
+					var pdT = pdTArr[i];
+					for (var j in timeObj) {
+						var _pdT = pdT[j];
+						if (_pdT) {
+							var _time = timeObj[j];
+							_time.planAmtT += parseFloat(_pdT.planAmt);
+							_time.actAmtT += parseFloat(_pdT.actAmt);
+						}
+					}
+				}
+				var pt, at;
+				for (var i in timeObj) {
+					pt += "<td>" + timeObj[i].planAmtT + "</td><td></td>";
+					at += "<td>" + timeObj[i].actAmtT + "</td><td></td>";
+				}
+				_tbody += "<tr><td colspan='5'></td><td>计划生产量</td>" + pt + fillSpaceTag(4, "td") + "</tr>";
+				_tbody += "<tr><td colspan='5'></td><td>实际生产量</td>" + at + fillSpaceTag(4, "td") + "</tr>";
+				_tbody += "<tr><td colspan='5'></td><td>当日所有加工数</td>" + fillSpaceTag(dateRow + 3, "td") + "</tr>";
+				_tbody += "<tr><td colspan='5'></td><td>跟机加工数</td>" + fillSpaceTag(dateRow + 3, "td") + "</tr>";
+				_tbody += "<tr><td colspan='5'></td><td>不良数</td>" + fillSpaceTag(dateRow + 3, "td") + "</tr>";
+				_tbody += "<tr><td colspan='5'></td><td>加工计划达成率</td>" + fillSpaceTag(dateRow + 3, "td") + "</tr>";
+				_tbody += "<tr><td colspan='5'></td><td>制造计划可动率</td>" + fillSpaceTag(dateRow + 3, "td") + "</tr>";
+				_tbody += "<tr><td colspan='5'></td><td>不良率</td>" + fillSpaceTag(dateRow + 3, "td") + "</tr>";
+				return _tbody;
+			}
+			
+			// 设置显示周数
+			function setWeekOption() {
+				var year = $("input[name=year]").val();
+				var month = $("select[name=month]").val();
+				
+				if (year && month == 2) {
+					var date = new Date(year, month, 0);
+					var dayNum = date.getDate(); // 天数
+					var weekIndex = (dayNum / 7) > 4 ? 5 : 4;
+					
+					if (weekIndex == 4) {
+						$("select[name=week]").find("option:first").attr("selected", "true");
+						$("select[name=week]").find("option:last").hide();
+					}
+				} else {
+					$("select[name=week]").find("option:last").show();
+				}
+				
+			}
+			
+		</script>
+	</body>
+</html>

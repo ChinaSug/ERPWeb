@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.Employee" table="T_EMPLOYEE" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="empName" column="EMP_NAME" type="string"/>
+		<property name="empType" column="EMP_TYPE" type="string"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="departOid" column="DEPART_OID" type="long"/>
+		<property name="positionCode" column="POSITION_CODE" type="string"/>
+		<property name="isSupport" column="IS_SUPPORT" type="boolean"/>
+		<property name="isWorking" column="IS_WORKING" type="boolean"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+		
+	</class>
+</hibernate-mapping>   

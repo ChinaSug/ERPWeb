@@ -1,0 +1,979 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>库存盘点</title>
+		<link rel="stylesheet" href="../ERPWeb/assets/css/bui-min.css" />
+		<link rel="stylesheet" href="../ERPWeb/assets/css/dpl-min.css" />
+		<link rel="stylesheet" href="../ERPWeb/assets/css/page-min.css" />
+		<style>
+			.check_width {
+				padding-left: 10px;
+				padding-right: 10px;
+			}
+			
+			.grid_title>ul>li {
+				list-style-type: none;
+				float: left;
+				margin-left: 10px;
+				margin-bottom: 10px;
+			}
+			
+			input.input-normal {
+				width: 170px;
+			}
+			
+			.calendar-icon {
+			    background: url(../ERPWeb/assets/img/calendar-200-300.gif) no-repeat right -130px #fff;
+			}
+			
+			#grid_check_form {
+				max-width: 1000px;
+			}
+			
+			#add_taking_form .x-field-error, #grid_check_form .x-field-error {
+				position: absolute;
+			}
+			
+			.taking_table, .prod-table {
+				width: 950px;
+			}
+						
+			.taking_table tr, .prod-table tr {
+				text-align: center;
+			}
+			
+			.prod-table th, .prod-table td {
+				border: 1px solid #000;
+			}
+			
+			input[name*=act_amt_] {
+				width: 60px;
+			}
+			
+			table .t-td60 {
+				width: 60px;
+			}
+			
+			table .t-td160 {
+				width: 160px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="row">
+				<form id="searchForm" name="searchForm" class="form-horizontal span24" action="">
+					<div class="controls space-row" style="width:100%; ">
+						<span class="space-span">
+							<label>盘点时间：</label>
+							<input type="text" id="peroid_time" name="peroid_time" style="width: 150px;" class="calendar-icon">
+						</span>
+						<span class="space-span">
+							<label>盘点人：</label>
+							<input type="text" class="text" id="checkPerson" name="checkPerson">
+						</span>
+						<span class="space-span">
+							<label>状态：</label>
+							<span id="warehouse_List" style="display: inline-block;">
+								<input type="hidden" class="text" id="warehouse_oid" name="warehouse_oid">
+								<select name="search_status" id="search_status">
+									<option value="">全部</option>
+									<option value="1">已盘点</option>
+									<option value="0">待盘点</option>
+									<option value="2">作废</option>
+								</select>
+							</span>
+						</span>
+						<span>
+							<button type="button" id="btnSearch" class="button button-primary">查询</button>
+						</span>
+					</div>
+				</form>
+			</div>
+			<div class="search-grid-container">
+				<div id="grid"></div>
+			</div>
+		</div>
+		<div id="add_taking" class="hide">
+			<div id="taking_inner">
+				<form name="add_taking_form" id="add_taking_form" method="post" action="" class="form-horizontal">
+					<div class="row">
+						<div class="control-group span8">
+							<label class="control-label"><s>*</s>盘点编号：</label>
+							<div class="controls" style="width: 170px;">
+								<input name="checkNum" id="checkNum" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-group span8">
+							<label class="control-label"><s>*</s>盘点时间：</label>
+							<div class="controls">
+								<input type="text" id="peroidTime" name="peroidTime" data-rules="{required:true}" class="calendar-icon" style="width: 170px;" >
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-group span8">
+							<label class="control-label"><s>*</s>盘  点  人：</label>
+							<div class="controls">
+								<input type="text" id="check_Person" name="check_Person" readonly="readonly" data-rules="{required:true}" class="input-normal control-text hidePrice">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-group span8">
+							<label class="control-label"><s>*</s>仓库名称：</label>
+							<div class="controls">
+								<input name="warehouseName" id="wah_name" type="text" data-rules="{required:true}" class="input-normal control-text">
+								<input name="warehouseOid" id="warehouseOid" type="hidden" />
+							</div>
+						</div>
+					</div>
+					<div class="row hide">
+						<div class="control-group span8">
+							<label class="control-label">备注：</label>
+							<div class="controls" style="height: auto;">
+								<textarea name="remark" id="remark" data-rules="{maxlength:500}" style="resize: none;height: 100px;width: 170px;margin: 0 auto;"></textarea>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div id="check_table" class="hide">
+			<form name="grid_check_form" id="grid_check_form" method="post" action="">
+				<div id="grid_check">
+					<div class="grid_title">
+						<ul>
+							<li>
+								<span>盘点时间：</span>
+								<span id="check_peroidTime">2017年03月</span>
+							</li>
+							<li>
+								<span>盘点仓库：</span>
+								<span id="check_warehouseName">普通元建仓</span>
+							</li>
+							<li>
+								<span>创建人：</span>
+								<span id="check_createBy">管理员</span>
+							</li>
+							<li>
+								<span><input type="button" value="导出Excel表" class="btn_export"/></span>
+							</li>
+							<li>
+								<span><input type="button" value="保存" id="saveMessage"/></span>
+							</li>
+							<li>
+								<span><input type="button" value="盘点单确认" id="inventory_sheet"/></span>
+							</li>
+						</ul>
+					</div>
+					<div style="clear: both;">
+						<h3 style="margin-bottom: 6px;">物料盘点：</h3>
+					</div>
+					<table border="1" style="clear: both; margin-bottom: 10px;" class="taking_table">
+						<thead>
+							<tr class="hide">
+								<th>物料盘点：</th>
+							</tr>
+							<tr>
+								<th class="check_width">物料编号</th>
+								<th class="check_width">物料名称</th>
+								<th class="check_width">物料类型</th>
+								<th class="check_width">安全库存量</th>
+								<th class="check_width">当前库存</th>
+								<th class="check_width t-td60">实际库存</th>
+								<th class="check_width t-td60">差异比例</th>
+								<th class="check_width t-td160">备注</th>
+								<th class="hide">
+									<input class="noExl" type="text" name="cp_main_oid" id="cp_main_oid" />
+								</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+					<div style="clear: both;">
+						<h3 style="margin-bottom: 6px;">产品盘点：</h3>
+					</div>
+					<table style="clear: both;" class="prod-table">
+						<thead>
+							<tr class="hide">
+								<th>产品盘点：</th>
+							</tr>
+							<tr>
+								<th class="check_width">BOM编号</th>
+								<th class="check_width">产品编号</th>
+								<th class="check_width">产品名称</th>
+								<th class="check_width">安全库存量</th>
+								<th class="check_width">当前库存</th>
+								<th class="check_width t-td60">实际库存</th>
+								<th class="check_width t-td60">差异比例</th>
+								<th class="check_width t-td160">备注</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</form>
+		</div>
+
+		<div id="message_table" class="hide">
+			<form name="grid_message_form" id="grid_message_form" action="">
+				<input type="hidden" name="cpMainOid" id="cpMainOid"/>
+				<div id="grid_message">
+					<div class="grid_title">
+						<ul>
+							<li>
+								<span>盘点时间：</span>
+								<span id="message_peroidTime"></span>
+							</li>
+							<li>
+								<span>盘点仓库：</span>
+								<span id="message_warehouseName">普通元建仓</span>
+							</li>
+							<li>
+								<span>创建人：</span>
+								<span id="message_createBy">管理员</span>
+							</li>
+							<li>
+								<span><input type="button" value="导出Excel表" class="btn_export"/></span>
+							</li>
+						</ul>
+					</div>
+					<div style="clear: both;">
+						<h3 style="margin-bottom: 6px;">物料盘点：</h3>
+					</div>
+					<table border="1" style="clear: both;margin-bottom: 10px;" class="taking_table">
+						<thead>
+							<tr class="hide">
+								<th>物料盘点：</th>
+							</tr>
+							<tr>
+								<th class="check_width">物料编号</th>
+								<th class="check_width">物料名称</th>
+								<th class="check_width">物料类型</th>
+								<th class="check_width">安全库存量</th>
+								<th class="check_width">当前库存</th>
+								<th class="check_width t-td60">实际库存</th>
+								<th class="check_width t-td60">差异比例</th>
+								<th class="check_width t-td160">备注</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+					<div style="clear: both;">
+						<h3 style="margin-bottom: 6px;">产品盘点：</h3>
+					</div>
+					<table style="clear: both;" class="prod-table">
+						<thead>
+							<tr class="hide">
+								<th>产品盘点：</th>
+							</tr>
+							<tr>
+								<th class="check_width">BOM编号</th>
+								<th class="check_width">产品编号</th>
+								<th class="check_width">产品名称</th>
+								<th class="check_width">安全库存量</th>
+								<th class="check_width">当前库存</th>
+								<th class="check_width t-td60">实际库存</th>
+								<th class="check_width t-td60">差异比例</th>
+								<th class="check_width t-td160">备注</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</form>
+		</div>
+		
+		<table id="excelTable" class="hide">
+		</table>
+
+		<script type="text/javascript" src="../ERPWeb/assets/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/config-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/jquery.table2excel.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/abs-select.js" ></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/check-data.js" ></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/common.js" ></script>
+
+		<script>
+		
+			var curUserName = "";
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				url: "/ERPWeb/mgHandler.html?op_action=CUR_USER",
+				success: function(data) {
+					if (data) {
+						curUserName = data.userName;
+					}
+				}
+			});
+			
+			
+			//搜索日历
+			BUI.use('bui/calendar', function(Calendar) {
+				var inputEl = $('#peroid_time'),
+					monthpicker = new BUI.Calendar.MonthPicker({
+						trigger: inputEl,
+						month: new Date().getMonth(), //月份从0开始，11结束
+						autoHide: true,
+						align: {
+							points: ['bl', 'tl']
+						},
+						year: new Date().getFullYear(),
+						success: function() {
+							var month = this.get('month') + 1,
+								year = this.get('year');
+							month = month < 10 ? "0" + month : month;	
+							inputEl.val(year + '-' + month); //月份从0开始，11结束
+							this.hide();
+						}
+					});
+				monthpicker.render();
+				
+				monthpicker.on('show', function(ev) {
+					var val = inputEl.val(),
+						arr, month, year;
+					if(val) {
+						arr = val.split('-'); //分割年月
+						year = parseInt(arr[0]);
+						month = parseInt(arr[1]) - 1;
+						month = month < 10 ? "0" + month : month;
+						monthpicker.set('year', year);
+						monthpicker.set('month', month);
+					}
+				});
+			});
+
+			//日历
+			BUI.use('bui/calendar', function(Calendar) {
+				var inputEl = $('#peroidTime'),
+					monthpicker = new BUI.Calendar.MonthPicker({
+						trigger: inputEl,
+						month: new Date().getMonth(), //月份从0开始，11结束
+						autoHide: true,
+						align: {
+							points: ['bl', 'tl']
+						},
+						year: new Date().getFullYear(),
+						success: function() {
+							var month = this.get('month') + 1,
+								year = this.get('year');
+								month = month < 10 ? "0" + month : month;
+							inputEl.val(year + '-' + month); //月份从0开始，11结束
+							inputEl.change();
+							this.hide();
+						},
+						cancel: function() {
+							this.hide();
+						}
+					});
+				monthpicker.render();
+				
+				monthpicker.on('show', function(ev) {
+					var val = inputEl.val(),
+						arr, month, year;
+					if(val) {
+						arr = val.split('-'); //分割年月
+						year = parseInt(arr[0]);
+						month = parseInt(arr[1]) - 1;
+						month = month < 10 ? "0" + month : month;
+						monthpicker.set('year', year);
+						monthpicker.set('month', month);
+					}
+				});
+			});
+
+			var check_dialog;
+			BUI.use('bui/overlay', function(Overlay) { 
+				check_dialog = new Overlay.Dialog({
+					contentId: "check_table",
+					title: '盘点单',
+					width: 1000,
+					height: 500,
+					mask: true,
+					autoRender: true,
+					buttons: []
+				});
+
+				//表单验证
+				BUI.use('bui/form', function(Form) {
+					form = new Form.Form({
+						srcNode: '#grid_check_form',
+						submitType: 'ajax',
+						callback: function(data) {
+
+						}
+					});
+					form.render();
+				});
+				$('.bui-ext-close').click(function() {
+					// location.reload();
+				});
+
+			});
+
+			var message_dialog;
+			BUI.use('bui/overlay', function(Overlay) {
+				message_dialog = new Overlay.Dialog({
+					contentId: "message_table",
+					title: '信息单',
+					width: 1000,
+					height: 500,
+					mask: true,
+					autoRender: true,
+					buttons: []
+				});
+			});
+
+			var addtaking_dialog;
+			BUI.use('bui/overlay', function(Overlay) {
+				addtaking_dialog = new Overlay.Dialog({
+					contentId: "add_taking",
+					title: '新建盘点单',
+					width: 410,
+					mask: true,
+					autoRender: true,
+					buttons: [{
+						text: '确定',
+						elCls: 'button button-primary',
+						handler: function() {
+							var checkNum = $('#checkNum').val();
+							var peroidTime = $('#peroidTime').val();
+							var warehouseOid = $('#warehouseOid').val();
+							var checkPerson = $('#check_Person').val();
+							var remark = $('#remark').val(); 
+							
+							if(checkNum == ""){
+								BUI.Message.Alert("盘点编号未填写！");
+								return false;
+							}
+							if(checkPerson == ""){
+								BUI.Message.Alert("盘点人未填写！");
+								return false;
+							}
+							if(warehouseOid == ""){ 
+								BUI.Message.Alert("仓库名称未选择！");
+								return false; 
+							}
+							$.ajax({
+								type: "post",
+								url: "/ERPWeb/mgHandler.html?op_action=CP_SAVE&checkNum=" + checkNum + "&peroidTime=" + peroidTime + "&warehouseOid=" + warehouseOid + "&remark=" + remark+"&checkPerson="+checkPerson,
+								async: false,
+								success: function(data) {
+									var b_error = data.substring("23", "28");
+									var b_hasEroor = data.substring("42", "46");
+									if(b_error == "10001" && b_hasEroor == "true") {
+										BUI.Message.Alert("盘点时间已存在，请重新选择！");
+									} else if(b_error == "10002" && b_hasEroor == "true") {
+										BUI.Message.Alert("当前仓库正在盘点不允许新建盘点！");
+									} else {
+										location.reload();
+									}
+								}
+							});
+							this.close();
+						}
+					}, {
+						text: '关闭',
+						elCls: 'button',
+						handler: function() {
+							this.close();
+						}
+					}]
+				});
+				
+				//表单验证
+				BUI.use('bui/form', function(Form) {
+					form = new Form.Form({
+						srcNode: '#add_taking_form',
+						submitType: 'ajax',
+						callback: function(data) {
+
+						}
+					});
+					form.render();
+					
+					var classN = "CheckPointMain",
+						fieldName = "checkNum";
+					
+					setFieldRemote(form, fieldName, classN);
+				});
+
+			});
+
+			BUI.use('common/search', function(Search) {
+				var status = { "0": "待盘点", "1": "已盘点", "2": "作废" };
+				var operation = { "0": "盘点", "1": "信息" };
+				editing = new BUI.Grid.Plugins.DialogEditing({
+						contentId: 'add_taking', //设置隐藏的Dialogn内容
+						autoSave: true, //设置隐藏数据或者修改数据时，自动保存
+						form: 'add_taking_form',
+					}),
+					columns = [
+						{ title: '盘点编号', dataIndex: 'checkNum', width: 150 },
+						{ title: '盘点时间', dataIndex: 'peroidTime', width: 100 },
+						{ title: '盘点人', dataIndex: 'checkPerson', width: 100 },
+						{ title: '仓库名称', dataIndex: 'warehouseName', width: 150 },
+						{ title: '盘点状态', dataIndex: 'status', width: 100, renderer: BUI.Grid.Format.enumRenderer(status) },
+						// { title: '备注', dataIndex: 'remark', width: 100 },
+						{ title: '创建人', dataIndex: 'createBy', width: 100 },
+						{ title: '创建时间', dataIndex: 'createDate', width: 150 }, //, renderer: BUI.Grid.Format.enumRenderer(status) 
+						// { title: '<span style="color:#333">操作</span>', dataIndex: 'status', width: 100,elCls:'operation_color',renderer: BUI.Grid.Format.enumRenderer(operation)}
+						{
+							title: '操作',
+							renderer: function(value, obj) {
+								if(obj.status == "0") {
+									return '<span class="grid-command btn-check"  title="盘点">盘点</span>';
+								} else {
+									// return '<span class="grid-command btn-message"  title="信息">信息</span><span class="grid-command btn-invalid"  title="作废">作废</span>';
+									return '<span class="grid-command btn-message"  title="信息">信息</span>';
+								}
+
+							}
+						}
+					],
+					store = Search.createStore('/ERPWeb/mgHandler.html?op_action=CP_LIST', {
+						proxy: {
+							save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
+								addUrl: '/ERPWeb/mgHandler.html?op_action=CP_SAVE',
+								removeUrl: '/ERPWeb/mgHandler.html?op_action=CP_DEL'
+							},
+							pageStart: 1,
+							method: 'POST'
+						},
+						pageSize: 10,
+						autoSync: true,
+
+					}),
+					gridCfg = Search.createGridCfg(columns, {
+						tbar: {
+							items: [
+								{ text: '<i class = "icon-plus"></i>新建盘点单', btnCls: 'button button-small', handler: addFunction },
+								{ text: '<i class = "icon-trash"></i>删除', btnCls: 'button button-small', handler: delFunction }
+							]
+						},
+						listeners: {
+							cellclick: function(ev) {
+								editor = editing.get('editor');
+								var traggerCls = editing.get('triggerCls');
+								if('btn-edit' == traggerCls && editor) {
+									var clValue = ev.record.typeName,
+										hideSelect = $("#itemTypeList .bui-select-input");
+									if(clValue != hideSelect.val()) {
+										hideSelect.val(clValue);
+									}
+
+								}
+
+							}
+						},
+						plugins: [editing, BUI.Grid.Plugins.CheckSelection, BUI.Grid.Plugins.AutoFit] // 插入形式引用多样式表格
+					});
+				var search = new Search({
+						store: store,
+						gridCfg: gridCfg
+					}),
+					grid = search.get('grid');
+				
+				$('.bui-monthpicker').css('z-index', "10000");
+				
+				function addFunction() {
+					addtaking_dialog.show();
+					addtaking_dialog.set("y", 100);
+					$("#checkNum").val(getLikaVersion("CP"));
+					$("#check_Person").val(curUserName);
+				}
+
+				function delFunction() {
+					var selections = grid.getSelection();
+					if(selections == '') {
+						BUI.Message.Alert("请先选择记录");
+					} else {
+						var hasChecked = false;
+						$.each(selections, function(i, n) {
+							if (n.status == "1") {
+								hasChecked = true;
+								return false;
+							}
+						});
+						if (hasChecked) {
+							BUI.Message.Alert("已盘点信息不可以删除！");
+						} else {
+							delIems(selections);
+						}
+					}
+				}
+
+				function delIems(items) {
+					var ids = [];
+					var numbers = [];
+					BUI.each(items, function(item) {
+						if(!item.disable) {
+							ids.push(item.oid);
+						} else {
+							numbers.push(item.checkNum);
+						}
+					});
+					if(ids.length) {
+						var showMsg = "确认要删除选中记录么?";
+						if(numbers.length) {
+							showMsg = "下列记录不能删除，排除后继续执行么？</br>" + numbers.join(",");
+						}
+						BUI.Message.Confirm(showMsg, function() {
+							store.save('remove', { ids: ids.join(",") });
+						}, 'question');
+					} else {
+						if(numbers.length) {
+							BUI.Message.Alert("所选择记录不能删除</br>" + numbers.join(","), "warning");
+						}
+					}
+				}
+			
+				//仓库名称
+				var wah = new SelectGrid({
+					render: 'wah_name',
+					url: '/ERPWeb/mgHandler.html?op_action=WHS_OPT',
+					itemKey: 'warehouseName',
+					itemTitle: [{
+						title: '仓库',
+						dataIndex: 'warehouseName'
+					}], 
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'warehouseName'
+					}, {
+						itemName: 'value',
+						fieldName: 'warehouseOid'
+					}],
+					setField: true,
+					selectWidth: '180px',
+					mustSelect: true,
+				});
+
+
+				var num = 0;
+				var dialog;
+				//监听事件，删除一条记录
+				grid.on('cellclick', function(ev) {
+					var sender = $(ev.domTarget); //点击的Dom  
+					if(sender.hasClass('btn-del')) {
+						var record = ev.record;
+						delIems([record]);
+					}
+					
+					//已盘点 信息
+					var curStockNum = "";
+					if(sender.hasClass("btn-message")) {
+						showCPDetail(ev);
+					}
+					
+					//未盘点 盘点
+					if(sender.hasClass("btn-check")) {
+						checkCPDetail(ev);
+					}
+					
+				});
+				
+				// 显示盘点子表
+				function showCPDetail(ev) {
+					var clValue = ev.record.oid;
+					$("#cpMainOid").val(clValue);
+					curStockNum = ev.record.checkNum;
+					$('#message_peroidTime').html(ev.record.peroidTime);
+					$('#message_warehouseName').html(ev.record.warehouseName);
+					$('#message_createBy').html(ev.record.createBy);
+					dataUrl = '/ERPWeb/mgHandler.html?op_action=CP_DETAIL&cp_main_oid=' + clValue
+					$.ajax({
+						type: "post",
+						dataType: "json",
+						url: dataUrl,
+						success: function(data) {
+							if (data) {
+								if (data.items) {
+									var itemTbody = "";
+									$.each(data.items, function(i, n) {
+										var gap = keep2Decimal((n.actualStockAmt - n.currentStockAmt)/n.currentStockAmt*100) + "%";
+										itemTbody += "<tr>";
+										itemTbody += "<td>" + n.itemCode + "</td>";
+										itemTbody += "<td>" + n.itemName + "</td>";
+										itemTbody += "<td>" + n.itemTypeName + "</td>";
+										itemTbody += "<td>" + n.safeAmt + "</td>";
+										itemTbody += "<td>" + n.currentStockAmt + "</td>";
+										itemTbody += "<td>" + n.actualStockAmt + "</td>";
+										itemTbody += "<td>" + gap + "</td>";
+										itemTbody += "<td>" + n.remark + "</td>";
+										itemTbody += "</tr>";
+									});
+									$("#grid_message .taking_table tbody").html(itemTbody);
+								}
+								
+								if (data.prods) {
+									var prodTbody = "";
+									$.each(data.prods, function(i, n) {
+										var gap = keep2Decimal((n.actualStockAmt - n.currentStockAmt)/n.currentStockAmt*100) + "%";
+										prodTbody += "<tr>";
+										prodTbody += "<td>" + n.bomNum + "</td>";
+										prodTbody += "<td>" + n.prodId + "</td>";
+										prodTbody += "<td>" + n.prodName + "</td>";
+										prodTbody += "<td>" + n.safeAmt + "</td>";
+										prodTbody += "<td>" + n.currentStockAmt + "</td>";
+										prodTbody += "<td>" + n.actualStockAmt + "</td>";
+										prodTbody += "<td>" + gap + "</td>";
+										prodTbody += "<td>" + n.remark + "</td>";
+										prodTbody += "</tr>";
+									});
+									$("#grid_message .prod-table tbody").html(prodTbody);
+								}
+							}
+						}
+					}); 
+					message_dialog.show(); //显示弹框
+					message_dialog.set("y", 100);
+					
+					return false; //不让其他弹框弹出
+				}
+				
+				// 获取盘点子表列表
+				function checkCPDetail(ev) {
+					var clValue = ev.record.oid;
+					$("#cpMainOid").val(clValue);
+					$("#check_peroidTime").html(ev.record.peroidTime);
+					$("#check_warehouseName").html(ev.record.warehouseName);
+					$("#check_createBy").html(ev.record.createBy);
+					$("#warehouseOid").val(ev.record.warehouseOid);
+					
+					dataUrl = "/ERPWeb/mgHandler.html?op_action=CP_DETAIL&cp_main_oid=" + clValue + "&whOid=" + $("#warehouseOid").val();
+					$.ajax({
+						type: "post",
+						dataType: "json",
+						url: dataUrl,
+						success: function(data) {
+							renderCPDetailTable(data);
+						}
+					});
+					 
+					check_dialog.show(); //显示弹框
+					check_dialog.set("y", 100);
+				}
+				
+				// 生成库存盘点子表
+				function renderCPDetailTable(cpdObj) {
+					if (cpdObj) {
+						if (cpdObj.items) {
+							renderCPDeatilItemTable(cpdObj.items);
+						}
+						
+						if (cpdObj.prods) {
+							renderCPDeatilProdTable(cpdObj.prods);
+						}
+						$("input[name=actualStockAmt]").change();
+					}
+				}
+				
+				// 生成物料盘点子表
+				function renderCPDeatilItemTable(items) {
+					var $itemTbody = $("#grid_check table[class=taking_table] tbody");
+					var tbody;
+
+					for(var i = 0; i < items.length; i++) {
+						var _obj = items[i];
+						tbody += "<tr>";
+						tbody += "<td>" + _obj.itemCode + "</td>";
+						tbody += "<td>" + _obj.itemName + "</td>";
+						tbody += "<td>" + _obj.itemTypeName + "</td>";
+						tbody += "<td>" + _obj.safeAmt + "</td>";
+						tbody += "<td>" + _obj.currentStockAmt + "</td>";
+						tbody += "<td><input type='text' name='actualStockAmt' value='" + _obj.actualStockAmt + "' class='t-td60'/></td>";
+						tbody += "<td></td>";
+						tbody += "<td><input type='text' name='remark' value='" + _obj.remark + "'/></td>";
+						tbody += "<td class='hide'><input type='text' name='cpdOid' value='" + _obj.oid + "'/></td>";
+						tbody += "</tr>";
+					}
+					
+					$itemTbody.html(tbody);
+					$itemTbody.find("input[name=actualStockAmt]").attr("data-rules", "{number:true, max:9999999999.99}");
+					$itemTbody.find("input[name=remark]").attr("data-rules", "{maxlength:200}");
+					if (items && items.length > 0) {
+						$("#cp_main_oid").val(items[0].cpMainOid);
+					}
+				
+					//表单验证
+					BUI.use('bui/form', function(Form) {
+						form = new Form.Form({
+							srcNode: '#grid_check_form',
+							submitType: 'ajax',
+							callback: function(data) {
+							}
+						});
+						form.render();
+					});
+				}
+				
+				// 生产库存产品子表
+				function renderCPDeatilProdTable(prods) {
+					var $prodTbody = $("#grid_check table[class=prod-table] tbody");
+					var tbody = "";
+					
+					$.each(prods, function(i, n) {
+						tbody += "<tr>";
+						tbody += "<td>" + n.bomNum + "</td>";
+						tbody += "<td>" + n.prodId + "</td>";
+						tbody += "<td>" + n.prodName + "</td>";
+						tbody += "<td>" + n.safeAmt + "</td>";
+						tbody += "<td>" + n.currentStockAmt + "</td>";
+						tbody += "<td><input type='text' name='actualStockAmt' class='t-td60' value='" + n.actualStockAmt + "' /></td>";
+						tbody += "<td><input type='text' name='gap' class='hidePrice t-td60' readOnly='readOnly'/></td>";
+						tbody += "<td><input type='text' name='remark' value='" + n.remark + "' /></td>";
+						tbody += "<td class='hide'><input type='hidden' name='cpdOid' value='" + n.oid + "' /></td>";
+						tbody += "</tr>";
+					});
+					
+					$prodTbody.html(tbody);
+					$prodTbody.find("input[name=actualStockAmt]").attr("data-rules", "{number:true, max:9999999999.99}");
+					$prodTbody.find("input[name=remark]").attr("data-rules", "{maxlength:200}");
+					
+					if (prods && prods.length > 0) {
+						$("#cp_main_oid").val(prods[0].cpMainOid);
+					}
+					
+					var prodForm = new BUI.Form.Form({
+						srcNode: '#grid_check_form',
+					}).render();
+				}
+				
+				// 盘点信息保存
+				$("#saveMessage").click(function() {
+					if ($("#grid_check_form .x-field-error").length > 0) {
+						return;
+					}
+					submitStockTable();
+				});
+				
+				// 保存库存盘点子表信息，包括物料和产品
+				// isConfirm: 是否确认盘点单
+				function submitStockTable(isConfirm) {
+					var urlData = "";
+					var itemJson = new Array();
+					var prodJson = new Array();
+					var $checkTrs = $("#grid_check .taking_table tbody tr");
+					var $prodTrs = $("#grid_check .prod-table tbody tr")
+					var ajaxUrl = "/ERPWeb/mgHandler.html?op_action=CP_DETAIL_SAVE";
+					
+					$.each($checkTrs, function(i, n) {
+						var $n = $(n);
+						
+						itemJson.push({
+							oid: $n.find("input[name=cpdOid]").val(),
+							actualStockAmt: $n.find("input[name=actualStockAmt]").val(),
+							remark: $n.find("input[name=remark]").val()
+						});
+					});
+					$.each($prodTrs, function(i, n) {
+						var $n = $(n);
+						
+						prodJson.push({
+							oid: $n.find("input[name=cpdOid]").val(),
+							actualStockAmt: $n.find("input[name=actualStockAmt]").val(),
+							remark: $n.find("input[name=remark]").val()
+						});
+					});
+					urlData += "&items=" + JSON.stringify(itemJson);
+					urlData += "&prods=" + JSON.stringify(prodJson);
+					urlData += "&cp_main_oid=" + $("#cpMainOid").val();
+					if (isConfirm) {
+						urlData += "&isConfirm=true";
+					}
+					
+					$.ajax({
+						type: "post",
+						url: ajaxUrl,
+						data: urlData,
+						dataType: "json",
+						success: function(data) {
+							renderCPDetailTable(data);
+							BUI.Message.Alert("盘点单提交成功!", function()	{
+								if (isConfirm) {
+									location.reload();
+								}
+							});
+						}
+					});
+				}
+				
+				// 盘点单确认
+				$("#inventory_sheet").click(function() { 
+					var isSubmit = true;
+					var $sAmt = $("#grid_check_form input[name=actualStockAmt]");
+					
+					if ($("#grid_check_form .x-field-error").length > 0) {
+						return;
+					}
+					$.each($sAmt, function(i, n) {
+						var val = n.value;
+						if (val == "" || val == null) {
+							isSubmit = false;
+							return false;
+						}
+					});
+					
+					if (!isSubmit) {
+						BUI.Message.Alert("请填写全部“实际库存”后再进行提交！");
+					} else {
+						submitStockTable(true);
+					}
+				});
+				
+				// 导出Excel
+				$('.btn_export').click(function() {
+					var $form;
+					var tbody = "";
+					if ($("#grid_message_form").css("visibility") != "hidden") {
+						$form = $("#grid_message_form");
+					} else if ($("#grid_check_form").css("visibility") != "hidden") {
+						$form = $("#grid_check_form");
+					} else {
+						BUI.Message.Alert("导出Excel失败！");
+						return;
+					}
+					
+					tbody += $form.find(".taking_table").eq(0).html();
+					tbody += "<tr></tr>";
+					tbody += $form.find(".prod-table").eq(0).html();
+					$("#excelTable").html(tbody);
+					
+					$("#excelTable").table2excel({
+						exclude: ".noExl",
+						name: "Excel Document Name",
+						filename: "盘点单",
+						exclude_img: true,
+						exclude_links: true, 
+						exclude_inputs: true
+					});
+				});
+				
+			});
+			
+			$("input[name=actualStockAmt]").live("change keyup", function() {
+				var actVal = this.value;
+				
+				if (actVal != null && actVal.length > 0) {
+					var curNum = $(this).parents("tr").find("td").eq(4).text();
+					var $gap = $(this).parents("tr").find("td").eq(6);
+					
+					$gap.text(keep2Decimal((actVal - curNum)/curNum*100) + "%");
+				}
+			});
+			
+		</script>
+	</body>
+
+</html> 

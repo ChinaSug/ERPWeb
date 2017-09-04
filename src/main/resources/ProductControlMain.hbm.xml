@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.ProductControlMain" table="T_PC_MAIN" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="pcNum" column="PC_NUM" type="string"/>
+		<property name="departOid" column="DEPART_OID" type="long"/>
+		<property name="publishPerson" column="PUBLISH_PERSON" type="string"/>
+		<property name="publishDate" column="PUBLISH_DATE" type="date"/>
+		<property name="confirmPerson" column="CONFIRM_PERSON" type="string"/>
+		<property name="machineOid" column="MACHINE_OID" type="long"/>
+		<property name="mouldOid" column="MOULD_OID" type="long"/>
+		<property name="prodNum" column="PROD_NUM" type="string"/>
+		<property name="stubBar" column="STUB_BAR" type="string"/>
+		<property name="weight" column="WEIGHT" type="string"/>
+		<property name="period" column="PERIOD" type="string"/>
+		<property name="caveNum" column="CAVE_NUM" type="string"/>
+		<property name="dailyTargetAmt" column="DAILY_TARGET_AMT" type="string"/>
+		<property name="pcDate" column="PC_DATE" type="date"/>
+		<property name="prodAmt" column="PROD_AMT" type="string"/>
+		<property name="unitConsume" column="UNIT_CONSUME" type="string"/>
+		<property name="plasticType" column="PLASTIC_TYPE" type="string"/>
+		<property name="plasticWeight" column="PLASTIC_WGT" type="string"/>
+		<property name="targetStartDate" column="TARGET_START_DATE" type="date"/>
+		<property name="targetEndDate" column="TARGET_END_DATE" type="date"/>
+		<property name="planTime" column="PLAN_TIME" type="string"/>
+		<property name="bomDetailOid" column="BOM_OID" type="long"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+		
+		<property name="materialName" column="MATERIAL_NAME" type="string"/>
+		<property name="materialNum" column="MATERIAL_NUM" type="string"/>
+		<property name="loss" column="LOSS" type="string"/>
+		<property name="itemOid" column="ITEM_OID" type="long"/>
+		
+		<property name="remark" column="REMARK" type="string"/>
+	</class>
+</hibernate-mapping>   

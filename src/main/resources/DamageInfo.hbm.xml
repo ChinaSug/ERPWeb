@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.DamageInfo" table="T_DAMAGE" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="number" column="DAM_NUM" type="string"/>
+		<property name="itemOid" column="ITEM_OID" type="long"/>
+		<property name="customerOid" column="CUST_OID" type="long"/>
+		<property name="badAmt" column="BAD_AMT" type="double"/>
+		<property name="pieAmt" column="PIE_AMT" type="double"/>
+		<property name="unitPrice" column="UNIT_PRICE" type="double"/>
+		<property name="cost" column="COST" type="double"/>
+		<property name="unitConsume" column="UNIT_CONSUME" type="double"/>
+		<property name="itemUnitPrice" column="ITEM_UNIT_PRICE" type="double"/>
+		<property name="itemFee" column="ITEM_FEE" type="double"/>
+		<property name="pieUnitPrice" column="PIE_UNIT_PRICE" type="double"/>
+		<property name="pieFee" column="PIE_FEE" type="double"/>
+		<property name="regSource" column="REG_SOURCE" type="string"/>
+		<property name="departOid" column="DEPART_OID" type="long"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="reportDate" column="REPORT_DATE" type="date"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+		
+		<property name="bomDetailOid" column="BOM_DETAIL_OID" type="long"/>
+		<property name="damageType" column="DAMAGE_TYPE" type="string"/>
+		
+	</class>
+</hibernate-mapping>   

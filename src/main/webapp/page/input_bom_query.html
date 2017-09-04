@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>BOM编号查询</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/css/page-min.css" rel="stylesheet" type="text/css" />
+		<style>
+			#bom_input_fahter {
+				width: 700px;
+				border: 1px solid #DDDDDD;
+				margin-top: 100px;
+				margin-left: auto; 
+				margin-right: auto; 
+			}
+			#seach_box ul{
+				overflow: auto;
+				width: 650px;
+				margin: 0 auto;
+			}
+			#seach_box ul li h1 {
+				display: inline-block;
+				line-height: 44px;
+				font-size: 30px;
+				margin-left: 30px;
+			}
+			
+			#seach_box ul li {
+				float: left;
+			}
+			
+			#seach_box ul li input {
+				height: 40px;
+				width: 300px;
+			}
+			
+			#seach_box ul li button {
+				width: 80px;
+				height: 45px;
+				margin-left: 20px;
+			}
+			
+			#next_box{
+				clear: both;
+			}
+			
+			#next_box button { 
+				width: 100px;
+				height: 45px;
+				margin-top: 20px;
+				margin-bottom: 10px;
+			}
+			#bom_grid{
+				width: 650px;
+				margin: 0 auto;
+				overflow: hidden;
+				margin-top: 120px;
+				margin-left: 25px;
+			}
+			
+			#bomNum_caret{
+				margin-top: 10px;
+			}
+			
+			#seach_box .x-field-error {
+			    position: absolute;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="bom_input_fahter">
+			<div id="seach_box">
+				<form action="">
+					<ul style="margin-top: 70px;margin-bottom: 50px;">
+						<li style="margin-left: 50px;">
+							<h1>BOM编号:</h1>
+						</li>
+						<li style="margin-left: 10px;">
+							<input type="text" name="bomNum" id="bomNum" style="font-size: 16px;padding-left: 10px;"/>
+							<input type="hidden" name="prodId" id="prodId" />
+						</li>
+						<li style="display:none;">
+							<button type="button" id="btn_search" class="button button-primary">查询</button>
+						</li>
+					</ul>
+				</form>
+			</div>
+			<div id="sea_cont_box">
+		        <div id="bom_grid" style="margin-top: -30px;">
+		          
+		        </div>
+		      </div>
+			<div id="next_box" style="margin-bottom: 20px;">
+				<div style=" width: 250px; margin-left: auto; margin-right: auto; ">
+					<button type="button" id="next_btn" class="button button-primary">下一步</button>
+					<button type="button" class="button" style="float:right" onclick="window.history.back();">返回</button>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+
+		<script type="text/javascript" src="../assets/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="../assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../assets/js/config-min.js"></script>
+		<script type="text/javascript" src="../assets/js/abs-select.js"></script>
+		
+		<script>
+			$(function() {
+				var addOid;
+				var bomOid;
+				//判断是否是点击编辑跳转页面
+				var thisUrl = document.URL;
+				var getValue = thisUrl.split("?")[1];
+				if(getValue != undefined) {
+					addOid = getValue.split("=")[1]; 
+				} 
+				
+				BUI.use(['bui/grid', 'bui/data'], function(Grid, Data) {
+					var status = {"1":"有效","0":"失效"};
+					var Grid = Grid,
+						Store = Data.Store,
+						columns = [
+							{
+								title: 'Oid',
+								dataIndex: 'oid',
+								visible:false
+							}, {
+								title: '产品编号',
+								dataIndex: 'prodId',
+								width: 130 
+							}, {
+								title: '模具', 
+								dataIndex: 'mouldName',
+							}, {
+								title: '名称', 
+								dataIndex: 'name',
+								width: 130
+							}, {
+								title: '材料型号',
+								dataIndex: 'itemCode',
+								width: 130
+							}
+							, {
+								title: '颜色',
+								dataIndex: 'itemColor',
+								width: 100
+							}
+						],
+						data = [];
+						
+					var store = new Store({
+							data: data,
+							autoLoad: true
+						}),
+						grid = new Grid.Grid({
+							render: '#bom_grid',
+							columns: columns,
+							store: store,
+							plugins: [Grid.Plugins.RadioSelection] // 插件形式引入单选表格
+						});
+	 
+					grid.on('cellclick', function(ev) {
+						var sender = $(ev.domTarget); //点击的Dom 
+						//将获取的bomOid存进bomOid
+						bomOid = ev.record.oid;
+					});
+					
+					$('#btn_search').click(function() {
+						bomNum = $('#bomNum').val(); 
+						$.ajax({
+							type: "post", 
+							url: "/ERPWeb/mgHandler.html?op_action=CP_GETBOM&bomNum=" + bomNum,
+							async: true,
+							success: function(objData) { 
+								if (objData) {
+									var result = jQuery.parseJSON(objData);
+									if(result != ""){ 
+										grid.render(); 
+										grid.setItems(result);
+										grid.setSelected(grid.findItemByField("prodId", $("#prodId").val()));
+									}
+								}
+							}
+						});
+					});
+					
+					$('#next_btn').click(function(){
+						var bomDetail = grid.getSelected();
+						if (bomDetail != null) {
+							window.location.href = "production_editor.html?addOid="+addOid+"&bomDetailOid="+bomDetail.oid;
+						} else {
+							BUI.Message.Alert("请先查询并选择一条BOM子表信息！");
+						}
+					});
+					
+				}); 
+				
+			});
+			
+			var bomSG = new SelectGrid({
+				render: 'bomNum',
+				url: '/ERPWeb/mgHandler.html?op_action=GET_BOM_NUM',
+				itemKey: 'bomNum',
+				itemTitle: [{
+					title: 'BOM编号',
+					dataIndex: 'bomNum'
+				}, {
+					title: '产品编号',
+					dataIndex: 'prodId'
+				}],
+				// setField: true,
+				// selectWidth: '230px',
+				mustSelect: true,
+			});
+			
+			// 单个下拉选择框使用，Sug
+			$(".bui-list-picker .bui-grid-row").live('click', function() {
+				$("#btn_search").click();
+				$("#prodId").val($(this).find(".bui-grid-cell").eq(1).text());
+			});
+
+			
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.OrderManager" table="T_ORDER_MANAGER" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="customerOid" column="CUSTOMER_OID" type="long"/>
+		<property name="acceptDate" column="ACCEPT_DATE" type="java.util.Date"/>
+		<property name="orderNum" column="ORDER_NUM" type="string"/>
+		<property name="projectNum" column="PROJECT_NUM" type="string"/>
+		<property name="productNum" column="PRODUCT_NUM" type="string"/>
+		<property name="specificationName" column="SPECIFICATION_NAME" type="string"/>
+		<property name="orderCount" column="ORDER_COUNT" type="string"/>
+		<property name="completeCount" column="COMPLETE_COUNT" type="string"/>
+		<property name="unCompleteCount" column="UNCOMPLETE_COUNT" type="string"/>
+		<property name="delivery" column="DELIVERY" type="java.util.Date"/>
+		<property name="startDate" column="START_DATE" type="java.util.Date"/>
+		<property name="finishDate" column="FINISH_DATE" type="java.util.Date"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="remark" column="REMARK" type="string"/>
+	</class>
+</hibernate-mapping>   

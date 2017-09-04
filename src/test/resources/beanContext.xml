@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/tx
+                      http://www.springframework.org/schema/tx/spring-tx.xsd
+                      http://www.springframework.org/schema/aop
+                      http://www.springframework.org/schema/aop/spring-aop.xsd">
+          
+      <bean id="userDao" class="com.abs.ps.dao.impl.UserDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+	 <bean id="userService" class="com.abs.ps.service.impl.UserServiceImpl">
+	 	<property name="userDao" ref="userDao" />
+	 	<property name="orgService" ref="orgService" />
+	 	<property name="mailUtils" ref="mailUtils" />
+	 </bean>
+
+	 <bean id="actionLogDao" class="com.abs.ps.dao.impl.ActionLogDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+	 <bean id="actionLogService" class="com.abs.ps.service.impl.ActionLogServiceImpl">
+	 	<property name="actionLogDao" ref="actionLogDao" />
+	 </bean> 
+	 
+	 <bean id="orgDao" class="com.abs.ps.dao.impl.OrgDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+	 <bean id="orgService" class="com.abs.ps.service.impl.OrgServiceImpl">
+	 	<property name="orgDao" ref="orgDao" />
+	 </bean>
+	 
+	 <bean id="appDao" class="com.abs.ps.dao.impl.AppDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+	 <bean id="appService" class="com.abs.ps.service.impl.AppServiceImpl">
+	 	<property name="appDao" ref="appDao" />
+	 </bean>
+	 
+	 <bean id="departmentDao" class="com.abs.ps.dao.impl.DepartmentDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+	 <bean id="departmentService" class="com.abs.ps.service.impl.DepartmentServiceImpl">
+	 	<property name="departmentDao" ref="departmentDao" />
+	 </bean>
+	 
+	 <bean id="employeeDao" class="com.abs.ps.dao.impl.EmployeeDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+	 <bean id="employeeService" class="com.abs.ps.service.impl.EmployeeServiceImpl">
+	 	<property name="employeeDao" ref="employeeDao" />
+	 </bean>
+
+	  <bean id="supportingDataDao" class="com.abs.ps.dao.impl.SupportingDataDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+	 <bean id="supportingDataService" class="com.abs.ps.service.impl.SupportingDataServiceImpl">
+	 	<property name="supportingDataDao" ref="supportingDataDao" />
+	 </bean>
+
+	<bean id="baseInfoDao" class="com.abs.ps.dao.impl.BaseInfoDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+     <bean id="baseInfoService" class="com.abs.ps.service.impl.BaseInfoServiceImpl">
+	 	<property name="baseInfoDao" ref="baseInfoDao" />
+	 </bean>
+	 
+	 <bean id="scheduleDao" class="com.abs.ps.dao.impl.ScheduleDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+     <bean id="scheduleService" class="com.abs.ps.service.impl.ScheduleServiceImpl">
+	 	<property name="scheduleDao" ref="scheduleDao" />
+	 </bean> 
+	 <bean id="stockInfoDao" class="com.abs.ps.dao.impl.StockInfoDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+     <bean id="stockInfoService" class="com.abs.ps.service.impl.StockInfoServiceImpl">
+	 	<property name="stockInfoDao" ref="stockInfoDao" />
+	 </bean> 
+	  <bean id="customerDao" class="com.abs.ps.dao.impl.CustomerDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+	 <bean id="customerService" class="com.abs.ps.service.impl.CustomerServiceImpl">
+	 	<property name="customerDao" ref="customerDao"></property>
+	 </bean>
+	 <bean id="bomInfoDao" class="com.abs.ps.dao.impl.BomInfoDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+     <bean id="bomInfoService" class="com.abs.ps.service.impl.BomInfoServiceImpl">
+	 	<property name="bomInfoDao" ref="bomInfoDao" />
+	 </bean> 
+	
+	<bean id="productControlDao" class="com.abs.ps.dao.impl.ProductControlDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+     <bean id="productControlService" class="com.abs.ps.service.impl.ProductControlServiceImpl">
+	 	<property name="productControlDao" ref="productControlDao" />
+	 </bean> 
+	 
+	 <bean id="damageDao" class="com.abs.ps.dao.impl.DamageDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+     <bean id="damageService" class="com.abs.ps.service.impl.DamageServiceImpl">
+	 	<property name="damageDao" ref="damageDao" />
+	 </bean>
+	 
+	 <bean id="orderManagerDao" class="com.abs.ps.dao.impl.OrderManagerDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+     </bean>
+     <bean id="orderManagerService" class="com.abs.ps.service.impl.OrderManagerServiceImpl">
+	 	<property name="orderManagerDao" ref="orderManagerDao" />
+	 </bean> 
+</beans>

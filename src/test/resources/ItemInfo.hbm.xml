@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.ItemInfo" table="T_ITEM" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="code" column="ITEM_CODE" type="string"/>
+		<property name="name" column="ITEM_NAME" type="string"/>
+		<property name="typeOid" column="TYPE_OID" type="long"/>
+		<property name="model" column="MODEL" type="string"/>
+		<property name="spec" column="SPEC" type="string"/>
+		<property name="color" column="COLOR" type="string"/>
+		<property name="unit" column="UNIT" type="string"/>
+		<property name="unitPrice" column="UNIT_PRICE" type="double"/>
+		<property name="damPrice" column="DAM_PRICE" type="double"/>
+		<property name="matPrice" column="MAT_PRICE" type="double"/>
+		<property name="piePrice" column="PIE_PRICE" type="double"/>
+		<property name="safeAmt" column="SAFE_AMT" type="double"/>
+		<property name="supplierOid" column="SUPPLIER_OID" type="long"/>
+		<property name="customerOid" column="CUSTOMER_OID" type="long"/>	
+		<property name="status" column="STATUS" type="string"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+		
+	</class>
+</hibernate-mapping>   

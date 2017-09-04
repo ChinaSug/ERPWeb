@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.abs.ps.domain.Contract" table="T_CONTRACT" catalog="rentdb">
+	    <id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="houseOid" column="HOUSE_OID" type="long" not-null="true"/>
+		<property name="tenantName" column="TENANT_NAME" type="string" not-null="true"/>
+		<property name="tenantPhone" column="TENANT_PHONE" type="string" not-null="true"/>
+		<property name="idNum" column="ID_NUM" type="string" not-null="true"/>
+		<property name="sex" column="SEX" type="string"/>
+		<property name="contCode" column="CONT_CODE" type="string"/>
+		<property name="status" column="STATUS" type="string"/>
+		<property name="rent" column="RENT" type="double"/>
+		<property name="deposit" column="DEPOSIT" type="double"/>
+		<property name="tollPeriod" column="TOLL_PERIOD" type="string"/>
+		<property name="startDate" column="START_DATE" type="date"/>
+		<property name="endDate" column="END_DATE" type="date"/>
+		<property name="remark" column="REMARK" type="string"/>
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+    </class>
+</hibernate-mapping>

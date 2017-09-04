@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>生产控制单编辑</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/css/page-min.css" rel="stylesheet" type="text/css" />
+		<style>
+			#btu_div {
+				overflow: auto;
+				text-align: center;
+				margin-bottom: 100px;
+			}
+			
+			#btu_div ul {
+				display: inline-block;
+				text-align: center;
+				margin-top: 20px;
+			}
+			
+			#btu_div ul li {
+				float: left;
+				padding: 0 100px 0 100px;
+			}
+			
+			s {
+				color: red;
+			}
+			
+			#pro_main_form td {
+				text-align: center;
+				vertical-align: middle;
+			}
+			
+			form .readOnly-input {
+				border: none;
+				background-color: transparent;
+			}
+			
+			#pro_main_form input {
+				width: 90%;
+			}
+			
+			.triangle_border_nw {
+				width: 0;
+				height: 0;
+				border-width: 0 0 8px 8px;
+				border-style: solid;
+				border-color: transparent transparent transparent #3997db;
+				position: absolute;
+				margin-left: -9px;
+				margin-top: -9px;
+			}
+			
+			.center-loca {
+				width: 1000px;
+				margin-left: auto;
+    			margin-right: auto;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<!--未加载完成阻碍层-->
+		<div id="loading-bar" style="">
+			<div class="over"></div>
+			<div class="layout">
+				<img src="../assets/img/load-16-16.gif" />
+			</div>
+		</div>
+		<div id="production_edtior_fahter" class="container">
+			<div id="pro_edt_main" class="center-loca">
+				<form id="pro_main_form" method="post" action="/ERPWeb/mgHandler.html?op_action=PC_SAVE">
+					<input type="hidden" name="oid" id="oid">
+					<input type="hidden" name="bomDetailOid" id="bomDetailOid"/>
+					<table class="bui-grid-table table table-bordered table-striped" style="border: 1px solid #DDDDDD;">
+						<tr>
+							<td>BOM编号</td>
+							<td colspan="2">
+								<input name="bomNum" type="text" class="input-normal control-text readOnly-input" style="width: 90%;" />
+							</td>
+							<td>状态</td>
+							<td colspan="2">
+								<input name="status" type="text" value="生产中" class="input-normal control-text readOnly-input"/>
+							</td>
+						</tr>
+						<tr>
+							<td><s>*</s>控制单号</td>
+							<td colspan="2">
+								<input name="pcNum" id="pcNum" type="text" data-rules="{required:true,maxlength:20}"  class="input-normal control-text" style="width: 90%;" />
+							</td>
+							<td><s>*</s>发行部门</td>
+							<td colspan="2">
+								<input name="departName" id="det_name" type="text" data-rules="{required:true}" class="input-normal control-text" style="width: 90%;">
+								<input name="departOid" type="hidden" />
+							</td>
+						</tr>
+						<tr>
+							<td>发 行 人</td>
+							<td colspan="2">
+								<input name="publishPerson" id="publishPerson" type="text" data-rules="{maxlength:20}" class="input-normal control-text" style="width: 90%;" />
+							</td>
+							<td>承 认</td>
+							<td colspan="2">
+								<input name="confirmPerson" id="confirmPerson" type="text" data-rules="{maxlength:20}" class="input-normal control-text" style="width: 90%;" />
+							</td>
+						</tr>
+						<tr>
+							<td><s>*</s>机器编号</td>
+							<td colspan="2">
+								<input name="machineName" id="mac_name" type="text" data-rules="{required:true}" class="input-normal control-text" style="width: 90%;">
+								<input name="machineOid" type="hidden" />
+							</td>
+							<td>日 期</td>
+							<td colspan="2">
+								<input name="publishDate" id="publishDate" type="text" class="input-normal calendar control-text" style="width: 90%;" />
+							</td>
+						</tr>
+						<tr>
+							<td>模具编号</td>
+							<td colspan="2">
+								<input name="mouldName" id="mou_name" type="text" class="input-normal control-text readOnly-input" style="width: 90%;">
+								<input name="mouldOid" type="hidden" />
+							</td>
+							<td>生 产 数</td>
+							<td colspan="2">
+								<input name="prodAmt" id="prodAmt" type="text" class="input-normal control-text" style="width: 90%;" />
+							</td>
+						</tr>
+						<tr>
+							<td>产品编号</td>
+							<td colspan="2">
+								<input name="prodId" ype="text" class="input-normal control-text readOnly-input" style="width: 90%;" />
+							</td>
+							<td>单 耗</td>
+							<td colspan="2">
+								<div id="ucTip" class="triangle_border_nw"></div>
+								<input title="单耗=流道重量/穴数+单重" name="unitConsume" id="unitConsume" type="text" class="input-normal control-text" style="width: 90%;" />
+							</td>
+						</tr>
+						<tr>
+							<td>流道重量</td>
+							<td colspan="2">
+								<input name="pwActualWgt" id="pwActualWgt" type="text" class="input-normal control-text readOnly-input" style="width: 90%;" />
+							</td>
+							<td>材料型号</td>
+							<td colspan="2">
+								<input name="itemCode" id="itemCode" type="text" class="input-normal control-text readOnly-input" style="width: 90%;" />
+								<input type="hidden" name="itemOid" />
+							</td>
+						</tr>
+						<tr>
+							<td>单 重</td>
+							<td colspan="2">
+								<input name="shotActualWgt" id="shotActualWgt" type="text" class="input-normal control-text readOnly-input" style="width: 90%;" />
+							</td>
+							<td>材料颜色</td>
+							<td colspan="2">
+								<input type="text" name="itemColor" class="input-normal control-text readOnly-input"/>
+							</td>
+						</tr>
+						<tr>
+							<td>周 期</td>
+							<td colspan="2">
+								<input name="period" id="period" type="text" class="input-normal control-text readOnly-input" style="width: 90%;" />
+							</td>
+							<td>损 耗</td>
+							<td colspan="2">
+								<input type="text" name="loss" id="loss" class="input-normal control-text"/>
+							</td>
+						</tr>
+						<tr>
+							<td>穴 数</td>
+							<td colspan="2">
+								<input name="fetchActualNum" type="text" class="input-normal control-text readOnly-input" style="width: 90%;" />
+							</td>
+							<td>所需材料(kg)</td>
+							<td colspan="2">
+								<div id="pwTip" class="triangle_border_nw"></div>
+								<input title="所需材料=单耗*生产数/1000*损耗" name="plasticWeight" id="plasticWeight" type="text" class="input-normal control-text" style="width: 90%;" />
+							</td>
+						</tr>
+						<tr>
+							<td>生产能力/日</td>
+							<td colspan="2">
+								<input name="dailyPc" id="dailyPc" type="text" class="input-normal control-text readOnly-input" style="width: 90%;" />
+							</td>
+							<td>预计开工日期</td>
+							<td colspan="2">
+								<input name="targetStartDate" id="targetStartDate" type="text" class="input-normal calendar control-text" style="width: 90%;" />
+							</td>
+						</tr>
+						<tr> 
+							<td>生产计划时间</td>
+							<td colspan="2">
+								<div id="ptTip" class="triangle_border_nw"></div>
+								<input title="生产计划时间=生产数/生产能力*23"  name="planTime" id="planTime" type="text" class="input-normal control-text" style="width: 78%;margin-right: 5px;" />小时
+							</td>
+							<td>预计完工日期</td>
+							<td colspan="2">
+								<input name="targetEndDate" id="targetEndDate" type="text" class="input-normal calendar control-text" style="width: 90%;" />
+							</td>
+						</tr>
+						<tr>
+							<td>备注：</td>
+							<td colspan="5">
+								<textarea name="remark" style="width:790px;max-width:790px;min-width:790px;"></textarea>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+
+			<div class="search-grid-container center-loca">
+				<div id="grid"></div>
+			</div>
+
+			<div id="btu_div" class="center-loca">
+				<ul>
+					<li><button class="button button-primary" id="sub_btn">提交</button></li>
+					<li><button class="button" id="can_btn">取消</button></li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="content" class="hide">
+			<form id="myform" name="myform" class="form-horizontal" action="/ERPWeb/mgHandler.html?op_action=SUPPLIER_SAVE">
+				<input type="hidden" name="pcOid" id="pcOid">
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>生产日期：</label>
+						<div class="controls">
+							<input name="produceDate" id="produceDate" type="text" data-rules="{required:true}" class="input-normal calendar control-text" style="width: 140px;">
+						</div> 
+					</div>
+
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>班别：</label>
+						<div class="controls">
+							<input name="dutyId" id="dutyId" type="text" data-rules="{required:true}" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8"> 
+						<label class="control-label">计划生产数量：</label>
+						<div class="controls">
+							<input name="planProduceAmt" id="planProduceAmt" type="text" data-rules="{number:true}" class="input-normal control-text readOnly-input">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">实际生产数：</label>
+						<div class="controls">
+							<input name="actualProduceAmt" id="actualProduceAmt" type="text"  data-rules="{number:true}" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">加工良品数：</label>
+						<div class="controls" id="itemList">
+							<input name="goodProductAmt" id="goodProductAmt" type="text" data-rules="{number:true}" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">不良数：</label>
+						<div class="controls">
+							<input name="badProductAmt" id="badProductAmt" type="text" data-rules="{number:true}" class="input-normal control-text readOnly-input">
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div id="pint_table" class="hide">
+			<table id="excelTable" style="width: 800px; text-align: center;margin-bottom: 100px;" border="1">
+			</table>
+		</div>
+
+		<script type="text/javascript" src="../assets/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="../assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../assets/js/config-min.js"></script>
+		<script type="text/javascript" src="../assets/js/jquery.table2excel.js" ></script>
+		<script type="text/javascript" src="../assets/js/abs-select.js"></script>
+		<script type="text/javascript" src="../assets/js/common.js"></script>
+		<script type="text/javascript" src="../assets/js/check-data.js"></script>
+		<script>
+			var urlObj = returnUrlObj();
+			var addOid = urlObj.addOid;
+			var bomDetailOid= urlObj.bomDetailOid;
+			var statusObj = {
+				0: "生产中",
+				1: "生产完成",
+				2: "异常",
+			};
+			
+			$(".readOnly-input").attr("readonly", "readonly");
+			var curDate = new Date();
+			var month = curDate.getMonth()+1;
+			month = month < 10 ? "0" + month : month;
+			var dat = curDate.getDate();
+			dat = dat < 10 ? "0" + dat : dat;
+			$("#publishDate").val(curDate.getFullYear()+"-"+month+"-"+dat);
+			
+			// 自动生产控制单号
+			$("#pcNum").val(getLikaVersion("PC"));
+			
+			if (bomDetailOid != null && bomDetailOid > 0) {
+				$.ajax({
+				  	type: "POST",
+				  	url: "/ERPWeb/mgHandler.html?op_action=GET_BOM_DETAIL&bomDetailOid=" + bomDetailOid,
+				  	success: function(data) {
+				  		if (data) {
+				  			var jsonObj = $.parseJSON(data);
+				  			delete jsonObj.status; // 删掉冲突属性
+				  			delete jsonObj.remark;
+							BUI.FormHelper.setFields($("#pro_main_form")[0], jsonObj);
+							
+							var pwActualWgt = jsonObj.pwActualWgt, // 流道重量
+								fetchActualNum = jsonObj.fetchActualNum, // 穴数
+								unitWgt = +jsonObj.shotActualWgt, // 单重
+								period = jsonObj.shapeActPd; // 周期
+							
+							$("input[name=period]").val(period);
+							var unitConsume = pwActualWgt / fetchActualNum + unitWgt; // 单耗 = 流道重量 / 穴数 + 单重
+							$("#unitConsume").val(keep4Decimal(unitConsume));
+							
+							calcPlanTime();
+							calcItemWeight();
+				  		}
+				  		$("#oid").val(addOid);
+				  		$("#bomDetailOid").val(bomDetailOid);
+				  		
+				  		// 设置导出Excel表格
+						setExcelTable();
+				  	}
+				});
+			}
+			
+			//判断是否是点击编辑跳转页面
+			var thisUrl = document.URL;
+			if(addOid != undefined) {
+				if(bomDetailOid != undefined){
+					$('#bomDetail').val(bomDetailOid);
+				}
+				
+				if(addOid == "N") {
+					var d = new Date();
+					$('#publishDate').val(d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate());
+					renderForm();
+				} else {
+					//一进入就开始显示加载图标202020
+					$('.over').css({'display':'block',"background-color":"#202020"});
+					$('.layout').css("display","block");
+					$.ajax({
+						type: "post",
+						url: "/ERPWeb/mgHandler.html?op_action=GET_PC&pcOid=" + addOid,
+						async: true,
+						success: function(data) {
+							var result = $.parseJSON(data);
+							BUI.FormHelper.setFields($("#pro_main_form")[0], result);	
+							
+							var canEdit = true;
+							if (1 == result.status) { // 若控制单状态为完成状态1，则控制单不能进行修改
+								$input = $("#pro_main_form").find("input:visible");
+								$.each($input, function(i, n) {
+									if (!$(n).hasClass("readOnly-input")) {
+										$(n).addClass("readOnly-input");
+										$(n).removeClass("calendar");
+										$(n).attr("readonly", "readonly");
+									}
+								});
+								$("#pro_main_form textarea").attr("readonly", "readonly");
+								$("#sub_btn").hide();
+								canEdit = false;
+							} else {
+								renderForm();
+							}				
+							renderPCSubTable(canEdit);
+
+							$("#pro_main_form input[name=status]").val(statusObj[result.status]);
+							//完成渲染以后加载图标隐藏
+							$('.over').css("display","none");
+							$('.layout').css("display","none");
+							
+							// 设置导出Excel表格
+							setExcelTable();
+						}
+					});
+				}
+			}
+			
+			// 渲染表单选项和日历
+			function renderForm() {
+				//发行部门
+				var wah = new SelectGrid({
+					render: 'det_name',
+					url: '/ERPWeb/mgHandler.html?op_action=DEPART_OPT',
+					itemKey: 'departName',
+					itemTitle: [{
+						title: '部门',
+						dataIndex: 'departName'
+					}],
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'departName'
+					}, {
+						itemName: 'value',
+						fieldName: 'departOid' 
+					}],
+					setField: true,
+					// selectWidth: '230px',
+					mustSelect: true,
+				});
+
+				//机器编号
+				var mac = new SelectGrid({
+					render: 'mac_name',
+					url: '/ERPWeb/mgHandler.html?op_action=MACHINE_OPT',
+					itemKey: 'machineName',
+					itemTitle: [{
+						title: '机器',
+						dataIndex: 'machineName'
+					}],
+					fieldReplace: [{
+						itemName: 'text',
+						fieldName: 'machineName'
+					}, {
+						itemName: 'value',
+						fieldName: 'machineOid'
+					}],
+					setField: true,
+					// selectWidth: '230px',
+					mustSelect: true,
+				});
+				
+				//提交表单
+				BUI.use('bui/form', function(Form) {
+					var buiForm = new Form.HForm({
+						srcNode: '#pro_main_form',
+						submitType: 'ajax',
+						callback: function(data) {
+							if(data.hasError == "") {
+								window.location.href = "/ERPWeb/mgHandler.html?op_action=PROD_PLAN_PAGE";
+							}
+						}
+					}).render(),
+					classN1 = "ProductControlMain",
+					fieldName1 = "pcNum";
+					
+					setFieldRemote(buiForm, fieldName1, classN1);
+	
+				});
+				
+				var datepicker = new BUI.Calendar.DatePicker({
+					trigger: '.calendar',
+					autoRender: true
+				});
+			}
+			
+			//编辑时要显示的下拉框
+			function selectFunction(s_url, result_oid, s_listId) {
+				$.ajax({
+					type: "GET",
+					url: s_url,
+					cache: false,
+					dataType: "json",
+					success: function(data) {
+						var items = data;
+						$.each(items, function(i, text, value) {
+							if(result_oid == items[i].value) {
+								var clValue = items[i].text,
+									hideSelect = $("#" + s_listId + " .bui-select-input");
+								hideSelect.val(clValue);
+							}
+						});
+					}
+				});
+			}
+			
+			$('#sub_btn').click(function(){
+				if (checkBeforeSubmit($("#pro_main_form"))) {
+					$('#pro_main_form').submit();
+				}
+			});
+			
+			$('#can_btn').click(function(){
+				window.history.back();
+			});
+
+			// 渲染生产控制单子表格
+			function renderPCSubTable(canEdit) {
+				BUI.use('common/search', function(Search) {
+					var enumObj = {
+							"1": "有效",
+							"0": "失效"
+						},
+						editing = new BUI.Grid.Plugins.DialogEditing({
+							contentId: 'content', //设置隐藏的Dialog内容
+							autoSave: true, //添加数据或者修改数据时，自动保存
+							form: 'myform',
+							triggerCls: 'btn-edit',
+							editor: {
+								title: ''
+							}
+						}),
+						columns = [{
+								title: '类型OID',
+								dataIndex: 'oid',
+								visible: false
+							},
+							{
+								title: '生产控制单主OID',
+								dataIndex: 'pcOid',
+								visible: false
+							},
+							{
+								title: '生产日期',
+								dataIndex: 'produceDate',
+								width: 120
+							},
+							{
+								title: '班别',
+								dataIndex: 'dutyId',
+								width: 150,
+							},
+							{
+								title: '计划生产数量',
+								dataIndex: 'planProduceAmt',
+								width: 140
+							},
+							{
+								title: '实际生产数',
+								dataIndex: 'actualProduceAmt',
+								width: 140
+							},
+							{
+								title: '加工良品数',
+								dataIndex: 'goodProductAmt',
+								width: 140
+							},
+							{
+								title: '不良数',
+								dataIndex: 'badProductAmt',
+								width: 140
+							}
+						],
+						store = Search.createStore('/ERPWeb/mgHandler.html?op_action=PC_SUB_LIST&pcOid='+addOid, {
+							proxy: {
+								save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
+									addUrl: "/ERPWeb/mgHandler.html?op_action=PC_SUB_SAVE&pcOid="+addOid,
+									updateUrl: "/ERPWeb/mgHandler.html?op_action=PC_SUB_SAVE&pcOid="+addOid,
+									removeUrl: "/ERPWeb/mgHandler.html?op_action=PC_SUB_DEL&pcOid=" + addOid
+								},
+								pageStart: 1,
+								method: 'POST'
+							},
+							pageSize: 5,
+							autoSync: true //保存数据后，自动更新
+						});
+					var tbar = null;
+					// 判断是否添家操作栏
+					tbar = {
+						items: [
+							{
+								text: '<i></i>导出Excel',
+								btnCls: 'button button-small',
+								handler: printFunction
+							}
+						]
+					};
+					if (canEdit) {
+						tbar = {
+							items: [
+								{
+									text: '<i class="icon-plus"></i>添加',
+									btnCls: 'button button-small',
+									handler: addFunction
+								},
+								{
+									text: '<i class="icon-trash"></i>删除',
+									btnCls: 'button button-small',
+									handler: delFunction
+								},
+								{
+									text: '<i></i>导出Excel',
+									btnCls: 'button button-small',
+									handler: printFunction
+								}
+							]
+						};
+						columns.push({
+							title: '操作',
+							renderer: function(value, obj) {
+								return '<span class="grid-command btn-edit" title="编辑信息">编辑</span>';
+							}
+						});
+					}
+					
+					// 若超过主表生产数就刷新页面
+					/* store.on("exception", function(ev) {
+						setTimeout(function() {
+							location.reload();
+						}, 1500);
+					}); */
+						
+					var gridCfg = Search.createGridCfg(columns, {
+							tbar: tbar,
+							listeners: {
+								cellclick: function(ev) {
+								}
+							},
+							plugins: [editing, BUI.Grid.Plugins.CheckSelection, BUI.Grid.Plugins.AutoFit] // 插件形式引入多选表格
+						});
+
+					if(addOid =="N"){
+						return false;
+					}else{
+						var search = new Search({
+							store: store,
+							gridCfg: gridCfg
+						}),
+						grid = search.get('grid'); //渲染
+					}
+					
+					function printFunction(){
+						//导出excel表格
+						$("#pint_table").find("table").table2excel({
+							exclude: ".noExl", // 不被导出的表格行的CSS class类
+							name: "Excel Document Name",
+							filename: $("#pcNum").val() + "生产控制单",
+							exclude_img: true,
+							exclude_links: true, 
+							exclude_inputs: true // 是否导出输入框中的内容
+						});
+					}
+
+					function addFunction() {
+						var newData = {
+							isNew: true
+						}; //标志是新增加的记录
+
+						//清空所有的虚假选项（例：库存名称等）
+						if($("#stockTypeOid").val() == "") {
+							$(".bui-select-input").attr("value", "");
+						}
+						editing.add(newData, 'name'); //添加记录后，直接编辑 
+						$("#planProduceAmt").val($("#dailyPc").val());
+					}
+
+					//删除操作
+					function delFunction() {
+						var selections = grid.getSelection();
+						if(selections == '') {
+							BUI.Message.Alert("请先选择记录");
+						} else {
+							delItems(selections);
+						}
+					}
+
+					function delItems(items) {
+						var ids = [];
+						var numbers = [];
+						BUI.each(items, function(item) {
+							if(!item.disabled) {
+								ids.push(item.oid);
+							} else {
+								numbers.push(item.stockNum);
+							}
+
+						});
+
+						if(ids.length) {
+							var showMsg = "确认要删除选中的记录么？";
+							if(numbers.length) {
+								showMsg = "下列记录不能删除，排除后继续执行么？</br>" + numbers.join(",");
+							}
+							BUI.Message.Confirm(showMsg, function() {
+								store.save('remove', {
+									ids: ids.join(",")
+								});
+							}, 'question');
+						} else {
+							if(numbers.length) {
+								BUI.Message.Alert("所选择记录不能删除</br>" + numbers.join(","), "warning");
+							}
+						}
+					}
+					//监听事件，删除一条记录
+					grid.on('cellclick', function(ev) {
+						var sender = $(ev.domTarget); //点击的Dom
+						if(sender.hasClass('btn-del')) {
+							var record = ev.record;
+							delItems([record]);
+						}
+						if(sender.hasClass('btn-edit')) {
+							var record = ev.record;
+							// alert("record = " + record);
+						}
+					});
+				});
+			}
+			
+			// 将Url地址狼转成对象
+			function returnUrlObj() {
+				var url = location.href;
+				var nameValue;
+				var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+				var paraObj = {};
+				for (var i = 0; nameValue = paraString[i]; i++) {
+					var name = nameValue.substring(0, nameValue.indexOf("="));
+					var value = nameValue.substring(nameValue.indexOf("=") + 1, nameValue.length);
+					if (value.indexOf("#") > -1) {
+						value = value.split("#")[0];
+					}
+					paraObj[name] = value;
+				}
+				return paraObj;
+			}
+			
+			BUI.use('bui/tooltip',function (Tooltip) {
+				var unitConsumeTip = new Tooltip.Tip({
+					trigger : '#ucTip',
+					alignType : 'bottom',
+					offset : 10,
+					title : '单耗=流道重量/穴数+单重',
+					elCls : 'tips tips-info tips-small',
+					titleTpl : '<span class="x-icon x-icon-small x-icon-info"><i class="icon icon-white icon-book"></i></span>\
+					<div class="tips-content">{title}</div>'
+    			});
+     			unitConsumeTip.render();
+     			
+				var pwTip = new Tooltip.Tip({
+					trigger : '#pwTip',
+					alignType : 'bottom',
+					offset : 10,
+					title : '所需材料=单耗*生产数/1000*损耗',
+					elCls : 'tips tips-info tips-small',
+					titleTpl : '<span class="x-icon x-icon-small x-icon-info"><i class="icon icon-white icon-book"></i></span>\
+					<div class="tips-content">{title}</div>'
+    			});
+     			pwTip.render();
+     			
+				var ptTip = new Tooltip.Tip({
+					trigger : '#ptTip',
+					alignType : 'bottom',
+					offset : 10,
+					title : '生产计划时间=生产数/生产能力*23',
+					elCls : 'tips tips-info tips-small',
+					titleTpl : '<span class="x-icon x-icon-small x-icon-info"><i class="icon icon-white icon-book"></i></span>\
+					<div class="tips-content">{title}</div>'
+    			});
+     			ptTip.render();
+			});
+			
+			$("#prodAmt, #loss, #unitConsume").on('change keyup', function() {
+				calcItemWeight();
+			})
+			
+			// 计算:所需材料(KG) = 单耗*生产数*/1000*损耗
+			function calcItemWeight() {
+				var prodAmt = $("#prodAmt").val();
+				var loss = $("#loss").val();
+				var unitC = $("#unitConsume").val();
+				var plasticWeight = unitC * prodAmt / 1000 * loss;
+				$("#plasticWeight").val(parseDecimal(plasticWeight, 4));
+			}
+			
+			$("#prodAmt").on('change keyup', function() {
+				calcPlanTime();
+			});
+			
+			// 计算:生产计划时间=生产数/生产能力*23
+			function calcPlanTime() {
+				var prodAmt = $("#prodAmt").val();
+				var dailyPc = $("#dailyPc").val();
+				var planT = prodAmt / dailyPc * 23;
+				$("#planTime").val(parseDecimal(planT, 1));
+			}
+			
+			function setExcelTable() {
+				var title = "BOM编号,状态,控制单号,发行部门,发行人,承认,机器编号,日期,模具编号,生产数,产品编号,单耗,流道重量,材料型号,单重,材料颜色,周期,损耗,穴数,所需材料(kg),生产能力/日,预计开工日期,生产计划时间,预计完工日期";
+				var titleName = "bomNum,status,pcNum,departName,publishPerson,confirmPerson,machineName,publishDate,mouldName,prodAmt,prodId,unitConsume,pwActualWgt,itemCode,shotActualWgt,itemColor,period,loss,fetchActualNum,plasticWeight,dailyPc,targetStartDate,planTime,targetEndDate";
+				
+				var titleObj = {
+					bomNum: 'BOM编号',
+					status: '状态',
+					pcNum: '控制单号',
+					departName: '发行部门',
+					publishPerson: '发行人',
+					confirmPerson: '承认',
+					machineName: '机器编号',
+					publishDate: '日期',
+					mouldName: '模具编号',
+					prodAmt: '生产数',
+					prodId: '产品编号',
+					unitConsume: '单耗',
+					pwActualWgt: '流道重量',
+					itemCode: '材料型号',
+					shotActualWgt: '单重',
+					itemColor: '材料颜色',
+					period: '周期',
+					loss: '损耗',
+					fetchActualNum: '穴数',
+					plasticWeight: '所需材料(kg)',
+					dailyPc: '生产能力/日',
+					targetStartDate: '预计开工日期',
+					planTime: '生产计划时间',
+					targetEndDate: '预计完工日期'
+				}
+				
+				var nameArr = titleName.split(",");
+				var $prodForm = $("#pro_main_form");
+				var tbody = "<tr><td colspan='4'>" + $prodForm.find("input[name=prodId]").val() + " 生产控制单</td></tr>";
+				for (var i = 0; i < nameArr.length; i++) {
+					tbody += "<tr>";
+					tbody += "<td>" + titleObj[nameArr[i]] + "</td>";
+					tbody += "<td>" + $prodForm.find("input[name=" + nameArr[i] + "]").val() + "</td>";
+					i++;
+					tbody += "<td>" + titleObj[nameArr[i]] + "</td>";
+					tbody += "<td>" + $prodForm.find("input[name=" + nameArr[i] + "]").val() + "</td>";
+					tbody += "</tr>";
+				}
+				tbody += "<tr><td colspan='4'>辅材及包材</td></tr>";
+				tbody += "<tr><td>物料名称</td><td></td><td>物料数量</td><td></td></tr>";
+				tbody += "<tr><td>物料名称</td><td></td><td>物料数量</td><td></td></tr>";
+				tbody += "<tr><td>物料名称</td><td></td><td>物料数量</td><td></td></tr>";
+				tbody += "<tr><td>物料名称</td><td></td><td>物料数量</td><td></td></tr>";
+				tbody += "<tr><td>物料名称</td><td></td><td>物料数量</td><td></td></tr>";
+				tbody += "<tr><td>物料名称</td><td></td><td>物料数量</td><td></td></tr>";
+				$("#excelTable").html(tbody);
+			} 
+			
+			$("#actualProduceAmt, #goodProductAmt").on("change keyup", function() {
+				var aAmt = $("#actualProduceAmt").val();
+				var gAmt = $("#goodProductAmt").val();
+				
+				$("#badProductAmt").val(keep2Decimal(aAmt - gAmt));
+			});
+			
+		</script>
+	</body>
+
+</html>

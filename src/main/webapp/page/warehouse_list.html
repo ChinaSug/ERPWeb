@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<title>仓库信息</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../ERPWeb/assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+		<link href="../ERPWeb/assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+		<link href="../ERPWeb/assets/css/page-min.css" rel="stylesheet" type="text/css" />
+
+	</head>
+
+	<body>
+
+		<div class="container">
+			<div class="row">
+				<form id="searchForm" name="searchForm" class="form-horizontal span24" action="/ERPWeb/mgHandler.html?op_action=WHS_LIST">
+					<div class="row">
+						<div class="control-group span8">
+							<div class="controls">
+								<input type="text" data-tip="{text:'请输入仓库名称'}" class="text" id="search_name" name="search_name">
+								<button type="button" id="btnSearch" class="button button-primary">查询</button>
+							</div>
+						</div>
+					</div>
+
+				</form>
+			</div>
+			<div class="search-grid-container">
+				<div id="grid"></div>
+			</div>
+		</div>
+
+		<div id="content" class="hide">
+			<form id="myform" name="myform" class="form-horizontal" action="/ERPWeb/mgHandler.html?op_action=WHS_SAVE">
+				<input type="hidden" name="oid" id="oid">
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label"><s>*</s>仓库名称：</label>
+						<div class="controls">
+							<input name="name" id="name" type="text" data-rules="{required:true,maxlength:30}" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+
+			</form>
+		</div>
+		<script type="text/javascript" src="../ERPWeb/assets/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/config-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/check-data.js"></script>
+		<script type="text/javascript">
+			BUI.use('common/page');
+		</script>
+
+		<script type="text/javascript">
+			BUI.use('common/search', function(Search) {
+
+				var enumObj = {
+						"1": "有效",
+						"0": "失效"
+					},
+					editing = new BUI.Grid.Plugins.DialogEditing({
+						contentId: 'content', //设置隐藏的Dialog内容
+						autoSave: true, //添加数据或者修改数据时，自动保存
+						form: 'myform',
+						triggerCls: 'btn-edit',
+						editor: {
+							title: '仓库信息'
+						}
+					}),
+					columns = [{
+							title: '仓库OID',
+							dataIndex: 'oid',
+							visible: false
+						},
+						{
+							title: '仓库名称',
+							dataIndex: 'name',
+							width: 300
+						},
+						{
+							title: '操作',
+							renderer: function(value, obj) {
+								return '<span class="grid-command btn-edit" title="编辑信息">编辑</span>';
+							}
+						}
+					],
+					store = Search.createStore('/ERPWeb/mgHandler.html?op_action=WHS_LIST', {
+						proxy: {
+							save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
+								addUrl: '/ERPWeb/mgHandler.html?op_action=WHS_SAVE',
+								updateUrl: '/ERPWeb/mgHandler.html?op_action=WHS_SAVE',
+								removeUrl: '/ERPWeb/mgHandler.html?op_action=WHS_DEL'
+							},
+							pageStart: 1,
+							method: 'POST'
+						},
+						pageSize: 10,
+						autoSync: true //保存数据后，自动更新
+					}),
+					gridCfg = Search.createGridCfg(columns, {
+						tbar: {
+							items: [{
+									text: '<i class="icon-plus"></i>添加',
+									btnCls: 'button button-small',
+									handler: addFunction
+								},
+								{
+									text: '<i class="icon-trash"></i>删除',
+									btnCls: 'button button-small',
+									handler: delFunction
+								}
+							]
+						},
+						plugins: [editing, BUI.Grid.Plugins.CheckSelection, BUI.Grid.Plugins.AutoFit] // 插件形式引入多选表格
+					});
+
+				var search = new Search({
+						store: store,
+						gridCfg: gridCfg
+					}),
+					grid = search.get('grid'),
+					form = editing.get('form').render(),
+					name = "name",
+					nameField = form.getField(name),
+					editor = editing.get('editor').render();
+					
+				nameField.set('remote', {
+					url: "/ERPWeb/mgHandler.html?op_action=IS_EXIST",
+					dataType: 'json', //默认为字符串
+					callback: function(data) {
+						if(data != null) {
+							if(data.success) {
+								return '';
+							} else {
+								return data.errors[name];
+							}
+						}
+					}
+				});
+				nameField.on('remotestart', function(ev) {
+					var data = ev.data;
+					var oidField = form.getField("oid");
+					nameField = form.getField(name);
+
+					data.oid = oidField.get("value");
+					data.class = 'Warehouse';
+					data.field = name;
+					data.value = nameField.get('value');
+				});
+
+				editing.on('editorshow', function(ev) {
+					var edt = editing.get('editor').render();
+					edt.set("y", 140);
+					clearCheckCache(nameField);
+				});
+
+				function addFunction() {
+					var newData = {
+						isNew: true
+					}; //标志是新增加的记录
+					editing.add(newData, 'name'); //添加记录后，直接编辑
+				}
+
+				//删除操作
+				function delFunction() {
+					var selections = grid.getSelection();
+					if(selections == '') {
+						BUI.Message.Alert("请先选择记录");
+					} else {
+						delItems(selections);
+					}
+				}
+
+				function delItems(items) {
+					var ids = [];
+					var numbers = [];
+					BUI.each(items, function(item) {
+						//alert("item.disabled = " +item.disabled);
+						if(!item.disabled) {
+							ids.push(item.oid);
+						} else {
+							numbers.push(item.name);
+						}
+
+					});
+
+					if(ids.length) {
+						var showMsg = "确认要删除选中的记录么？";
+						if(numbers.length) {
+							showMsg = "下列记录不能删除，排除后继续执行么？</br>" + numbers.join(",");
+						}
+						BUI.Message.Confirm(showMsg, function() {
+							store.save('remove', {
+								ids: ids.join(",")
+							});
+						}, 'question');
+					} else {
+						if(numbers.length) {
+							BUI.Message.Alert("所选择记录不能删除</br>" + numbers.join(","), "warning");
+						}
+					}
+				}
+
+				//监听事件，删除一条记录
+				grid.on('cellclick', function(ev) {
+					var sender = $(ev.domTarget); //点击的Dom
+					if(sender.hasClass('btn-del')) {
+						var record = ev.record;
+						delItems([record]);
+					}
+					if(sender.hasClass('btn-edit')) {
+						var record = ev.record;
+						alert("record = " + record);
+					}
+
+				});
+			});
+		</script>
+
+		<body>
+
+</html>

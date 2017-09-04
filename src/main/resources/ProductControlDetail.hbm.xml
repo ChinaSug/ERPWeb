@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.ProductControlDetail" table="T_PC_DETAIL" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="pcOid" column="PC_OID" type="long"/>
+		<property name="pcType" column="PC_TYPE" type="string"/>
+		<property name="produceDate" column="PRODUCE_DATE" type="date"/>
+		<property name="dutyId" column="DUTY_ID" type="string"/>
+		<property name="planProduceAmt" column="PLAN_PROD_AMT" type="double"/>
+		<property name="actualProduceAmt" column="ACT_PROD_AMT" type="double"/>
+		<property name="goodProductAmt" column="GOOD_PROD_AMT" type="double"/>
+		<property name="badProductAmt" column="BAD_PROD_AMT" type="double"/>
+		<property name="efficiencyRate" column="EFF_RATE" type="string"/>
+		<property name="badRate" column="BAD_RATE" type="string"/>
+		<property name="remark" column="REMARK" type="string"/>	
+		<property name="createBy" column="CREATE_BY" type="string"/>
+		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="lastModifyBy" column="LAST_MODIFY_BY" type="string"/>
+		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
+		
+	</class>
+</hibernate-mapping>   

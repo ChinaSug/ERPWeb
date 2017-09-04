@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.abs.ps.domain.CheckPointDetail" table="T_ST_CHECK_DETAIL" lazy="false">
+		<id name="oid" column="OID" type="long">
+			<generator class="identity"/>
+		</id>
+		<property name="cpMainOid" column="CP_MAIN_OID" type="long"/>
+		<property name="itemOid" column="ITEM_OID" type="long"/>
+		<property name="currentStockAmt" column="CUR_STOCK_AMT" type="double"/>
+		<property name="actualStockAmt" column="ACT_STOCK_AMT" type="double"/>
+		<property name="remark" column="REMARK" type="string"/>
+		
+		<property name="stockItemType" column="STOCK_ITEM_TYPE" type="string"/>
+		<property name="bomDetailOid" column="BOM_DETAIL_OID" type="long"/>
+		
+	</class>
+</hibernate-mapping>   
