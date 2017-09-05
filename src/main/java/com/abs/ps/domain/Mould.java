@@ -1,6 +1,7 @@
 package com.abs.ps.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Mould implements Serializable {
 	private static final long serialVersionUID = -1202551235288249912L;
@@ -12,8 +13,8 @@ public class Mould implements Serializable {
 	private String hole;
 	private String made;
 	private String manu;
-	private String date;
-	private String outDate;
+	private Date date;
+	private Date outDate;
 	private String place;
 	private String remark;
 
@@ -73,19 +74,19 @@ public class Mould implements Serializable {
 		this.manu = manu;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
-	public String getOutDate() {
+	public Date getOutDate() {
 		return outDate;
 	}
 
-	public void setOutDate(String outDate) {
+	public void setOutDate(Date outDate) {
 		this.outDate = outDate;
 	}
 

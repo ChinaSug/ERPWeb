@@ -73,7 +73,11 @@
 					<div class="control-group span8">
 						<label class="control-label">自制/移管：</label>
 						<div class="controls">
-							<input name="made" type="text" class="input-normal control-text">
+							<select name="made">
+								<option value="">=请选择=</option>
+								<option value="0">自制</option>
+								<option value="1">移管</option>
+							</select>
 						</div>
 					</div>
 					<div class="control-group span8">
@@ -151,6 +155,10 @@
 						"1": "有效",
 						"0": "失效"
 					},
+					madeObj = {
+						"0": "自制",
+						"1": "移管",
+					},
 					editing = new BUI.Grid.Plugins.DialogEditing({
 						contentId: 'content', //设置隐藏的Dialog内容
 						autoSave: true, //添加数据或者修改数据时，自动保存
@@ -183,7 +191,8 @@
 						}, {
 							title: '自制/移管',
 							dataIndex: 'made',
-							width: 100
+							width: 80,
+							renderer:BUI.Grid.Format.enumRenderer(madeObj)
 						}, {
 							title: '制造商',
 							dataIndex: 'manu',

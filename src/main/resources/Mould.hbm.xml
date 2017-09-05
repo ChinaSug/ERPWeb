@@ -13,8 +13,8 @@
 		<property name="hole" column="HOLE" type="string"/>
 		<property name="made" column="MADE" type="string"/>
 		<property name="manu" column="MANU" type="string"/>
-		<property name="date" column="DATE" type="string"/>
-		<property name="outDate" column="OUT_DATE" type="string"/>
+		<property name="date" column="DATE" type="date"/>
+		<property name="outDate" column="OUT_DATE" type="date"/>
 		<property name="place" column="PLACE" type="string"/>
 		<property name="remark" column="REMARK" type="string"/>
 	</class>
