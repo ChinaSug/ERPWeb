@@ -208,7 +208,12 @@ public class StockInfoHelper implements IControllerHelper{
 		out.close();
 	}
 	
-	
+	/**
+	 * 获取物料库存查询列表
+	 * 
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void searchCheckPoint() throws ServletException, IOException {
 		String pageNumStr = request.getParameter("pageIndex");
 		int pageNumber = 1;

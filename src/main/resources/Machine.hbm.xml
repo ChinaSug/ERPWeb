@@ -8,5 +8,16 @@
 			<generator class="identity"/>
 		</id>
 		<property name="name" column="NAME" type="string"/>
+		<property name="brand" column="BRAND" type="string"/>
+		<property name="type" column="TYPE" type="string"/>
+		<property name="tieBar" column="TIE_BAR" type="string"/>
+		<property name="fpSize" column="FP_SIZE" type="string"/>
+		<property name="openQuan" column="OPEN_QUAN" type="string"/>
+		<property name="thick" column="THICK" type="string"/>
+		<property name="screwDia" column="SCREW_DIA" type="string"/>
+		<property name="maxInjPrs" column="MAX_INJ_PRS" type="string"/>
+		<property name="injWgt" column="INJ_WGT" type="string"/>
+		<property name="remark" column="REMARK" type="string"/>
+		
 	</class>
 </hibernate-mapping>   

@@ -190,10 +190,10 @@
 			<hr />
 			
 			<div id="pd_table_div" class="hide">
-				<a href="" id="exportExcel" style="float:right;padding: 5px;margin-bottom: 10px;" class="button button-info">
+				<button id="exportExcel" style="float:right;padding: 5px;margin-bottom: 10px;" class="button button-info">
 					<i class="icon-white icon-share"></i>
 					导出Excel
-				</a>
+				</button>
 				<table class="wp-table" id="wpTable">
 					<thead></thead>
 					<tbody></tbody>
@@ -222,14 +222,18 @@
 				setWeekOption();
 			});
 			
-			$("#btnSearch").click(function() {
-				var year = $("input[name=year]").val();
+			$("#exportExcel").click(function() {
 				var month = $("select[name=month]").val();
 				var week = $("select[name=week]").val();
 				
-				var href = "/ERPWeb/mgHandler.html?op_action=WEEK_PLAN";
-				href += "&year=" + year + "&month=" + month + "&week=" + week;
-				$("#exportExcel").attr("href", href);
+				$("#wpTable").table2excel({
+					exclude: ".noExl",
+					name: "Excel Document Name",
+					filename: month + "月份第" + week + "周计划",
+					exclude_img: true,
+					exclude_links: true, 
+					exclude_inputs: true
+				});
 			});
 			
 			BUI.use('bui/form', function(Form) {
@@ -362,7 +366,7 @@
 				for (var i = startDate; i <= endDate; i++) {
 					var _d = i < 10 ? "0" + i : i;
 					var pdT = pdTime[year + "-" + month + "-" + _d];
-					var amt = pdT != null ? pdT[amtName] : ""; 
+					var amt = pdT != null ? keep2Decimal(pdT[amtName]) : ""; 
 					
 					_tbody += "<td>" + amt + "</th>";
 					var rate = "";
@@ -412,8 +416,8 @@
 				
 				var _tbody = "<tr>" + fillSpaceTag(5, "td");
 				_tbody += "<td>合计</td>" + fillSpaceTag(dateRow-1, "td");
-				_tbody += "<td>" + amountTableCol("wpTable", -3) + "</td>";
-				_tbody += "<td>" + amountTableCol("wpTable", -2) + "</td>";
+				_tbody += "<td>" + keep2Decimal(amountTableCol("wpTable", -3)) + "</td>";
+				_tbody += "<td>" + keep2Decimal(amountTableCol("wpTable", -2)) + "</td>";
 				_tbody += "<td></td><td></td>";
 				_tbody += "</tr>";
 				

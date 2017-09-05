@@ -32,12 +32,27 @@
 				color: red;
 			}
 			
-			.margin-right-5 {
-				margin-left: 5px;
-			}
-			
 			#pro_sch_form .border-left-width {
 				border-left-width: 1px;
+			}
+			
+			#pro_sch_table td {
+				text-align: center;
+				vertical-align: middle;
+			}
+			
+			#pro_sch_table input {
+				width: 230px;
+			}
+			
+			#pro_sch_table .margin-right-5 {
+				margin-left: 5px;
+				width: 200px;
+			}
+			
+			#pro_sch_table .x-field-error {
+				position: absolute;
+	    		display: block;
 			}
 			
 		</style>
@@ -51,129 +66,139 @@
 			</div>
 		</div>
 
-		<div id="pro_father_div" class="container">
-			<div id="pro_child_div" style="width: 800px;">
+		<div id="pro_father_div" class="container" style="width: 850px; margin-left: auto; margin-right: auto;">
+			<div id="pro_child_div" >
 				<form name="pro_sch_form" id="pro_sch_form" method="post" action="/ERPWeb/mgHandler.html?op_action=SCHED_SAVE">
 					<input name="oid" class="hide" />
 					<table class="bui-grid-table table table-bordered table-striped" id="pro_sch_table" style="height: 30px;border: 1px solid #DDDDDD;">
 						<tr>
 							<td><s>*</s>客户</td>
 							<td colspan="2">
-								<input name="customerName" id="cus_name" type="text" data-rules="{required:true}" class="input-normal control-text" style="width: 220px;">
+								<input name="customerName" id="cus_name" type="text" data-rules="{required:true}" class="input-normal control-text">
 								<input name="customerOid" type="hidden" />
 							</td>
 							<td><s>*</s>立上日期</td>
-							<td colspan="2"><input name="scheduleDate" id="scheduleDate" type="text" data-rules="{required:true}" class="input-normal calendar control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="scheduleDate" id="scheduleDate" type="text" data-rules="{required:true}" class="input-normal calendar control-text"  /></td>
 						</tr>
 						<tr>
 							<td><s>*</s>担 当</td>
-							<td colspan="2"><input name="respPerson" id="respPerson" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text" style="width: 90%;" /></td>
-							<td><s>*</s>部 番</td>
-							<td colspan="2"><input name="prodId" id="prodId" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="respPerson" id="respPerson" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text"  /></td>
+							<td><s>*</s>预计量产日期</td>
+							<td colspan="2"><input name="prodAmtDate" id="prodAmtDate" type="text" data-rules="{required:true}" class="input-normal calendar control-text"  /></td>
 						</tr>
 						<tr>
+							<td><s>*</s>产品编号</td>
+							<td colspan="2"><input name="prodId" id="prodId" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text"  /></td>
 							<td><s>*</s>名 称</td>
-							<td colspan="2"><input name="name" id="name" type="text" data-rules="{required:true,maxlength:30}" class="input-normal control-text" style="width: 90%;" /></td>
-							<td><s>*</s>生 产 数</td>
-							<td colspan="2"><input name="prodAmt" id="prodAmt" type="text" data-rules="{required:true,maxlength:20}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="name" id="name" type="text" data-rules="{required:true,maxlength:30}" class="input-normal control-text"  /></td>
 						</tr>
 						<tr> 
-							<td><s>*</s>材 料</td>
+							<td><s>*</s>材料编号</td>
 							<td colspan="2">
-								<input name="itemName" id="ite_name" type="text" data-rules="{required:true}" class="input-normal control-text" style="width: 220px;">
+								<input name="itemName" id="ite_name" type="text" data-rules="{required:true}" class="input-normal control-text" >
 								<input name="itemOid" type="hidden" />
 							</td>
-							<td>单 耗</td>
-							<td colspan="2"><input name="unitConsume" id="unitConsume" type="text" class="input-normal control-text" style="width: 90%;" /></td>
+							<td>材料颜色</td>
+							<td colspan="2">
+								<input name="itemColor" type="text" readonly="readonly" class="input-normal control-text hidePrice" >
+							</td>
 						</tr>
 						<tr>
-							<td>产品编号</td>
-							<td colspan="2"><input name="prodNum" id="prodNum" type="text" data-rules="{maxlength:30}" class="input-normal control-text" style="width: 89%;" /></td>
-							<td>量 产</td>
-							<td colspan="2"><input name="productAmt" id="productAmt" type="text" class="input-normal control-text" style="width: 90%;" /></td>
+							<td rowspan="2">图面配布实际</td>
+							<td colspan="2">图 番<input name="projectId" id="projectId" type="text" class="input-normal control-text margin-right-5"/></td>
+							<td rowspan="2">机台吨位</td>
+							<td colspan="2">标准<input name="" type="text" class="input-normal control-text margin-right-5" /></td>
 						</tr>
 						<tr>
-							<td rowspan="2" style="line-height: 60px;">工程图面版本</td>
-							<td colspan="2">图 番<input name="projectId" id="projectId" type="text" class="input-normal control-text margin-right-5" style="width: 73%;" /></td>
-							<td rowspan="2" style="line-height: 60px;">产品图面</td>
-							<td rowspan="2" colspan="2">
+							<td colspan="2" class="border-left-width">日期<input name="projectDate" id="projectDate" type="text" class="margin-right-5 input-normal calendar control-text" /></td>
+							<td colspan="2">实际<input name="" type="text" class="input-normal control-text margin-right-5" /></td>
 						</tr>
 						<tr>
-							<td colspan="2" class="border-left-width">配布日期：<input name="projectDate" id="projectDate" type="text" class="input-normal calendar control-text" style="width: 57%;" /></td>
+							<td rowspan="2">取数</td>
+							<td colspan="2">标 准<input name="fetchStandardNum" id="fetchStandardNum" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" /></td>
+							<td rowspan="2">周期时间</td>
+							<td colspan="2">标 准<input name="" type="text" class="margin-right-5 input-normal control-text" /></td>
 						</tr>
 						<tr>
-							<td rowspan="2" style="line-height: 60px;">取数</td>
-							<td colspan="2">标 准<input name="fetchStandardNum" id="fetchStandardNum" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
-							<td rowspan="2" style="line-height: 60px;">S T</td>
-							<td colspan="2">标 准<input name="shotStandardWgt" id="shotStandardWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+							<!-- <td colspan="2" class="border-left-width">实 际<input name="fetchActualNum" id="fetchActualNum" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" /></td> -->
+							<td colspan="2" class="border-left-width">实 际<input name="shotActualWgt" id="shotActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" /></td>
+							<td colspan="2">实 际<input name="" type="text" class="margin-right-5 input-normal control-text" /></td>
 						</tr>
 						<tr>
-							<td colspan="2" class="border-left-width">实 际<input name="fetchActualNum" id="fetchActualNum" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
-							<td colspan="2">实 际<input name="shotActualWgt" id="shotActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+							<td rowspan="2">产品单重</td>
+							<td colspan="2">标 准<input name="prodStandardWgt" id="prodStandardWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" /></td>
+							<td rowspan="2">流道重量</td>
+							<td colspan="2">标 准<input name="pwStandardWgt" id="pwStandardWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" /></td>
 						</tr>
 						<tr>
-							<td rowspan="2" style="line-height: 60px;">部品单重</td>
-							<td colspan="2">标 准<input name="prodStandardWgt" id="prodStandardWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
-							<td rowspan="2" style="line-height: 60px;">流道重量</td>
-							<td colspan="2">标 准<input name="pwStandardWgt" id="pwStandardWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
+							<td colspan="2" class="border-left-width">实 际<input name="prodActualWgt" id="prodActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" /></td>
+							<td colspan="2">实 际<input name="pwActualWgt" id="pwActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" /></td>
 						</tr>
 						<tr>
-							<td colspan="2" class="border-left-width">实 际<input name="prodActualWgt" id="prodActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
-							<td colspan="2">实 际<input name="pwActualWgt" id="pwActualWgt" type="text" data-rules="{maxlength:20}" class="margin-right-5 input-normal control-text" style="width: 72%;" /></td>
-						</tr>
-						<tr>
-							<td colspan="6">模具加工日程</td>
+							<td colspan="6">模具加工</td>
 						</tr>
 						<tr>
 							<td>预计模具<br/>加工完成日期</td>
-							<td colspan="2"><input name="mouldTgCompleteDate" id="mouldTgCompleteDate" type="text" class="input-normal calendar control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="mouldTgCompleteDate" id="mouldTgCompleteDate" type="text" class="input-normal calendar control-text"  /></td>
 							<td>实际模具<br/>加工完成日期</td>
-							<td colspan="2"><input name="mouldActCompleteDate" id="mouldActCompleteDate" type="text" class="input-normal calendar control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="mouldActCompleteDate" id="mouldActCompleteDate" type="text" class="input-normal calendar control-text"  /></td>
 						</tr>
 						<tr>
-							<td>试做目标 回数</td>
-							<td colspan="2"><input name="tryAmt" id="tryAmt" type="text" data-rules="{maxlength:10}" class="input-normal control-text" style="width: 90%;" /></td>
-							<td>实际试做 回数</td>
-							<td colspan="2"><input name="actAmt" id="actAmt" type="text" data-rules="{maxlength:10}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td>目标试做回数</td>
+							<td colspan="2"><input name="tryAmt" id="tryAmt" type="text" data-rules="{maxlength:10}" class="input-normal control-text"  /></td>
+							<td>实际试做回数</td>
+							<td colspan="2"><input name="actAmt" id="actAmt" type="text" data-rules="{maxlength:10}" class="input-normal control-text"  /></td>
+						</tr>
+						<tr>
+							<td>预计试做日期</td>
+							<td colspan="2"><input name="tryDate" id="tryDate" type="text" class="input-normal calendar control-text"  /></td>
+							<td>实际试做日期</td>
+							<td colspan="2"><input name="actDate" id="actDate" type="text" class="input-normal calendar control-text"  /></td>
 						</tr>
 						<tr>
 							<td colspan="6">项目资料完成状况</td>
 						</tr>
 						<tr>
 							<td>QC工程图</td>
-							<td colspan="2"><input name="prodQc" id="prodQc" type="text" class="input-normal control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="prodQc" id="prodQc" type="text" class="input-normal control-text"  /></td>
 							<td>作业标准</td>
-							<td colspan="2"><input name="prodStandardJob" id="prodStandardJob" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="prodStandardJob" id="prodStandardJob" type="text" data-rules="{maxlength:50}" class="input-normal control-text"  /></td>
 						</tr>
 						<tr>
 							<td>检查标准 FQC\IPQC\OQC</td>
-							<td colspan="2"><input name="prodFqc" id="prodFqc" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="prodFqc" id="prodFqc" type="text" data-rules="{maxlength:50}" class="input-normal control-text"  /></td>
 							<td>包装仕样书</td>
-							<td colspan="2"><input name="prodPkg" id="prodPkg" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="prodPkg" id="prodPkg" type="text" data-rules="{maxlength:50}" class="input-normal control-text"  /></td>
 						</tr>
 						<tr>
-							<td>成型条件表</td>
-							<td colspan="2"><input name="prodShape" id="prodShape" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td>标准成型条件表</td>
+							<td colspan="2"><input name="prodShape" id="prodShape" type="text" data-rules="{maxlength:50}" class="input-normal control-text"  /></td>
 							<td>材料报告 MSDS/SGS/UL</td>
-							<td colspan="2"><input name="prodReport" id="prodReport" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="prodReport" id="prodReport" type="text" data-rules="{maxlength:50}" class="input-normal control-text"  /></td>
 						</tr>
 						<tr>
-							<td>客户样品 签订日期</td>
-							<td colspan="2"><input name="prodSignDate" id="prodSignDate" type="text" class="input-normal  calendar control-text" style="width: 90%;" /></td>
+							<td>客户样品签订日期</td>
+							<td colspan="2"><input name="prodSignDate" id="prodSignDate" type="text" class="input-normal  calendar control-text"  /></td>
 							<td>模具验收</td>
-							<td colspan="2"><input name="prodVerify" id="prodVerify" type="text" data-rules="{maxlength:50}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td colspan="2"><input name="prodVerify" id="prodVerify" type="text" data-rules="{maxlength:50}" class="input-normal control-text"  /></td>
 						</tr>
 						<tr>
-							<td>量产GO发行</td>
-							<td colspan="2"><input name="prodGo" id="prodGo" type="text" data-rules="{maxlength:30}" class="input-normal control-text" style="width: 90%;" /></td>
+							<td>社内量产发行</td>
+							<td colspan="2"><input name="prodGo" id="prodGo" type="text" data-rules="{maxlength:30}" class="input-normal control-text"  /></td>
 							<td></td>
 							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<td>备注</td>
+							<td colspan='5'>
+								<textarea name="remark" style="width: 670px;max-width: 670px;"></textarea>
+							</td>
 						</tr>
 					</table>
 				</form>
 			</div>
 
-			<div class="search-grid-container" style="width: 800px;">
+			<div class="search-grid-container" style="width: 850px;">
 				<div id="grid" style="margin-bottom: 30px;"></div>
 			</div>
 			<div id="btu_div">
@@ -191,7 +216,7 @@
 					<div class="control-group span8">
 						<label class="control-label"><s>*</s>编号：</label>
 						<div class="controls">
-							<input name="tryNum" id="tryNum" type="text" data-rules="{required:true}" class="input-normal control-text">
+							<input name="tryNum" id="tryNum" type="text"  class="input-normal control-text">
 						</div>
 					</div>
 					<div class="control-group span8">
@@ -222,12 +247,26 @@
 							<input name="tryCallback" id="tryCallback" type="text" class="input-normal control-text">
 						</div>
 					</div>
+					<div class="control-group span8">
+						<label class="control-label">成型条件表回收：</label>
+						<div class="controls">
+							<input name="endCallback" id="endCallback" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span16">
+						<label class="control-label">备注：</label>
+						<div class="controls">
+							<textarea name="remark" id="remark" style="resize: none;width: 460px;"></textarea>
+						</div>
+					</div>
 				</div>
 			</form>
 		</div>
 
 		<script type="text/javascript" src="../assets/js/jquery-1.8.1.min.js"></script>
-		<script type="text/javascript" src="../assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../assets/js/bui.js"></script>
 		<script type="text/javascript" src="../assets/js/config-min.js"></script>
 		<script type="text/javascript" src="../assets/js/abs-select.js" ></script>
 		<script type="text/javascript" src="../assets/js/check-data.js" ></script>
@@ -373,7 +412,7 @@
 							{
 								title: '编号',
 								dataIndex: 'tryNum',
-								width: 180
+								width: 100
 							},
 							{
 								title: '预定试做日期',
@@ -393,6 +432,11 @@
 							{
 								title: '试做指示单回收',
 								dataIndex: 'tryCallback',
+								width: 120
+							},
+							{
+								title: '成型条件表回收',
+								dataIndex: 'endCallback',
 								width: 120
 							},
 							{
@@ -462,70 +506,6 @@
 								editor.accept();
 							}
 						});
-						
-
-						store.__proto__.onSave = function(type, saveData, data) {
-							var _self = this,
-								hasErrorField = _self.get('hasErrorProperty');
-
-							if(data != null) {
-								if(data[hasErrorField] || data.exception) { //如果失败
-									_self.onException(data);
-									return;
-								}
-							}
-
-							_self._clearDirty(type, saveData);
-
-							_self.fire('saved', { type: type, saveData: saveData, data: data });
-							if(_self.get('autoSync')) {
-								_self.load();
-							}
-						}
-						store.__proto__.processLoad = function(data, params) {
-							var _self = this,
-								hasErrorField = _self.get('hasErrorProperty');
-
-							_self.fire('beforeprocessload', { data: data });
-
-							_self.fire('beforeProcessLoad', data);
-
-							if(data != null) {
-								if(data[hasErrorField] || data.exception) {
-									_self.onException(data);
-									return false;
-								}
-							}
-
-							return true;
-						}
-						store.__proto__.afterProcessLoad = function(data, params) {
-							var _self = this,
-								root = _self.get('root'),
-								start = params.start,
-								limit = params.limit,
-								totalProperty = _self.get('totalProperty');
-
-							if(data != null) {
-								if(BUI.isArray(data)) {
-									_self._setResult(data);
-								} else {
-									_self._setResult(data[root], data[totalProperty]);
-								}
-							}
-
-							_self.set('start', start);
-
-							if(limit) {
-								_self.set('pageIndex', start / limit);
-							}
-
-							if(!_self.get('remoteSort')) {
-								_self._sortData();
-							}
-
-							_self.fire('load', { params: params });
-						}
 
 					}
 

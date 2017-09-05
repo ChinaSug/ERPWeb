@@ -24,15 +24,14 @@
 			<div class="row">
 				<form id="searchForm" name="searchForm" class="form-horizontal span24" action="/ERPWeb/mgHandler.html?op_action=SCHED_LIST">
 					<div class="controls space-row">
-						<!-- <span class="space-span">
+						 <span class="space-span">
 							<label>状态：</label>
 							<select id="search_status" name="search_status">
 								<option value="">全部</option>
-								<option value="0">创建</option>
-								<option value="1">通过</option>
-								<option value="2">异常</option>
+								<option value="0">试做中</option>
+								<option value="1">量产</option>
 							</select>
-						</span> -->
+						</span> 
 						<span class="space-span">
 							<label>立上日期：</label>
 							<input type="text" class="calendar" id="search_schedDate" name="search_schedDate" style="width: 150px;">
@@ -53,7 +52,7 @@
 		</div>
 
 		<script type="text/javascript" src="../ERPWeb/assets/js/jquery-1.8.1.min.js"></script>
-		<script type="text/javascript" src="../ERPWeb/assets/js/bui-min.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/bui.js"></script>
 		<script type="text/javascript" src="../ERPWeb/assets/js/config-min.js"></script>
 		
 		<script type="text/javascript">
@@ -62,18 +61,24 @@
 
 		<script type="text/javascript">
 			BUI.use('common/search', function(Search) {
-				var status = { "0": "创建", "1": "通过", "2": "异常" };
+				var status = { "0": "试做", "1": "量产" };
 				editing = new BUI.Grid.Plugins.DialogEditing({}),
 					columns = [
 						{ title: '供应商OID', dataIndex: 'itemOid', visible: false },
-						{ title: '部番', dataIndex: 'prodId', width: 150 },
-						{ title: '名称', dataIndex: 'name', width: 150 },
+						{ title: '客户', dataIndex: 'customerName', width: 100 },
+						{ title: '产品编号', dataIndex: 'prodId', width: 100 },
+						{ title: '名称', dataIndex: 'name', width: 100 },
+						{ title: '担当', dataIndex: 'respPerson', width: 100 },
 						{ title: '立上日期', dataIndex: 'scheduleDate', width: 100 },
-						{ title: '客户', dataIndex: 'customerName', width: 150 },
+						{ title: '预计量产日期', dataIndex: 'prodAmtDate', width: 100 },
+						{ title: '预计模具完成日期', dataIndex: 'mouldTgCompleteDate', width: 110 },
+						{ title: '实际模具完成日期', dataIndex: 'mouldActCompleteDate', width: 110 },
+						{ title: '目标试做回数', dataIndex: 'tryAmt', width: 100 },
+						{ title: '实际试做回数', dataIndex: 'actAmt', width: 100 },
+						{ title: '预计试做日期', dataIndex: 'tryDate', width: 100 },
+						{ title: '实际试做日期', dataIndex: 'actDate', width: 100 },
 						{ title: '产品图面', dataIndex: 'prodPicUrl', width: 100, visible: false },
-						{ title: '材料', dataIndex: 'itemName', width: 100 },
-						{ title: '量产', dataIndex: 'prodAmt', width: 100 },
-						{ title: '状态', dataIndex: 'status', visible: false, renderer: BUI.Grid.Format.enumRenderer(status) },
+						{ title: '状态', dataIndex: 'status', renderer: BUI.Grid.Format.enumRenderer(status) },
 						{
 							title: '操作',
 							renderer: function(value, obj) {
@@ -135,6 +140,34 @@
 						gridCfg: gridCfg
 					}),
 					grid = search.get('grid');
+				
+				grid.on('aftershow',function(event){
+					console.log($('#grid').find(".bui-grid-body").find('tr').length);
+					$.each($('#grid').find(".bui-grid-body").find('tr'), function(i) {
+						//获取当前时间
+						var timestamp = Date.parse(new Date());
+						
+						//预计模具预计完成日期
+						var mouldTgCompleteDate = Date.parse($(this).find("td:nth-child(9)").find("span").html());
+						//预计模具实际完成日期
+						var mouldActCompleteDate = $(this).find("td:nth-child(10)").find("span").html();
+						//预计模具
+						if(timestamp>mouldTgCompleteDate && mouldActCompleteDate == ""){
+							$(this).find("td:nth-child(9)").css("background-color","coral");
+						}
+						
+						//预计试做日期
+						var tryDate = Date.parse($(this).find("td:nth-child(13)").find("span").html());
+						//实际试做日期
+						var actDate = $(this).find("td:nth-child(14)").find("span").html();
+						//预计试做
+						if(timestamp>tryDate && actDate == ""){
+							$(this).find("td:nth-child(13)").css("background-color","coral");
+						}
+					});
+				});
+				
+					
 
 				function addFunction() {
 					window.location.href = "page/project_schedule_detail_list.html?addOid=N";

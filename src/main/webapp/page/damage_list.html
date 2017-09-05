@@ -426,7 +426,7 @@
 						{
 							title: '物品编号',
 							dataIndex: 'itemCode',
-							width: 120,
+							width: 160,
 						},
 						{
 							title: '物品名称',
@@ -544,8 +544,7 @@
 					month = month < 10 ? "0" + month : month;
 					var dat = curDate.getDate();
 					dat = dat < 10 ? "0" + dat : dat;
-					var damCode = "DAM-" + curDate.getFullYear() + month + dat + curDate.getHours() + curDate.getMinutes() + curDate.getSeconds() + Math.ceil(Math.random()*99);
-					$("#number").val(damCode);
+					$("#number").val(getLikaVersion("DM"));
 					$("#reportDate").val(curDate.getFullYear() + "-" + month + "-" + dat);
 				}
 

@@ -66,7 +66,7 @@
 			</div>
 			<div class="search-grid-container">
 				<div id="grid"></div>
-				<div id="prodGrid"></div>
+				<div id="prodGrid" style="visibility: hidden;"></div>
 			</div>
 			
 			
@@ -275,22 +275,22 @@
 					if (1 == st) {
 						$("#searchForm").show();
 						$("#searchProdForm2").hide();
+						$("#btnSearch").click();
 					} else if (2 == st) {
 						$("#searchForm").hide();
 						$("#searchProdForm2").show();
+						$("#btnSearch2").click();
 					}
-					$("#btnSearch, #btnSearch2").click();
 				});
 				
-				showGrid();
 				function showGrid() {
 					var st = $("#searchType").val();
 					
 					if (1 == st) {
-						$("#prodGrid").hide();
+						$("#prodGrid").css("visibility", "hidden");
 						$("#grid").show();
 					} else if (2 == st) {
-						$("#prodGrid").show();
+						$("#prodGrid").css("visibility", "visible");
 						$("#grid").hide();
 					}
 				}

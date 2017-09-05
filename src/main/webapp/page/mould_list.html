@@ -7,6 +7,12 @@
 		<link href="../ERPWeb/assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
 		<link href="../ERPWeb/assets/css/bui-min.css" rel="stylesheet" type="text/css" />
 		<link href="../ERPWeb/assets/css/page-min.css" rel="stylesheet" type="text/css" />
+		
+		<style>
+			form .calendar {
+				width: 140px;
+			}
+		</style>
 
 	</head>
 
@@ -41,16 +47,101 @@
 							<input name="name" id="name" type="text" data-rules="{required:true,maxlength:100}" class="input-normal control-text">
 						</div>
 					</div>
+					<div class="control-group span8">
+						<label class="control-label">客户：</label>
+						<div class="controls">
+							<input name="customerName" id="cus_name" type="text" class="input-normal control-text">
+							<input name="customerOid" type="hidden" class="input-normal control-text">
+						</div>
+					</div>
 				</div>
-
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">模具规格：</label>
+						<div class="controls">
+							<input name="scale" type="text" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">穴数：</label>
+						<div class="controls">
+							<input name="hole" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">自制/移管：</label>
+						<div class="controls">
+							<input name="made" type="text" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">制造商：</label>
+						<div class="controls">
+							<input name="manu" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">日期：</label>
+						<div class="controls">
+							<input name="date" type="text" class="input-normal control-text calendar">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">移出日期：</label>
+						<div class="controls">
+							<input name="outDate" type="text" class="input-normal control-text calendar">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">放置场所：</label>
+						<div class="controls">
+							<input name="place" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span16">
+						<label class="control-label">备注：</label>
+						<div class="controls" style="height: initial;">
+							<textarea name="remark" style="width:460px; max-width:460px; height: 45px;"></textarea>
+						</div>
+					</div>
+				</div>
 			</form>
 		</div>
 		<script type="text/javascript" src="../ERPWeb/assets/js/jquery-1.8.1.min.js"></script>
 		<script type="text/javascript" src="../ERPWeb/assets/js/bui-min.js"></script>
 		<script type="text/javascript" src="../ERPWeb/assets/js/config-min.js"></script>
 		<script type="text/javascript" src="../ERPWeb/assets/js/check-data.js"></script>
+		<script type="text/javascript" src="../ERPWeb/assets/js/abs-select.js"></script>
 		<script type="text/javascript">
 			BUI.use('common/page');
+			
+			var cus = new SelectGrid({
+				render: 'cus_name',
+				url: '/ERPWeb/mgHandler.html?op_action=CUSTOMER_OPT',
+				itemKey: 'customerName',
+				itemTitle: [{
+					title: '客户',
+					dataIndex: 'customerName'
+				}],
+				fieldReplace: [{
+					itemName: 'text',
+					fieldName: 'customerName'
+				}, {
+					itemName: 'value',
+					fieldName: 'customerOid'
+				}],
+				setField: true,
+				selectWidth: '150px',
+				mustSelect: true,
+			});
 		</script>
 
 		<script type="text/javascript">
@@ -73,13 +164,47 @@
 							title: '模具OID',
 							dataIndex: 'oid',
 							visible: false
-						},
-						{
+						}, {
 							title: '模具名称',
 							dataIndex: 'name',
-							width: 300
-						},
-						{
+							width: 150
+						}, {
+							title: '客户',
+							dataIndex: 'customerName',
+							width: 150
+						}, {
+							title: '模具规模',
+							dataIndex: 'scale',
+							width: 100
+						}, {
+							title: '穴数',
+							dataIndex: 'hole',
+							width: 80
+						}, {
+							title: '自制/移管',
+							dataIndex: 'made',
+							width: 100
+						}, {
+							title: '制造商',
+							dataIndex: 'manu',
+							width: 150
+						}, {
+							title: '日期',
+							dataIndex: 'date',
+							width: 100
+						}, {
+							title: '移出日期',
+							dataIndex: 'outDate',
+							width: 100
+						}, {
+							title: '放置场所',
+							dataIndex: 'place',
+							width: 100
+						}, {
+							title: '备注',
+							dataIndex: 'remark',
+							width: 100
+						}, {
 							title: '操作',
 							renderer: function(value, obj) {
 								return '<span class="grid-command btn-edit" title="编辑信息">编辑</span>';

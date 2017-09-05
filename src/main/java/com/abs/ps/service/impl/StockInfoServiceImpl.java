@@ -430,4 +430,9 @@ public class StockInfoServiceImpl extends AbstractService implements StockInfoSe
 		return stockInfoDao.getCheckingStock(stockIds);
 	}
 	
+	@Override
+	public List<StockSearchDto> getStockView(Map<String, String> paramMap) {
+		return stockInfoDao.getStockView(paramMap);
+	}
+	
 }

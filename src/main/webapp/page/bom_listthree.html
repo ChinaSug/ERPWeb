@@ -313,7 +313,7 @@
 		<script type="text/javascript" src="../assets/js/bui-min.js"></script>
 		<script type="text/javascript" src="../assets/js/config-min.js"></script>
 		<script type="text/javascript" src="../assets/js/abs-select.js" ></script>
-		<script type="text/javascript" src="../assets/js/check-data.js?v=2017811092507" ></script>
+		<script type="text/javascript" src="../assets/js/check-data.js" ></script>
 		<script type="text/javascript" src="../assets/js/common.js" ></script>
 		<script type="text/javascript">
 			var enumObj = {
@@ -369,6 +369,7 @@
 					if(addOid == "N"){
 						$verifyDiv.hide();
 						$(".search-grid-container").hide();
+						$("#bomNum").val(getLikaVersion("BM"));
 						return false; 
 					}else{
 						$.ajax({
@@ -543,6 +544,7 @@
 						$(".bui-select-input").attr("value","");
 					}
 					editing.add(newData, 'name'); //添加记录后，直接编辑 
+					$("#prodId").val(getLikaVersion("BD"));
 				}
 
 				//删除操作

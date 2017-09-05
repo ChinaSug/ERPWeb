@@ -79,7 +79,7 @@
 		});
 		
 		// 添加工作台tab页面
-		/*var workbench = {
+		var workbench = {
 			id : 'work_bench',
 			title : '工作台',
 			href : 'mgHandler.html?op_action=WORK_BENCH',
@@ -91,7 +91,7 @@
 		wb_ref_button.attr({class: "icon-refresh workbench-refresh", style:"display:block"});
 		wb_ref_button.click(function(){
 			mainPage.reloadPage("work_bench");
-		});*/
+		});
 	});
     
     

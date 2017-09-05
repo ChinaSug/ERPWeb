@@ -7,6 +7,7 @@ import com.abs.core.paging.IPaging;
 import com.abs.core.util.StringHelper;
 import com.abs.ps.dao.BaseInfoDao;
 import com.abs.ps.domain.BomDetail;
+import com.abs.ps.domain.Customer;
 import com.abs.ps.domain.DamageInfo;
 import com.abs.ps.domain.Department;
 import com.abs.ps.domain.ItemInfo;
@@ -20,6 +21,7 @@ import com.abs.ps.domain.Supplier;
 import com.abs.ps.domain.Warehouse;
 import com.abs.ps.service.AbstractService;
 import com.abs.ps.service.BaseInfoService;
+import com.abs.ps.util.FilterUtil;
 import com.abs.ps.web.dto.BomDetailDto;
 import com.abs.ps.web.dto.DamageInfoDto;
 import com.abs.ps.web.dto.ItemDto;
@@ -113,9 +115,7 @@ public class BaseInfoServiceImpl extends AbstractService implements BaseInfoServ
 			
 			for (int i = 0, j = paging.getThisPageElements().size(); i < j; i++) {
 				Machine obj = (Machine) paging.getThisPageElements().get(i);
-				MachineDto dto = new MachineDto();
-				dto.setOid(obj.getOid().toString());
-				dto.setName(obj.getName());
+				MachineDto dto = FilterUtil.convertObjectClass(obj, MachineDto.class);
 				boolean isDeletable = baseInfoDao.isDeletable(ProductControlMain.class, "machineOid", obj.getOid());
 				if (!isDeletable) {
 					dto.setDisabled("true");
@@ -139,14 +139,20 @@ public class BaseInfoServiceImpl extends AbstractService implements BaseInfoServ
 			
 			for (int i = 0, j = paging.getThisPageElements().size(); i < j; i++) {
 				Mould obj = (Mould) paging.getThisPageElements().get(i);
-				MouldDto dto = new MouldDto();
-				dto.setOid(obj.getOid().toString());
-				dto.setName(obj.getName());
+				MouldDto dto = FilterUtil.convertObjectClass(obj, MouldDto.class);
 				boolean isDeletable = baseInfoDao.isDeletable(BomDetail.class, "mouldOid", obj.getOid());
 				if (isDeletable) {
 					isDeletable = baseInfoDao.isDeletable(ProductControlMain.class, "mouldOid", obj.getOid());
 				}
-
+				
+				String customerOid = dto.getCustomerOid();
+				if (!StringHelper.isEmpty(customerOid)) {
+					Customer customer = (Customer) baseInfoDao.getEntityByOid(Customer.class, Long.parseLong(customerOid));
+					if (customer != null) {
+						dto.setCustomerName(customer.getName());
+					}
+				}
+				
 				if (!isDeletable) {
 					dto.setDisabled("true");
 				}

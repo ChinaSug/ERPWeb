@@ -2,6 +2,7 @@ package com.abs.ps.web.helper;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -13,9 +14,9 @@ import org.hibernate.util.StringHelper;
 
 import com.abs.core.util.AbsBeanFactory;
 import com.abs.core.util.JsonUtils;
-import com.abs.ps.domain.Machine;
 import com.abs.ps.domain.Mould;
 import com.abs.ps.service.BaseInfoService;
+import com.abs.ps.util.FilterUtil;
 import com.abs.ps.util.QueueConstants;
 import com.abs.ps.web.dto.ListResult;
 import com.abs.ps.web.dto.MouldDto;
@@ -44,7 +45,6 @@ public class MouldHelper implements IControllerHelper{
 	}
 	@Override
 	public void doDelete() throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String deleteIds = request.getParameter("ids");
 		if (!StringHelper.isEmpty(deleteIds)) {
 			if (deleteIds.indexOf(",") >= 0) {
@@ -81,34 +81,12 @@ public class MouldHelper implements IControllerHelper{
 
 	@Override
 	public void doSave() throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String oid = request.getParameter("oid");
-		String name = request.getParameter("name");
-		
-		Mould obj = null;
-		if (StringHelper.isEmpty(oid)) {
-			obj = new Mould();
-			actionLogHelper.saveActionLog(
-					actionLogHelper.generateActionLog(
-						ActionLogHelper.ACTION_TYPE_ADD,
-						QueueConstants.AM_MOULD,
-						"模具名称:" + name,
-						""
-					)
-				);
-			
-		} else {
-			obj = (Mould) baseInfoService.getEntityByOid(Mould.class,Long.parseLong(oid));
-			actionLogHelper.saveActionLog(
-					actionLogHelper.generateActionLog(
-						ActionLogHelper.ACTION_TYPE_MODIFY,
-						QueueConstants.AM_MOULD,
-						"模具名称:" + obj.getName(),name
-					
-					)
-				);
+		Map<String, Object> paramMap = FilterUtil.getParamStringMap(request.getParameterMap(), false);
+		Mould obj = FilterUtil.getInstance(paramMap, Mould.class);
+		long oid = obj.getOid() != null ? obj.getOid() : 0;
+		if (oid <= 0) {
+			obj.setOid(null);
 		}
-		obj.setName(name);
 		baseInfoService.saveObject(obj);
 		
 		doQuery();
@@ -117,7 +95,6 @@ public class MouldHelper implements IControllerHelper{
 
 	@Override
 	public void doQuery() throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String pageNumStr = request.getParameter("pageIndex");
 		int pageNumber = 1;
 		if (!StringHelper.isEmpty(pageNumStr)) {
@@ -142,12 +119,10 @@ public class MouldHelper implements IControllerHelper{
 	}
 	@Override
 	public void doModify() throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void doAdd() throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 	}
 	

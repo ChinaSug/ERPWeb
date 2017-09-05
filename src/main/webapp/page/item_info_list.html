@@ -164,9 +164,71 @@
 		<script type="text/javascript" src="../ERPWeb/assets/js/check-data.js"></script>
 		<script type="text/javascript">
 			BUI.use('common/page');
+			//供应商
+			var sup = new SelectGrid({
+				render: 'sup_name',
+				url: '/ERPWeb/mgHandler.html?op_action=SUPPLIER_OPT',
+				itemKey: 'supplierName',
+				itemTitle: [{
+					title: '供应商名称',
+					dataIndex: 'supplierName'
+				}],
+				fieldReplace: [{
+					itemName: 'text',
+					fieldName: 'supplierName'
+				}, {
+					itemName: 'value',
+					fieldName: 'supplierOid'
+				}],
+				setField: true,
+				selectWidth: '150px',
+				mustSelect: true,
+			});
+
+			//物品类型
+			var typ = new SelectGrid({
+				render: 'typ_name',
+				url: '/ERPWeb/mgHandler.html?op_action=ITEM_TYPE_OPT',
+				itemKey: 'typeName',
+				itemTitle: [{
+					title: '物品类型',
+					dataIndex: 'typeName'
+				}],
+				fieldReplace: [{
+					itemName: 'text',
+					fieldName: 'typeName'
+				}, {
+					itemName: 'value',
+					fieldName: 'typeOid'
+				}],
+				setField: true,
+				selectWidth: '150px',
+				mustSelect: true,
+			});
+
+			//搜索物品类型
+			var seaType = new SelectGrid({
+				render: 'sea_type',
+				url: '/ERPWeb/mgHandler.html?op_action=ITEM_TYPE_OPT',
+				itemKey: 'typeName',
+				itemTitle: [{
+					title: '物品名称',
+					dataIndex: 'typeName'
+				}],
+				fieldReplace: [{
+					itemName: 'text',
+					fieldName: 'typeName'
+				}, {
+					itemName: 'value',
+					fieldName: 'search_typeOid'
+				}],
+				setField: true,
+				selectWidth: '150px',
+			});
 		</script>
 
 		<script type="text/javascript">
+		
 			BUI.use('common/search', function(Search) {
 				var status = {
 						"1": "有效",
@@ -217,8 +279,8 @@
 							width: 70
 						},
 						{
-							title: '颜色',
-							dataIndex: 'color',
+							title: '单价',
+							dataIndex: 'unitPrice',
 							width: 80
 						},
 						{
@@ -384,68 +446,6 @@
 						}
 					}
 				}
-
-				//供应商
-				var sup = new SelectGrid({
-					render: 'sup_name',
-					url: '/ERPWeb/mgHandler.html?op_action=SUPPLIER_OPT',
-					itemKey: 'supplierName',
-					itemTitle: [{
-						title: '供应商名称',
-						dataIndex: 'supplierName'
-					}],
-					fieldReplace: [{
-						itemName: 'text',
-						fieldName: 'supplierName'
-					}, {
-						itemName: 'value',
-						fieldName: 'supplierOid'
-					}],
-					setField: true,
-					selectWidth: '150px',
-					mustSelect: true,
-				});
-
-				//物品类型
-				var typ = new SelectGrid({
-					render: 'typ_name',
-					url: '/ERPWeb/mgHandler.html?op_action=ITEM_TYPE_OPT',
-					itemKey: 'typeName',
-					itemTitle: [{
-						title: '物品类型',
-						dataIndex: 'typeName'
-					}],
-					fieldReplace: [{
-						itemName: 'text',
-						fieldName: 'typeName'
-					}, {
-						itemName: 'value',
-						fieldName: 'typeOid'
-					}],
-					setField: true,
-					selectWidth: '150px',
-					mustSelect: true,
-				});
-
-				//搜索物品类型
-				var seaType = new SelectGrid({
-					render: 'sea_type',
-					url: '/ERPWeb/mgHandler.html?op_action=ITEM_TYPE_OPT',
-					itemKey: 'typeName',
-					itemTitle: [{
-						title: '物品名称',
-						dataIndex: 'typeName'
-					}],
-					fieldReplace: [{
-						itemName: 'text',
-						fieldName: 'typeName'
-					}, {
-						itemName: 'value',
-						fieldName: 'search_typeOid'
-					}],
-					setField: true,
-					selectWidth: '150px',
-				});
 
 				//监听事件，删除一条记录
 				grid.on('cellclick', function(ev) {

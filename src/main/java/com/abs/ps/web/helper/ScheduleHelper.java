@@ -149,6 +149,9 @@ public class ScheduleHelper implements IControllerHelper{
 		String prodVerify = request.getParameter("prodVerify");
 		String prodGo = request.getParameter("prodGo");
 		String unitConsume = request.getParameter("unitConsume");
+		String prodAmtDate=request.getParameter("prodAmtDate");
+		String tryDate=request.getParameter("tryDate");
+		String actDate=request.getParameter("actDate");
 
 		ScheduleMain scheduleMain = null;
 		if (StringHelper.isEmpty(oid)) {
@@ -157,12 +160,10 @@ public class ScheduleHelper implements IControllerHelper{
 				scheduleMain.setCreateBy(this.sessionUserDto.getUserId());
 			}
 			scheduleMain.setCreateDate(new Date());
-			scheduleMain.setStatus("0");
 		} else {
 			scheduleMain = (ScheduleMain) scheduleService.getEntityByOid(ScheduleMain.class, Long.parseLong(oid));
 			
 			if (!StringHelper.isEmpty(prodGo)) {
-				scheduleMain.setStatus("1");
 			}
 		}
 		
@@ -181,11 +182,16 @@ public class ScheduleHelper implements IControllerHelper{
 		if (!StringHelper.isEmpty(mouldTgCompleteDate)) {
 			scheduleMain.setMouldTgCompleteDate(DateHelper.convert2Date(mouldTgCompleteDate,DateHelper.DATE_FORMATE));
 		}
+		if (StringHelper.isEmpty(prodGo)) {
+			scheduleMain.setProdGo(prodGo);
+			scheduleMain.setStatus("1");
+		} else{
+			scheduleMain.setStatus("0");
+		}
 		scheduleMain.setName(name);
 		scheduleMain.setProdActualWgt(prodActualWgt);
 		scheduleMain.setProdAmt(prodAmt);
 		scheduleMain.setProdFqc(prodFqc);
-		scheduleMain.setProdGo(prodGo);
 		scheduleMain.setProdId(prodId);
 		scheduleMain.setProdNum(prodNum);
 		scheduleMain.setProdPicUrl(prodPicUrl);
@@ -210,6 +216,15 @@ public class ScheduleHelper implements IControllerHelper{
 		scheduleMain.setRespPerson(respPerson);
 		if (!StringHelper.isEmpty(scheduleDate)) {
 			scheduleMain.setScheduleDate(DateHelper.convert2Date(scheduleDate,DateHelper.DATE_FORMATE));
+		}
+		if (!StringHelper.isEmpty(prodAmtDate)) {
+			scheduleMain.setProdAmtDate(DateHelper.convert2Date(prodAmtDate,DateHelper.DATE_FORMATE));
+		}
+		if (!StringHelper.isEmpty(tryDate)) {
+			scheduleMain.setTryDate(DateHelper.convert2Date(tryDate,DateHelper.DATE_FORMATE));
+		}
+		if (!StringHelper.isEmpty(actDate)) {
+			scheduleMain.setActDate(DateHelper.convert2Date(actDate,DateHelper.DATE_FORMATE));
 		}
 		scheduleMain.setShotActualWgt(shotActualWgt);
 		scheduleMain.setShotStandardWgt(shotStandardWgt);
@@ -256,6 +271,8 @@ public class ScheduleHelper implements IControllerHelper{
 		String actualDate = request.getParameter("actualDate");
 		String result = request.getParameter("result");
 		String tryCallback = request.getParameter("tryCallback");
+		String endCallback = request.getParameter("endCallback");
+		String remark=request.getParameter("remark");
 
 		ScheduleDetail detail = null; 
 		if (StringHelper.isEmpty(oid)) {
@@ -276,6 +293,8 @@ public class ScheduleHelper implements IControllerHelper{
 		}
 		detail.setResult(result);
 		detail.setTryCallback(tryCallback);
+		detail.setEndCallback(endCallback);
+		detail.setRemark(remark);
 		
 		if(StringHelper.isEmpty(oid)){
 			actionLogHelper.saveActionLog(

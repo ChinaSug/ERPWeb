@@ -15,6 +15,9 @@ public class ScheduleMain implements Serializable{
 	private String respPerson;
 	private String name;
 	private String prodAmt;
+	private Date prodAmtDate;
+	private Date tryDate;
+	private Date actDate;
 	private Long itemOid;
 	private String prodNum;
 	private String unitConsume;
@@ -48,6 +51,25 @@ public class ScheduleMain implements Serializable{
 	private Date createDate;
 	private String lastModifyBy;
 	private Date lastModifyDate;
+	
+	public Date getActDate() {
+		return actDate;
+	}
+	public void setActDate(Date actDate) {
+		this.actDate = actDate;
+	}
+	public Date getProdAmtDate() {
+		return prodAmtDate;
+	}
+	public void setProdAmtDate(Date prodAmtDate) {
+		this.prodAmtDate = prodAmtDate;
+	}
+	public Date getTryDate() {
+		return tryDate;
+	}
+	public void setTryDate(Date tryDate) {
+		this.tryDate = tryDate;
+	}
 	public Long getOid() {
 		return oid;
 	}

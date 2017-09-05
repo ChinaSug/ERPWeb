@@ -12,6 +12,7 @@ import com.abs.ps.DaoSupportTest;
 import com.abs.ps.web.dto.CheckPointDetailDto;
 import com.abs.ps.web.dto.ListResult;
 import com.abs.ps.web.dto.StockInfoDto;
+import com.abs.ps.web.dto.StockSearchDto;
 
 public class StockInfoDaoImpl extends DaoSupportTest {
 
@@ -57,6 +58,14 @@ public class StockInfoDaoImpl extends DaoSupportTest {
 	public void testGetCheckingStock() {
 		
 		List<StockInfoDto> list = stockInfoDao.getCheckingStock("1237, 2");
+		printJsonStr(list);
+		
+	}
+	
+	@Test
+	public void testgetStockView() {
+		
+		List<StockSearchDto> list = stockInfoDao.getStockView(null);
 		printJsonStr(list);
 		
 	}

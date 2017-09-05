@@ -8,8 +8,23 @@ public class ScheduleDetailDto {
 	private String actualDate;
 	private String result;
 	private String tryCallback;
+	private String endCallback;
 	private String createDate;
 	private String disabled;
+	private String remark;
+	
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getEndCallback() {
+		return endCallback;
+	}
+	public void setEndCallback(String endCallback) {
+		this.endCallback = endCallback;
+	}
 	public String getOid() {
 		return oid;
 	}

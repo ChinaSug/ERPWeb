@@ -13,8 +13,10 @@
 		<property name="actualDate" column="ACT_DATE" type="date"/>
 		<property name="result" column="RESULT" type="string"/>
 		<property name="tryCallback" column="TRY_CALLBACK" type="string"/>
+		<property name="endCallback" column="END_CALLBACK" type="string"/>
 		<property name="createDate" column="CREATE_DATE" type="timestamp"/>
+		<property name="remark" column="REMARK" type="string"/>
 		
 		
 	</class>
-</hibernate-mapping>   
+</hibernate-mapping> 

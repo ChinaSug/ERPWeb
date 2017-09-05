@@ -12,15 +12,33 @@
 		<div class="container">
 			<div class="row">
 				<form id="searchForm" name="searchForm" class="form-horizontal span24" action="/ERPWeb/mgHandler.html?op_action=BOMINFO_LIST">
-					<div class="row">
-						<div class="control-group span8" style="width: 600px;">
+					<div class="controls space-row">
+						<div class="control-group span8" style="width: 1000px;">
+							<span class="space-span">
+								<label>BOM编号：</label>
+								<span style="display: inline-block;">
+									<input type="text" data-tip="{text:'请输入BOM编号'}" class="text" name="search_bom">
+								</span>
+							</span>
+							<span class="space-span">
+								<label>客户：</label>
+								<span style="display: inline-block;">
+									<input name="" id="" type="text" class="input-normal control-text">
+								</span>
+							</span>
+							<span class="space-span">
+								<label>产品编号：</label>
+								<span style="display: inline-block;">
+									<input name="" id="" type="text" class="input-normal control-text">
+								</span>
+							</span>
+							<span class="space-span">
+								<label>材料编号：</label>
+								<span style="display: inline-block;">
+									<input name="" id="" type="text" class="input-normal control-text">
+								</span>
+							</span>
 							<div class="controls">
-								<!-- <label>BOM状态</label>
-								<select style="width: 50px;margin-right: 20px;">
-									<option value="0">正常</option>
-									<option value="1">异常</option>
-								</select> -->
-								<input type="text" data-tip="{text:'请输入BOM编号'}" class="text" name="search_bom">
 								<button type="button" id="btnSearch" class="button button-primary">查询</button>
 							</div>
 						</div>
@@ -37,200 +55,231 @@
 		<script type="text/javascript" src="../ERPWeb/assets/js/common.js"></script>
 		<script type="text/javascript" src="../ERPWeb/assets/js/check-data.js?v=2017811092507"></script>
 		<script type="text/javascript">
-			BUI.use('common/search', function(Search) {
-				var enumObj = {
-						"0": "已审",
-						"1": "待审",
-						"2": "未通过审核",
-						"3": "重审"
-					},
-					editing = new BUI.Grid.Plugins.DialogEditing({
-					}),
-					columns = [{
-							title: 'BOMOID',
-							dataIndex: 'oid',
-							visible: false
+			var isVisible = false;
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				url: "/ERPWeb/mgHandler.html?op_action=CUR_USER",
+				success: function(data) {
+					if (data && data.isAdmin) {
+						isVisible = true;
+					}
+					rederGrid();
+				}
+			});
+			
+			function rederGrid() {
+				BUI.use('common/search', function(Search) {
+					var enumObj = {
+							"0": "已审",
+							"1": "待审",
+							"2": "未通过审核",
+							"3": "重审"
 						},
-						
-						{
-							title: 'BOM编号',
-							dataIndex: 'bomNum',
-							width: 150
-						},
-						
-						{
-							title: '承认',
-							dataIndex: 'confirmPerson',
-							width: 130
-						},
-						
-						{
-							title: '担当',
-							dataIndex: 'respPerson',
-							width: 130
-						},
-						{
-							title: '客户OID',
-							dataIndex: 'customerOid',
-							width: 130,
-							visible: false
-						},
-						{
-							title: '客户', 
-							dataIndex: 'customerName',
-							width: 130
-						},
-						{
-							title: '状态',
-							dataIndex: 'status',
-							width: 130,
-							renderer:BUI.Grid.Format.enumRenderer(enumObj)
-						},
-						{
-							title: '物品OID',
-							dataIndex: 'itemOid',
-							width: 130,
-							visible: false
-						},
-						{
-							title: '创建人',
-							dataIndex: 'createBy',
-							width: 130
-						},
-						{
-							title: '创建日期',
-							dataIndex: 'createDate',
-							width: 130
-						},
-						{
-							title: '操作',
-							renderer: function(value, obj) { 
-								return '<span class="grid-command btn-edit" id="bj_btn" title="编辑信息">编辑</span>';
-							} 
-						}
-					],
-					store = Search.createStore('/ERPWeb/mgHandler.html?op_action=BOMINFO_LIST', {
-						proxy: {
-							save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
-								addUrl: '/ERPWeb/mgHandler.html?op_action=BOMDETAIL_SAVE',
-								updateUrl: '/ERPWeb/mgHandler.html?op_action=BOMDETAIL_SAVE',
-								removeUrl: '/ERPWeb/mgHandler.html?op_action=BOMINFO_DEL' 
+						editing = new BUI.Grid.Plugins.DialogEditing({
+						}),
+						columns = [{
+								title: 'BOMOID',
+								dataIndex: 'oid',
+								visible: false
 							},
-							pageStart: 1,
-							method: 'POST'
-						},
-						pageSize: 10,
-						autoSync: true //保存数据后，自动更新
-					}),
-					gridCfg = Search.createGridCfg(columns, {
-						tbar: {
-							items: [{
-									text: '<i class="icon-plus"></i>添加',
-									btnCls: 'button button-small',
-									handler: addFunction
-								},
-								{
-									text: '<i class="icon-trash"></i>删除',
-									btnCls: 'button button-small',
-									handler: delFunction
-								}
-							]
-						},
-						listeners: {
-							cellclick: function(ev) {
-								editor = editing.get('editor');
-								var triggerCls = editing.get('triggerCls');
-								if("btn-edit" == triggerCls && editor) {
-									var stockTypeName = ev.record.stockTypeName, 
-										stockTypeNameSelect = $("#stockTypeList .bui-select-input");
-									if(stockTypeName != stockTypeNameSelect.val()) {
-										stockTypeNameSelect.val(stockTypeName);
-									}
-									
-									var warehouseName = ev.record.warehouseName, 
-										warehouseNameSelect = $("#warehouseList .bui-select-input");
-									if(warehouseName != warehouseNameSelect.val()) {
-										warehouseNameSelect.val(warehouseName);
-									}
-									
-									var itemName = ev.record.itemName, 
-										itemNameSelect = $("#itemList .bui-select-input");
-									if(itemName != itemNameSelect.val()){
-										itemNameSelect.val(itemName);
-									}
-									
-									var  supplierName = ev.record.supplierName, 
-									supplierNameSelect = $("#supplierList  .bui-select-input"); 
-									if(supplierName != supplierNameSelect.val()){
-										supplierNameSelect.val(supplierName);
-									}
-								}
+							{
+								title: 'BOM编号',
+								dataIndex: 'bomNum',
+								width: 160
+							},
+							{
+								title: '客户', 
+								dataIndex: 'customerName',
+								width: 150
+							},
+							{
+								title: '产品编号', 
+								dataIndex: '',
+								width: 160
+							},
+							{
+								title: '材料编号', 
+								dataIndex: '',
+								width: 160
+							},
+							{
+								title: '穴数', 
+								dataIndex: '',
+								width: 60
+							},
+							{
+								title: '产品单重', 
+								dataIndex: '',
+								width: 70
+							},
+							{
+								title: '流道单重', 
+								dataIndex: '',
+								width: 70
+							},
+							{
+								title: '周期时间', 
+								dataIndex: '',
+								width: 130
+							},
+							{
+								title: '机台吨位', 
+								dataIndex: '',
+								width: 70
+							},
+							{
+								title: '产品单价', 
+								dataIndex: '',
+								width: 70,
+								visible: isVisible,
+							},
+							{
+								title: '担当', 
+								dataIndex: '',
+								width: 70
+							},
+							{
+								title: '状态',
+								dataIndex: 'status',
+								width: 60,
+								renderer:BUI.Grid.Format.enumRenderer(enumObj)
+							},
+							{
+								title: '创建日期',
+								dataIndex: 'createDate',
+								width: 130
+							},
+							{
+								title: '操作',
+								renderer: function(value, obj) { 
+									return '<span class="grid-command btn-edit" id="bj_btn" title="编辑信息">编辑</span>';
+								} 
 							}
-						},
-						plugins: [editing, BUI.Grid.Plugins.CheckSelection, BUI.Grid.Plugins.AutoFit] // 插件形式引入多选表格
-					});
-
-				var search = new Search({
-						store: store,
-						gridCfg: gridCfg
-					}),
-					grid = search.get('grid');
-
-				function addFunction() {
-					 location.href="page/bom_listthree.html?bomOid=N";
-				}
-				//删除操作
-				function delFunction() {
-					var selections = grid.getSelection();
-					if(selections == '') {
-						BUI.Message.Alert("请先选择记录");
-					} else {
-						delItems(selections);
+						],
+						store = Search.createStore('/ERPWeb/mgHandler.html?op_action=BOMINFO_LIST', {
+							proxy: {
+								save: { //也可以是一个字符串，那么增删改，都会往那么路径提交数据，同时附加参数saveType
+									addUrl: '/ERPWeb/mgHandler.html?op_action=BOMDETAIL_SAVE',
+									updateUrl: '/ERPWeb/mgHandler.html?op_action=BOMDETAIL_SAVE',
+									removeUrl: '/ERPWeb/mgHandler.html?op_action=BOMINFO_DEL' 
+								},
+								pageStart: 1,
+								method: 'POST'
+							},
+							pageSize: 10,
+							autoSync: true //保存数据后，自动更新
+						}),
+						gridCfg = Search.createGridCfg(columns, {
+							tbar: {
+								items: [{
+										text: '<i class="icon-plus"></i>添加',
+										btnCls: 'button button-small',
+										handler: addFunction
+									},
+									{
+										text: '<i class="icon-trash"></i>删除',
+										btnCls: 'button button-small',
+										handler: delFunction
+									}
+								]
+							},
+							listeners: {
+								cellclick: function(ev) {
+									editor = editing.get('editor');
+									var triggerCls = editing.get('triggerCls');
+									if("btn-edit" == triggerCls && editor) {
+										var stockTypeName = ev.record.stockTypeName, 
+											stockTypeNameSelect = $("#stockTypeList .bui-select-input");
+										if(stockTypeName != stockTypeNameSelect.val()) {
+											stockTypeNameSelect.val(stockTypeName);
+										}
+										
+										var warehouseName = ev.record.warehouseName, 
+											warehouseNameSelect = $("#warehouseList .bui-select-input");
+										if(warehouseName != warehouseNameSelect.val()) {
+											warehouseNameSelect.val(warehouseName);
+										}
+										
+										var itemName = ev.record.itemName, 
+											itemNameSelect = $("#itemList .bui-select-input");
+										if(itemName != itemNameSelect.val()){
+											itemNameSelect.val(itemName);
+										}
+										
+										var  supplierName = ev.record.supplierName, 
+										supplierNameSelect = $("#supplierList  .bui-select-input"); 
+										if(supplierName != supplierNameSelect.val()){
+											supplierNameSelect.val(supplierName);
+										}
+									}
+								}
+							},
+							plugins: [editing, BUI.Grid.Plugins.CheckSelection, BUI.Grid.Plugins.AutoFit] // 插件形式引入多选表格
+						});
+	
+					var search = new Search({
+							store: store,
+							gridCfg: gridCfg
+						}),
+						grid = search.get('grid');
+	
+					function addFunction() {
+						 location.href="page/bom_listthree.html?bomOid=N";
 					}
-				}
-
-				function delItems(items) {
-					var ids = [];
-					var numbers = [];
-					BUI.each(items, function(item) {
-						if(!item.disabled) {
-							ids.push(item.oid);
+					//删除操作
+					function delFunction() {
+						var selections = grid.getSelection();
+						if(selections == '') {
+							BUI.Message.Alert("请先选择记录");
 						} else {
-							numbers.push(item.supplierId);
-						}
-
-					});
-
-					if(ids.length) {
-						var showMsg = "确认要删除选中的记录么？";
-						if(numbers.length) {
-							showMsg = "下列编号不能删除，排除后继续执行么？</br>" + numbers.join(",");
-						}
-						BUI.Message.Confirm(showMsg, function() {
-							store.save('remove', {
-								ids: ids.join(",")
-							});
-						}, 'question');
-					} else {
-						if(numbers.length) {
-							BUI.Message.Alert("所选择记录不能删除</br>" + numbers.join(","), "warning");
+							delItems(selections);
 						}
 					}
-				}
-				//监听事件，删除一条记录
-				grid.on('cellclick', function(ev) {
-					var sender = $(ev.domTarget); //点击的Dom
-					if(sender.hasClass('btn-del')) {
-						var record = ev.record;
-						delItems([record]);
+	
+					function delItems(items) {
+						var ids = [];
+						var numbers = [];
+						BUI.each(items, function(item) {
+							if(!item.disabled) {
+								ids.push(item.oid);
+							} else {
+								numbers.push(item.supplierId);
+							}
+	
+						});
+	
+						if(ids.length) {
+							var showMsg = "确认要删除选中的记录么？";
+							if(numbers.length) {
+								showMsg = "下列编号不能删除，排除后继续执行么？</br>" + numbers.join(",");
+							}
+							BUI.Message.Confirm(showMsg, function() {
+								store.save('remove', {
+									ids: ids.join(",")
+								});
+							}, 'question');
+						} else {
+							if(numbers.length) {
+								BUI.Message.Alert("所选择记录不能删除</br>" + numbers.join(","), "warning");
+							}
+						}
 					}
-					if(sender.hasClass('btn-edit')) {
-						var  clValue = ev.record.oid;
-						window.location.href="page/bom_listthree.html?bomOid="+clValue + "&_v="+erpHVersion;
-					}
-
+					//监听事件，删除一条记录
+					grid.on('cellclick', function(ev) {
+						var sender = $(ev.domTarget); //点击的Dom
+						if(sender.hasClass('btn-del')) {
+							var record = ev.record;
+							delItems([record]);
+						}
+						if(sender.hasClass('btn-edit')) {
+							var  clValue = ev.record.oid;
+							window.location.href="page/bom_listthree.html?bomOid="+clValue + "&_v="+erpHVersion;
+						}
+	
+					}); 
 				}); 
-			}); 
+			}
 		</script>
 
 		<body>

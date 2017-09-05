@@ -1,6 +1,3 @@
-<%@ page import="com.abs.ps.web.dto.UserDto"%>
-<%@ page import="com.abs.ps.web.dto.EnterpriceInfoDto"%>
-<%@ page import="com.abs.ps.web.dto.ParkInfoDto"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"	pageEncoding="utf-8"%>
 <%@ page import="com.abs.ps.util.StringHelper"%>
 <%@ page import="java.util.*"%>
@@ -10,6 +7,7 @@
 	if(isAdmin == null){
 		isAdmin = false;
 	}
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -36,6 +34,10 @@
 		      	overflow: hidden;
 		    }
 		    
+		    .redWord {
+		    	color: red;
+		    }
+		    
 		</style>
 
 	</head>
@@ -49,35 +51,114 @@
 			</div>
 		</div>
 		
-	<!--	<div id="div_contList" style="display:none;">
+		<div id="divItem" class="hide">
 			<div class="x-collapsed x-accordion-body">
-				<table cellspacing="0" style="width: 100%;" class="table table-bordered">
+				<table class="table table-bordered">
 					<tr>
-						<th>合约编号</th>
-						<th>租户姓名</th>
-						<th>租户电话</th>
-						<th>租期开始时间</th>
-						<th>租期结束时间</th>
+						<th>物品编号</th>
+						<th>物品名称</th>
+						<th>类型</th>
+						<th>型号</th>
+						<th>颜色</th>
+						<th>规格</th>
+						<th>单位</th>
+						<th>供应商</th>
+						<th>仓库</th>
+						<th>安全库存量</th>
+						<th>当前库存量</th>
 					</tr>
-					<c:forEach items="${requestScope.DUE_CONT_LIST }" var="cont">
+					<c:forEach items="${requestScope.LOW_STOCK }" var="d">
 						<tr>
-							<td>${cont.contCode }</td>
-							<td>${cont.tenantName }</td>
-							<td>${cont.tenantPhone }</td>
-							<td>${cont.startDate }</td>
-							<td>${cont.endDate }</td>
+							<td>${d.itemCode }</td>
+							<td>${d.itemName }</td>
+							<td>${d.typeName }</td>
+							<td>${d.model }</td>
+							<td>${d.color }</td>
+							<td>${d.spec }</td>
+							<td>${d.unit }</td>
+							<td>${d.supplierName }</td>
+							<td>${d.warehouseName }</td>
+							<td>${d.safeAmt }</td>
+							<td class="redWord">${d.stockAmt }</td>
 						</tr>
 					</c:forEach>
 				</table>
 			</div>
-		</div>-->
+		</div>
+		
+		<div id="divOrder" class="hide">
+			<div class="x-collapsed x-accordion-body">
+				<table class="table table-bordered">
+					<tr>
+						<th>接单日期</th>
+						<th>客户</th>
+						<th>订单号</th>
+						<th>部番</th>
+						<th>规格名称</th>
+						<th>订单量</th>
+						<th>完成量</th>
+						<th>未完成量</th>
+						<th>纳期</th>
+						<th>开工日期</th>
+						<th>完工日期</th>
+						<th>状态</th>
+					</tr>
+					<c:forEach items="${requestScope.LOW_STOCK1 }" var="d">
+						<tr>
+							<td>${d.itemCode }</td>
+							<td>${d.itemName }</td>
+							<td>${d.typeName }</td>
+							<td>${d.model }</td>
+							<td>${d.color }</td>
+							<td>${d.spec }</td>
+							<td>${d.unit }</td>
+							<td>${d.supplierName }</td>
+							<td>${d.warehouseName }</td>
+							<td>${d.safeAmt }</td>
+							<td class="redWord">${d.stockAmt }</td>
+						</tr>
+					</c:forEach>
+				</table>
+			</div>
+		</div>
 		
 		<script src="assets/js/jquery-1.8.1.min.js"></script>
 		<script src="assets/js/bui-min.js"></script>
 		<script src="assets/js/sea.js"></script>
 		<script src="assets/js/config-min.js"></script>
 		<script type="text/javascript">
-	
+			BUI.use(['bui/layout', 'bui/grid', 'bui/data'], function(Layout, Grid, Data) {
+			
+				var divItem = $("#divItem").html();
+				var divOrder = $("#divOrder").html();
+				
+				var downArrows = "<div style='float:right'><span class='x-caret x-caret-down'></span></div>";
+				var control = new BUI.Component.Controller({
+					width : '100%',
+					height: 500,
+					render: '#J_Layout',
+					defaultChildClass: 'controller',
+					children: [
+						{
+							layout: {
+								title: '少于安全库存量的物料'+downArrows,
+							},
+							content : divItem,
+						},{
+							layout: {
+								title: '异常状态订单'+downArrows,
+							},
+							content : divOrder,
+						},{
+							layout: {
+							}
+						}
+					],
+					plugins: [Layout.Accordion]
+				});
+				
+				control.render();
+			});
 		</script>
 	</body>
 

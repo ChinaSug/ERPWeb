@@ -59,5 +59,7 @@ public interface StockInfoService extends IService{
 	 * @return
 	 */
 	public List<StockInfoDto> getCheckingStock(String stockIds);
+	
+	public List<StockSearchDto> getStockView(Map<String, String> paramMap);
 }
  

@@ -73,6 +73,7 @@ public class ItemHelper implements IControllerHelper{
 			jsonObj.put("value", obj.getOid().toString());
 			jsonObj.put("text", obj.getName());
 			jsonObj.put("itemCode", obj.getCode());
+			jsonObj.put("itemColor", obj.getColor());
 			if (sessionUserDto.isAdmin()) {
 				jsonObj.put("unitPrice", obj.getUnitPrice());
 			}

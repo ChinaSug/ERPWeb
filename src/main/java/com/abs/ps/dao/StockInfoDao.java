@@ -19,7 +19,6 @@ public interface StockInfoDao extends IDao{
 	
 	/**
 	 * 该月是否已盘点
-	 * 
 	 * @param dto
 	 * @return
 	 */
@@ -70,4 +69,11 @@ public interface StockInfoDao extends IDao{
 	 * @return
 	 */
 	public List<StockInfoDto> getCheckingStock(String stockIds);
+	
+	/**
+	 * 获取库存查询视图列表
+	 * @param paramMap
+	 * @return
+	 */
+	public List<StockSearchDto> getStockView(Map<String, String> paramMap);
 }

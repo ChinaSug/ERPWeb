@@ -41,8 +41,77 @@
 							<input name="name" id="name" type="text" data-rules="{required:true,maxlength:100}" class="input-normal control-text">
 						</div>
 					</div>
+					<div class="control-group span8">
+						<label class="control-label">注塑机品牌：</label>
+						<div class="controls">
+							<input name="brand" type="text" class="input-normal control-text">
+						</div>
+					</div>
 				</div>
-
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">机械型号：</label>
+						<div class="controls">
+							<input name="type" type="text" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">哥林柱间距：</label>
+						<div class="controls">
+							<input name="tieBar" type="text" placeholder="(横×纵)/mm" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">固定板尺寸：</label>
+						<div class="controls">
+							<input name="fpSize" type="text" placeholder="(横×纵)/mm" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">型开量/mm：</label>
+						<div class="controls">
+							<input name="openQuan" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">型厚/mm：</label>
+						<div class="controls">
+							<input name="thick" type="text" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">螺杆直径/mm：</label>
+						<div class="controls">
+							<input name="screwDia" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span8">
+						<label class="control-label">最大射出压力：</label>
+						<div class="controls">
+							<input name="maxInjPrs" type="text" placeholder="kgf/cm2" class="input-normal control-text">
+						</div>
+					</div>
+					<div class="control-group span8">
+						<label class="control-label">射出重量/g：</label>
+						<div class="controls">
+							<input name="injWgt" type="text" class="input-normal control-text">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="control-group span16">
+						<label class="control-label">备注：</label>
+						<div class="controls" style="height: initial;">
+							<textarea name="remark" class="input-normal control-text" style="width:460px; max-width:460px; height: 45px;"></textarea>
+						</div>
+					</div>
+				</div>
 			</form>
 		</div>
 		<script type="text/javascript" src="../ERPWeb/assets/js/jquery-1.8.1.min.js"></script>
@@ -73,13 +142,51 @@
 							title: '机台OID',
 							dataIndex: 'oid',
 							visible: false
-						},
-						{
+						}, {
 							title: '机台名称',
 							dataIndex: 'name',
-							width: 300
-						},
-						{
+							width: 100
+						}, {
+							title: '注塑机品牌',
+							dataIndex: 'brand',
+							width: 100
+						}, {
+							title: '机械型号',
+							dataIndex: 'type',
+							width: 80
+						}, {
+							title: '哥林柱间距(横×纵)/mm',
+							dataIndex: 'tieBar',
+							width: 150
+						}, {
+							title: '固定板尺寸(横×纵)/mm',
+							dataIndex: 'fpSize',
+							width: 150
+						}, {
+							title: '型开量/mm',
+							dataIndex: 'openQuan',
+							width: 100
+						}, {
+							title: '型厚/mm',
+							dataIndex: 'thick',
+							width: 100
+						}, {
+							title: '螺杆直径/mm',
+							dataIndex: 'screwDia',
+							width: 100
+						}, {
+							title: '最大射出压力/kgf/cm2',
+							dataIndex: 'maxInjPrs',
+							width: 150
+						}, {
+							title: '射出重量/g',
+							dataIndex: 'injWgt',
+							width: 80
+						}, {
+							title: '备注',
+							dataIndex: 'remark',
+							width: 100
+						}, {
 							title: '操作',
 							renderer: function(value, obj) {
 								return '<span class="grid-command btn-edit" title="编辑信息">编辑</span>';

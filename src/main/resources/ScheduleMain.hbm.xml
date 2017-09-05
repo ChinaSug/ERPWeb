@@ -13,6 +13,9 @@
 		<property name="respPerson" column="RESP_PERSON" type="string"/>
 		<property name="name" column="SCHD_NAME" type="string"/>
 		<property name="prodAmt" column="PROD_AMT" type="string"/>
+		<property name="prodAmtDate" column="PROD_AMT_DATE" type="date"/>
+		<property name="tryDate" column="TRY_DATE" type="date"/>
+		<property name="actDate" column="ACT_DATE" type="date"/>
 		<property name="itemOid" column="ITEM_OID" type="long"/>
 		<property name="prodNum" column="PROD_NUM" type="string"/>
 		<property name="unitConsume" column="UNIT_CONSUME" type="string"/>
@@ -48,4 +51,4 @@
 		<property name="lastModifyDate" column="LAST_MODIFY_DATE" type="timestamp"/>
 		
 	</class>
-</hibernate-mapping>   
+</hibernate-mapping>  

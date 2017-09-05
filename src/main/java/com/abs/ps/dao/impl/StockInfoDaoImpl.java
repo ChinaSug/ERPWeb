@@ -1,7 +1,7 @@
 package com.abs.ps.dao.impl;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -39,8 +39,8 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 	
 	public IPaging findStocksByPaging(int pageNumber, int pageSize, StockInfoDto criteria) {
 		StringBuffer sql = new StringBuffer();
-		List<Object> valueList = new LinkedList<>();
-		List<StockInfoDto> result = new LinkedList<>();
+		List<Object> valueList = new ArrayList<>();
+		List<StockInfoDto> result = new ArrayList<>();
 		
 		sql.append(" SELECT ")
 		.append(" TST.NAME, TW.NAME, TI.ITEM_CODE, TI.ITEM_NAME, TBD.PROD_ID, TBD.NAME, TS.SUPP_NAME, TC.NAME, TIT.NAME, TI.TYPE_OID ")
@@ -58,27 +58,30 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 		.append(" LEFT JOIN T_BOM_DETAIL TBD ON TSI.BOM_DETAIL_OID = TBD.OID ")
 		.append(" WHERE 1=1 ");
 		
-		if (!StringHelper.isEmpty(criteria.getStockInfoType())) {
-			sql.append(" AND TST.DIM = ? ");
-			valueList.add(criteria.getStockInfoType());
-		}
-		if (!StringHelper.isEmpty(criteria.getStockNum())) {
-			sql.append(" AND (TSI.STOCK_NUM LIKE ? OR TI.ITEM_CODE LIKE ? OR TI.ITEM_NAME LIKE ?)");
-			valueList.add("%"+criteria.getStockNum()+"%");
-			valueList.add("%"+criteria.getStockNum()+"%");
-			valueList.add("%"+criteria.getStockNum()+"%");
-		}
-		if (!StringHelper.isEmpty(criteria.getWarehouseOid())) {
-			sql.append(" AND TSI.WAREHOUSE_OID = ? ");
-			valueList.add(Long.parseLong(criteria.getWarehouseOid()));
-		}
-		if (!StringHelper.isEmpty(criteria.getStockTypeOid())) {
-			sql.append(" AND TST.OID = ? ");
-			valueList.add(criteria.getStockTypeOid());
-		}
-		if (!StringHelper.isEmpty(criteria.getStockDate())) {
-			sql.append(" AND TSI.STOCK_DATE = ? ");
-			valueList.add(criteria.getStockDate());
+		if (criteria != null) {
+			if (!StringHelper.isEmpty(criteria.getStockInfoType())) {
+				sql.append(" AND TST.DIM = ? ");
+				valueList.add(criteria.getStockInfoType());
+			}
+			if (!StringHelper.isEmpty(criteria.getStockNum())) {
+				sql.append(" AND (TSI.STOCK_NUM LIKE ? OR TI.ITEM_CODE LIKE ? OR TI.ITEM_NAME LIKE ? OR TBD.PROD_ID LIKE ?)");
+				valueList.add("%"+criteria.getStockNum()+"%");
+				valueList.add("%"+criteria.getStockNum()+"%");
+				valueList.add("%"+criteria.getStockNum()+"%");
+				valueList.add("%"+criteria.getStockNum()+"%");
+			}
+			if (!StringHelper.isEmpty(criteria.getWarehouseOid())) {
+				sql.append(" AND TSI.WAREHOUSE_OID = ? ");
+				valueList.add(Long.parseLong(criteria.getWarehouseOid()));
+			}
+			if (!StringHelper.isEmpty(criteria.getStockTypeOid())) {
+				sql.append(" AND TST.OID = ? ");
+				valueList.add(criteria.getStockTypeOid());
+			}
+			if (!StringHelper.isEmpty(criteria.getStockDate())) {
+				sql.append(" AND TSI.STOCK_DATE = ? ");
+				valueList.add(criteria.getStockDate());
+			}
 		}
 		sql.append(" ORDER BY TSI.OID DESC ");
 		
@@ -278,23 +281,24 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 
 		List<Object> list = new ArrayList<Object>();
 		
-		if (!StringHelper.isEmpty(criteria.getWarehouseOid())) {
-			sql.append(" AND SV.WHS_OID = ? ");
-			list.add(criteria.getWarehouseOid());
+		if (criteria != null) {
+			if (!StringHelper.isEmpty(criteria.getWarehouseOid())) {
+				sql.append(" AND SV.WHS_OID = ? ");
+				list.add(criteria.getWarehouseOid());
+			}
+			
+			if (!StringHelper.isEmpty(criteria.getItemName())) {
+				sql.append(" AND (SV.ITEM_CODE LIKE ? OR SV.ITEM_NAME LIKE ?  OR SV.TYPE_NAME LIKE ? OR SV.SUPP_NAME LIKE ?) ");
+				list.add("%" + criteria.getItemName() + "%");
+				list.add("%" + criteria.getItemName() + "%");
+				list.add("%" + criteria.getItemName() + "%");
+				list.add("%" + criteria.getItemName() + "%");
+			}
+			if (!StringHelper.isEmpty(criteria.getItemCode())) {
+				sql.append(" AND SV.SV.ITEM_CODE=? ");
+				list.add(criteria.getItemCode());
+			}
 		}
-		
-		if (!StringHelper.isEmpty(criteria.getItemName())) {
-			sql.append(" AND (SV.ITEM_CODE LIKE ? OR SV.ITEM_NAME LIKE ?  OR SV.TYPE_NAME LIKE ? OR SV.SUPP_NAME LIKE ?) ");
-			list.add("%" + criteria.getItemName() + "%");
-			list.add("%" + criteria.getItemName() + "%");
-			list.add("%" + criteria.getItemName() + "%");
-			list.add("%" + criteria.getItemName() + "%");
-		}
-		if (!StringHelper.isEmpty(criteria.getItemCode())) {
-			sql.append(" AND SV.SV.ITEM_CODE=? ");
-			list.add(criteria.getItemCode());
-		}
-
 		sql.append(" ORDER BY SV.ITEM_NAME ");
 		
 		Object[] params = new Object[list.size()];
@@ -342,7 +346,7 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 	
 	@Override
 	public ListResult<JSONObject> findStockProdView(int pageNum, int pageSize, Map<String, String> searchMap) {
-		List<JSONObject> list = new LinkedList<>();
+		List<JSONObject> list = new ArrayList<>();
 		List<Object> valueList = null;
 		
 		StringBuffer sql = new StringBuffer();
@@ -351,7 +355,7 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 		sql.append(" WHERE 1=1 ");
 		
 		if (searchMap != null) {
-			valueList = new LinkedList<>();
+			valueList = new ArrayList<>();
 			
 			String whOid = searchMap.get("warehouse_oid");
 			if (!StringHelper.isEmpty(whOid)) {
@@ -407,7 +411,7 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 				+ " FROM STOCK_PROD_VIEW SPV "
 				+ " WHERE SPV.PIV_WH = ? OR SPV.POV_WH = ? ";
 		
-		List<CheckPointDetailDto> list = new LinkedList<>();
+		List<CheckPointDetailDto> list = new ArrayList<>();
 		SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, whOid, whOid);
 		while (rs.next()) {
 			CheckPointDetailDto dto = new CheckPointDetailDto();
@@ -430,7 +434,7 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 					+ " INNER JOIN T_ST_CHECK_MAIN TCM ON TCM.OID = ? AND (TCM.WAREHOUSE_OID = SPV.PIV_WH OR TCM.WAREHOUSE_OID = SPV.POV_WH) "
 					+ " INNER JOIN T_ST_CHECK_DETAIL TCD ON TCD.CP_MAIN_OID = TCM.OID AND TCD.BOM_DETAIL_OID = SPV.BOM_DETAIL_OID ";
 		
-		List<CheckPointDetailDto> list = new LinkedList<>();
+		List<CheckPointDetailDto> list = new ArrayList<>();
 		SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, cpMainOid);
 		while (rs.next()) {
 			CheckPointDetailDto dto = new CheckPointDetailDto();
@@ -473,7 +477,7 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 				+ " and si.oid in (" + stockIds.replaceAll("\\d+", "?") + ")";
 		
 		String[] split = stockIds.split(",");
-		Long[] oidsArr = new Long[split.length];
+		Object[] oidsArr = new Long[split.length];
 		for (int i = 0; i < split.length; i++) {
 			oidsArr[i] = Long.parseLong(split[i].trim());
 		}
@@ -495,5 +499,42 @@ public class StockInfoDaoImpl extends AbsDaoSupport implements StockInfoDao{
 		return list;
 	}
 	
+	@Override
+	public List<StockSearchDto> getStockView(Map<String, String> paramMap) {
+		StringBuffer sql = new StringBuffer(); 
+		sql.append(" SELECT ST.ITEM_OID, ST.ITEM_CODE, ST.ITEM_NAME, ST.TYPE_NAME, ST.MODEL, ST.COLOR, ST.SPEC, ST.UNIT, ST.SAFE_AMT, ST.SUPP_NAME, ST.WHS_OID, ST.WHS_NAME, ST.AMT")
+		.append(" FROM STOCK_VIEW ST WHERE 1=1 ");
+		
+		List<Object> values = new ArrayList<>();
+		if (paramMap != null) {
+			if (!StringHelper.isEmpty(paramMap.get("LOW_STOCK"))) {
+				sql.append(" AND ST.SAFE_AMT > ST.AMT ");
+			}
+		}
+		
+		SqlRowSet rs = jdbcTemplate.queryForRowSet(sql.toString(), values.toArray());
+		List<StockSearchDto> dtoList = new ArrayList<>();
+		StockSearchDto d = null;
+		while (rs.next()) {
+			d = new StockSearchDto();
+			d.setItemOid(rs.getString("ITEM_OID"));
+			d.setItemCode(rs.getString("ITEM_CODE"));
+			d.setItemName(rs.getString("ITEM_NAME"));
+			d.setTypeName(rs.getString("TYPE_NAME"));
+			d.setModel(rs.getString("MODEL"));
+			d.setColor(rs.getString("COLOR"));
+			d.setSpec(rs.getString("SPEC"));
+			d.setUnit(rs.getString("UNIT"));
+			d.setSafeAmt(rs.getString("SAFE_AMT"));
+			d.setSupplierName(rs.getString("SUPP_NAME"));
+			d.setWarehouseOid(rs.getString("WHS_OID"));
+			d.setWarehouseName(rs.getString("WHS_NAME"));
+			d.setStockAmt(rs.getString("AMT"));
+			
+			dtoList.add(d);
+		}
+		
+		return dtoList;
+	}
 	
 }

@@ -11,6 +11,9 @@ public class ScheduleMainDto {
 	private String respPerson;
 	private String name;
 	private String prodAmt;
+	private String prodAmtDate;
+	private String tryDate;
+	private String actDate;
 	private String itemOid;
 	private String itemName;
 	private String prodNum;
@@ -47,6 +50,25 @@ public class ScheduleMainDto {
 	private String lastModifyDate;
 	private String disabled;
 	private List<ScheduleDetailDto> details;
+	
+	public String getActDate() {
+		return actDate;
+	}
+	public void setActDate(String actDate) {
+		this.actDate = actDate;
+	}
+	public String getProdAmtDate() {
+		return prodAmtDate;
+	}
+	public void setProdAmtDate(String prodAmtDate) {
+		this.prodAmtDate = prodAmtDate;
+	}
+	public String getTryDate() {
+		return tryDate;
+	}
+	public void setTryDate(String tryDate) {
+		this.tryDate = tryDate;
+	}
 	public String getOid() {
 		return oid;
 	}

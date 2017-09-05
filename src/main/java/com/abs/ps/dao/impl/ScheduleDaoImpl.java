@@ -86,13 +86,17 @@ public class ScheduleDaoImpl extends AbsDaoSupport  implements  ScheduleDao{
 			dto.setCustomerName(rs.getString("NAME"));
 			dto.setProdId(rs.getString("PROD_ID"));
 			dto.setName(rs.getString("SCHD_NAME"));
+			dto.setRespPerson(rs.getString("RESP_PERSON"));
 			dto.setScheduleDate(DateHelper.convert2String(rs.getDate("SCHD_DATE"), DateHelper.DATE_FORMATE));
-			dto.setItemOid(rs.getString("ITEM_OID"));
-			dto.setItemName(rs.getString("ITEM_NAME"));
-			dto.setProdAmt(rs.getString("PRODUCT_AMT"));
+			dto.setProdAmtDate(rs.getString("PROD_AMT_DATE"));
+			dto.setMouldTgCompleteDate(rs.getString("MOULD_TG_COMPLETE_DATE"));
+			dto.setMouldActCompleteDate(rs.getString("MOULD_ACT_COMPLETE_DATE"));
+			dto.setTryAmt(rs.getString("TRY_AMT"));
+			dto.setActAmt(rs.getString("ACT_AMT"));
+			dto.setTryDate(DateHelper.convert2String(rs.getDate("TRY_DATE"), DateHelper.DATE_FORMATE));
+			dto.setActDate(DateHelper.convert2String(rs.getDate("ACT_DATE"), DateHelper.DATE_FORMATE));
 			dto.setStatus(rs.getString("STATUS"));
-			
-			
+			dto.setProdAmt(rs.getString("PRODUCT_AMT"));
 			/*boolean isDeletable = isDeletable(ProductControlMain.class, "bomDetailOid", Long.parseLong(dto.getOid()));
 			if (!isDeletable) {
 				dto.setDisabled("true");
